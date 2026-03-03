@@ -212,14 +212,7 @@ export default function PageOnboardingUsers({ setPage }) {
       >
         {/* ── Basic Info ── */}
         <SectionTitle>Basic Information</SectionTitle>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-            marginBottom: 16,
-          }}
-        >
+        <div className="g-halves mb-section">
           <div>
             <Label required>Name</Label>
             <Input placeholder="Name" />
@@ -356,13 +349,7 @@ export default function PageOnboardingUsers({ setPage }) {
 
         {/* ── Permissions ── */}
         <SectionTitle>Permissions</SectionTitle>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gap: "14px 20px",
-          }}
-        >
+        <div className="g-perms5">
           {PERMISSIONS.map((p) => (
             <div
               key={p.key}

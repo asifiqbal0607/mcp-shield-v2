@@ -76,14 +76,8 @@ export default function PageOverview() {
             onMouseLeave={hoverOff}
           >
             <div
-              style={{
-                fontSize: 34,
-                fontWeight: 700,
-                color: "#1a1a2e",
-                letterSpacing: -1,
-                fontFamily: "Poppins,serif",
-                lineHeight: 1,
-              }}
+              className="kpi-stat"
+              style={{ color: "#1a1a2e", letterSpacing: -1, lineHeight: 1 }}
             >
               1.5m
             </div>
@@ -169,12 +163,10 @@ export default function PageOverview() {
           }}
         >
           <div
+            className="kpi-stat"
             style={{
-              fontSize: 44,
-              fontWeight: 700,
               color: "#fff",
               letterSpacing: -2,
-              fontFamily: "Poppins,serif",
               lineHeight: 1,
             }}
           >

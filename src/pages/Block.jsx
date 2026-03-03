@@ -42,14 +42,7 @@ export default function PageBlocking() {
   return (
     <div>
       {/* Summary stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: 14,
-          marginBottom: 18,
-        }}
-      >
+      <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map((s) => (
           <Card
             key={s.label}
@@ -65,11 +58,8 @@ export default function PageBlocking() {
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
           >
-            <div
+            <div className="kpi-stat-sm"
               style={{
-                fontSize: 22,
-                fontWeight: 700,
-                fontFamily: "Poppins,serif",
                 color: s.color,
               }}
             >
@@ -93,14 +83,7 @@ export default function PageBlocking() {
       </div>
 
       {/* Charts */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.3fr 1fr",
-          gap: 14,
-          marginBottom: 18,
-        }}
-      >
+      <div className="g-split mb-section">
         <Card>
           <BlockRadarChart
             height={300}
@@ -154,7 +137,7 @@ export default function PageBlocking() {
       {/* Full Breakdown Block Reason */}
       <Card>
         <SectionTitle>Full Breakdown Block Reasons</SectionTitle>
-        <table
+        <div className="table-wrap"><table
           style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
         >
           <thead>
@@ -267,7 +250,7 @@ export default function PageBlocking() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </Card>
       {/* Transactions modal */}
       {modal && <TransactionsModal title={modal} onClose={close} />}

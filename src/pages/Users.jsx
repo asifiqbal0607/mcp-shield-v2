@@ -425,7 +425,7 @@ function ViewModal({ user, onClose }) {
           </span>
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
+      <div className="g-halves">
         <Field label="Region" value={user.region} />
         <Field label="Sessions" value={user.sessions} />
         <Field label="Last Login" value={user.lastLogin} />
@@ -1860,14 +1860,7 @@ export default function PageUsers({ role = "admin", setPage }) {
   // ── Admin view ────────────────────────────────────────────────────────────
   return (
     <div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4,1fr)",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-stats4 mb-section">
         {[
           { label: "Total Users", value: TOTAL_USERS, color: BLUE },
           {
@@ -1892,10 +1885,7 @@ export default function PageUsers({ role = "admin", setPage }) {
           >
             <div
               style={{
-                fontSize: 34,
-                fontWeight: 700,
-                color,
-                fontFamily: "Poppins",
+                fontSize: 'var(--text-stat)',
               }}
             >
               {value}
@@ -1907,14 +1897,7 @@ export default function PageUsers({ role = "admin", setPage }) {
         ))}
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-split2 mb-section">
         <Card>
           <SectionTitle>Login &amp; Action Activity</SectionTitle>
           <ResponsiveContainer width="100%" height={240}>
@@ -2100,7 +2083,7 @@ export default function PageUsers({ role = "admin", setPage }) {
           })}
         </div>
 
-        <table
+        <div className="table-wrap"><table
           style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
         >
           <thead>
@@ -2218,7 +2201,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               </tr>
             )}
           </tbody>
-        </table>
+        </table></div>
       </Card>
     </div>
   );

@@ -34,7 +34,7 @@ export const blkRows = [
   },
   {
     reason: "Remotely Controlled Fraud",
-    count: "1,54,700",
+    count: "1,54,900",
     pct: 10,
     trend: "+15%",
     sev: "Critical",
@@ -585,7 +585,7 @@ export const geoData = [
   {
     country: "Indonesia",
     code: "ID",
-    value: 12600,
+    value: 12800,
     lat: -0.8,
     lng: 113.9,
     color: "#3b82f6",
@@ -601,7 +601,7 @@ export const geoData = [
   {
     country: "Germany",
     code: "DE",
-    value: 9600,
+    value: 9800,
     lat: 51.2,
     lng: 10.5,
     color: "#3b82f6",
@@ -633,7 +633,7 @@ export const geoData = [
   {
     country: "Pakistan",
     code: "PK",
-    value: 5600,
+    value: 5800,
     lat: 30.4,
     lng: 69.3,
     color: "#3b82f6",
@@ -641,7 +641,7 @@ export const geoData = [
   {
     country: "Tanzania",
     code: "TZ",
-    value: 4700,
+    value: 4900,
     lat: -6.4,
     lng: 34.9,
     color: "#3b82f6",
@@ -763,10 +763,10 @@ export const geoSpreadData = [
     clicks: 21400,
     pct: 9.2,
   },
-  { country: "Nigeria", code: "NG", visits: 31450, clicks: 14600, pct: 6.0 },
+  { country: "Nigeria", code: "NG", visits: 31450, clicks: 14800, pct: 6.0 },
   { country: "Ethiopia", code: "ET", visits: 24780, clicks: 10200, pct: 4.7 },
   { country: "Kenya", code: "KE", visits: 18320, clicks: 8100, pct: 3.5 },
-  { country: "Egypt", code: "EG", visits: 15640, clicks: 6700, pct: 3.0 },
+  { country: "Egypt", code: "EG", visits: 15640, clicks: 6900, pct: 3.0 },
   { country: "Ghana", code: "GH", visits: 12890, clicks: 5400, pct: 2.5 },
   { country: "Tanzania", code: "TZ", visits: 10230, clicks: 4300, pct: 2.0 },
   { country: "Uganda", code: "UG", visits: 8760, clicks: 3700, pct: 1.7 },
@@ -775,10 +775,10 @@ export const geoSpreadData = [
     country: "United States",
     code: "US",
     visits: 6210,
-    clicks: 2600,
+    clicks: 2800,
     pct: 1.2,
   },
-  { country: "Other", code: "OT", visits: 19230, clicks: 7700, pct: 2.4 },
+  { country: "Other", code: "OT", visits: 19230, clicks: 7900, pct: 2.4 },
 ];
 
 // ─── Transactions (Clicked Clean popup) ──────────────────────────────────────
@@ -824,7 +824,7 @@ export const transactionRows = [
     userIp: "1.47.19.193",
     msisdn: "",
     status: "Block",
-    reasons: ["MCPS-1300", "AMCPS-1310"],
+    reasons: ["MCPS-1300", "AMCPS-1310", "MCPS-1400"],
     interaction: "false",
   },
   {
@@ -846,7 +846,7 @@ export const transactionRows = [
     userIp: "1.46.18.9",
     msisdn: "",
     status: "Block",
-    reasons: ["MCPS-1300", "AMCPS-1310"],
+    reasons: ["MCPS-1300", "AMCPS-1310", "MCPS-1400"],
     interaction: "false",
   },
   {
@@ -857,7 +857,7 @@ export const transactionRows = [
     userIp: "223.24.143.7",
     msisdn: "",
     status: "Block",
-    reasons: ["MCPS-1300", "AMCPS-1310"],
+    reasons: ["MCPS-1300", "AMCPS-1310", "MCPS-1400"],
     interaction: "false",
   },
   {
@@ -868,7 +868,7 @@ export const transactionRows = [
     userIp: "223.24.142.184",
     msisdn: "",
     status: "Block",
-    reasons: ["MCPS-1300", "AMCPS-1310"],
+    reasons: ["MCPS-1300", "AMCPS-1310", "MCPS-1400"],
     interaction: "false",
   },
   {
@@ -879,7 +879,7 @@ export const transactionRows = [
     userIp: "1.46.29.92",
     msisdn: "",
     status: "Block",
-    reasons: ["MCPS-1300", "AMCPS-1310"],
+    reasons: ["MCPS-1300", "AMCPS-1310", "MCPS-1400"],
     interaction: "false",
   },
   {

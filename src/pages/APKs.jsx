@@ -162,14 +162,7 @@ export default function PageAPKs() {
   return (
     <div>
       {/* Summary stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: 14,
-          marginBottom: 18,
-        }}
-      >
+      <div className="g-stats3 mb-section">
         {[
           { label: "Total APKs", value: "170", color: BLUE },
           { label: "Clean APKs", value: "142", color: GREEN },
@@ -189,11 +182,8 @@ export default function PageAPKs() {
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
           >
-            <div
+            <div className="kpi-stat"
               style={{
-                fontSize: 36,
-                fontWeight: 700,
-                fontFamily: "Poppins,serif",
                 color: s.color,
               }}
             >
@@ -217,14 +207,7 @@ export default function PageAPKs() {
       </div>
 
       {/* Top APK pie charts */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 14,
-          marginBottom: 18,
-        }}
-      >
+      <div className="g-halves mb-section">
         <ApkPieCard
           title="Block APKs"
           data={trustedApkData}
@@ -315,7 +298,7 @@ export default function PageAPKs() {
             />
           </div>
         </div>
-        <table
+        <div className="table-wrap"><table
           style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
         >
           <thead>
@@ -409,7 +392,7 @@ export default function PageAPKs() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </Card>
 
       {modal && <TransactionsModal title={modal} onClose={close} />}

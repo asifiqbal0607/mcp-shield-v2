@@ -1,6 +1,7 @@
 import { GREEN } from "./colors";
 
 export const NAV_GROUPS = [
+  // ── Ungrouped (flat tabs for all roles) ──────────────────────────────────
   {
     group: null,
     items: [
@@ -12,24 +13,47 @@ export const NAV_GROUPS = [
       },
     ],
   },
+
+  // ── Management — appears first so partner sees Users/Services up front ───
+  {
+    group: "Management",
+    items: [
+      {
+        key: "users",
+        label: "Manage Users",
+        icon: "◎",
+        roles: ["admin", "partner"],
+      },
+      {
+        key: "services",
+        label: "Manage Services",
+        icon: "⚙",
+        roles: ["admin", "partner"],
+      },
+      {
+        key: "partners",
+        label: "Partners",
+        icon: "◈",
+        roles: ["admin"],
+        badge: { n: "12", c: GREEN },
+      },
+      {
+        key: "audit",
+        label: "Audit Log",
+        icon: "📋",
+        roles: ["admin"],
+        badge: { n: "New", c: GREEN },
+      },
+    ],
+  },
+
+  // ── Analytics ────────────────────────────────────────────────────────────
   {
     group: "Analytics",
     items: [
       {
         key: "reporting",
         label: "Reporting",
-        icon: "≡",
-        roles: ["admin", "partner"],
-      },
-      {
-        key: "users",
-        label: "Manage Users",
-        icon: "≡",
-        roles: ["admin", "partner"],
-      },
-      {
-        key: "services",
-        label: "Manage Services",
         icon: "≡",
         roles: ["admin", "partner"],
       },
@@ -59,32 +83,8 @@ export const NAV_GROUPS = [
       },
     ],
   },
-  {
-    group: "Management",
-    items: [
-      { key: "users", label: "Manage Users", icon: "◎", roles: ["admin"] },
-      {
-        key: "services",
-        label: "Manage Services",
-        icon: "⚙",
-        roles: ["admin"],
-      },
-      {
-        key: "partners",
-        label: "Partners",
-        icon: "◈",
-        roles: ["admin"],
-        badge: { n: "12", c: GREEN },
-      },
-      {
-        key: "audit",
-        label: "Audit Log",
-        icon: "📋",
-        roles: ["admin"],
-        badge: { n: "New", c: GREEN },
-      },
-    ],
-  },
+
+  // ── Resources ────────────────────────────────────────────────────────────
   {
     group: "Resources",
     items: [

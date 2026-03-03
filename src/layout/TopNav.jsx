@@ -13,8 +13,8 @@ export default function TopNav({ role, page, setPage }) {
     ...flatItems,
     ...groupedSecs.flatMap((g) => g.items),
   ];
-  const partnerVisible = allPartnerItems.slice(0, 4);
-  const partnerMore = allPartnerItems.slice(4);
+  const partnerVisible = allPartnerItems.slice(0, 3);
+  const partnerMore = allPartnerItems.slice(3);
   const moreHasActive = partnerMore.some((i) => i.key === page);
   const closeAll = () => setOpenGroup(null);
   const toggleGroup = (g) => setOpenGroup((open) => (open === g ? null : g));
@@ -180,7 +180,7 @@ export default function TopNav({ role, page, setPage }) {
         borderBottom: "3px solid var(--gold)",
         position: "sticky",
         top: 0,
-        zIndex: 200,
+        zIndex: 500,
         boxShadow: "0 4px 20px rgba(10,22,40,.4)",
       }}
     >
@@ -225,6 +225,7 @@ export default function TopNav({ role, page, setPage }) {
           </div>
           <div>
             <div
+              className="topnav-logo-text"
               style={{
                 fontSize: 15,
                 fontWeight: 700,
@@ -237,6 +238,7 @@ export default function TopNav({ role, page, setPage }) {
               MCP Shield
             </div>
             <div
+              className="topnav-portal-sub"
               style={{
                 fontSize: 8,
                 color: "rgba(255,255,255,.5)",
@@ -250,6 +252,7 @@ export default function TopNav({ role, page, setPage }) {
             </div>
           </div>
           <div
+            className="topnav-admin-badge"
             style={{
               padding: "3px 10px",
               borderRadius: 4,
@@ -268,7 +271,7 @@ export default function TopNav({ role, page, setPage }) {
         </div>
 
         <div className="nav-divider" />
-        <div style={{ flex: 1, height: "100%" }}>
+        <div style={{ flex: 1, height: "100%", overflow: "visible" }}>
           <NavTabs />
         </div>
 
@@ -303,6 +306,7 @@ export default function TopNav({ role, page, setPage }) {
               }}
             />
             <span
+              className="topnav-live-label"
               style={{
                 fontSize: 10,
                 fontWeight: 600,

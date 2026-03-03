@@ -172,14 +172,7 @@ export default function PageGeo() {
   return (
     <div>
       {/* Summary stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4,1fr)",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-stats4 mb-section">
         {[
           {
             label: "Countries Reached",
@@ -230,11 +223,8 @@ export default function PageGeo() {
                 : undefined
             }
           >
-            <div
+            <div className="kpi-stat-sm"
               style={{
-                fontSize: 26,
-                fontWeight: 700,
-                fontFamily: "Poppins,serif",
                 color: s.color,
               }}
             >
@@ -289,7 +279,7 @@ export default function PageGeo() {
       </Card>
 
       {/* Bar chart + table */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+      <div className="g-halves">
         <Card>
           <SectionTitle>Visits by Country</SectionTitle>
           <ResponsiveContainer width="100%" height={300}>
@@ -330,8 +320,8 @@ export default function PageGeo() {
 
         <Card>
           <SectionTitle>Country Breakdown</SectionTitle>
-          <table
-            style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
+          <div className="table-wrap"><table
+          style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
           >
             <thead>
               <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
@@ -419,7 +409,7 @@ export default function PageGeo() {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></div>
         </Card>
       </div>
 

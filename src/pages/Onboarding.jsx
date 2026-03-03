@@ -304,14 +304,7 @@ export default function PageOnboarding({ setPage }) {
           </HelpText>
         </div>
         <Divider />
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-            marginBottom: 16,
-          }}
-        >
+        <div className="g-halves mb-section">
           <div>
             <Label>Short Code</Label>
             <Input placeholder="Enter short code" />
@@ -363,14 +356,7 @@ export default function PageOnboarding({ setPage }) {
         title="Geographic & Network Configuration"
         subtitle="Location and carrier settings"
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-            marginBottom: 16,
-          }}
-        >
+        <div className="g-halves mb-section">
           <div>
             <Label required>Country</Label>
             <Select placeholder="Select country…" />
@@ -407,9 +393,7 @@ export default function PageOnboarding({ setPage }) {
           </div>
         </div>
         <Divider />
-        <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}
-        >
+        <div className="g-halves">
           <div>
             <Label>Time Zone</Label>
             <Select placeholder="UTC+03:00 – Asia/Baghdad" />
@@ -438,14 +422,7 @@ export default function PageOnboarding({ setPage }) {
         title="Service Flow Configuration"
         subtitle="Shield mode, enrichment and page flow settings"
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: 16,
-            marginBottom: 16,
-          }}
-        >
+        <div className="g-stats3" style={{ gap: 16, marginBottom: 16 }}>
           <div>
             <Label required>Shield Mode</Label>
             <Select placeholder="Standard" />
@@ -533,14 +510,7 @@ export default function PageOnboarding({ setPage }) {
         title="Multi-Page Configuration"
         subtitle="Hosting and Shield placement across pages"
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-            marginBottom: 16,
-          }}
-        >
+        <div className="g-halves mb-section">
           <div>
             <Label required>Page 1 Hosted By</Label>
             <Select placeholder="Select…" />

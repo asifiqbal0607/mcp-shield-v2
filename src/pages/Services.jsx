@@ -409,7 +409,7 @@ export default function PageServices({ role = "admin", setPage }) {
         return <span style={{ color: "#94a3b8" }}>{idx + 1}</span>;
       case "name":
         return (
-          <span style={{ fontWeight: 600, color: "#f59e0b", fontSize: 12 }}>
+          <span style={{ fontWeight: 600, color: "#0f172a", fontSize: 12 }}>
             {row.name}
           </span>
         );
@@ -525,26 +525,15 @@ export default function PageServices({ role = "admin", setPage }) {
   return (
     <div>
       {/* Summary stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map(({ label, value, color }) => (
           <Card
             key={label}
             style={{ textAlign: "center", borderTop: `4px solid ${color}` }}
           >
             <div
-              style={{
-                fontSize: 34,
-                fontWeight: 700,
-                color,
-                fontFamily: "Poppins",
-              }}
+              className="kpi-stat"
+              style={{ color }}
             >
               {value}
             </div>
@@ -556,14 +545,7 @@ export default function PageServices({ role = "admin", setPage }) {
       </div>
 
       {/* Charts */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "2fr 1fr",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-split2 mb-section">
         <Card>
           <SectionTitle>Uptime Trend (14 days)</SectionTitle>
           <ResponsiveContainer width="100%" height={240}>
@@ -689,9 +671,8 @@ export default function PageServices({ role = "admin", setPage }) {
           </div>
         </div>
 
-        <div style={{ overflowX: "auto" }}>
-          <table
-            style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
+        <div className="table-wrap"><table
+          style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
           >
             <thead>
               <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
@@ -754,8 +735,7 @@ export default function PageServices({ role = "admin", setPage }) {
                 ))
               )}
             </tbody>
-          </table>
-        </div>
+          </table></div>
       </Card>
     </div>
   );

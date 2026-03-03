@@ -121,14 +121,7 @@ export default function PageDevice() {
   return (
     <div>
       {/* ── Summary ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: 14,
-          marginBottom: 20,
-        }}
-      >
+      <div className="g-stats3 mb-section">
         {stats.map((s) => (
           <Card
             key={s.label}
@@ -154,11 +147,8 @@ export default function PageDevice() {
                 : undefined
             }
           >
-            <div
+            <div className="kpi-stat"
               style={{
-                fontSize: 28,
-                fontWeight: 700,
-                fontFamily: "Poppins,serif",
                 color: s.color,
               }}
             >
@@ -184,14 +174,7 @@ export default function PageDevice() {
       </div>
 
       {/* ── Top 10 Devices + Top 10 OS ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 14,
-          marginBottom: 18,
-        }}
-      >
+      <div className="g-halves mb-section">
         <StatPieCard
           title="Top 10 Devices"
           data={topDevicesData}
@@ -205,7 +188,7 @@ export default function PageDevice() {
       </div>
 
       {/* ── Top 10 Browsers + Top 10 Networks ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+      <div className="g-halves">
         <StatPieCard
           title="Top 10 Browsers"
           data={topBrowsersData}

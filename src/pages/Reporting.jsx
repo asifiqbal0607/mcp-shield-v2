@@ -33,12 +33,8 @@ export default function PageReporting() {
             style={{ textAlign: "center", borderTop: `4px solid ${color}` }}
           >
             <div
-              style={{
-                fontSize: 32,
-                fontWeight: 700,
-                color,
-                fontFamily: "Poppins",
-              }}
+              className="kpi-stat"
+              style={{ color }}
             >
               {value}
             </div>
@@ -155,7 +151,7 @@ export default function PageReporting() {
             + New Report
           </button>
         </div>
-        <table
+        <div className="table-wrap"><table
           style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
         >
           <thead>
@@ -211,7 +207,7 @@ export default function PageReporting() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table></div>
       </Card>
     </div>
   );

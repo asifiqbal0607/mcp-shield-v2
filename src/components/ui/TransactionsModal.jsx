@@ -1,38 +1,198 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { transactionRows } from "../../data/tables";
 import TransactionDetailModal from "./TransactionDetailModal";
 import TransactionDashboardModal from "./TransactionDashboardModal";
 
+// ── Reason colour palette ────────────────────────────────────────────────────
 const REASON_COLORS = {
   "MCPS-2000": { bg: "#7c3aed", text: "#fff" },
   "MCPS-1300": { bg: "#2563eb", text: "#fff" },
   "AMCPS-1310": { bg: "#0891b2", text: "#fff" },
+  "MCPS-1400": { bg: "#d97706", text: "#fff" },
+  "MCPS-1500": { bg: "#dc2626", text: "#fff" },
+  "AMCPS-2000": { bg: "#059669", text: "#fff" },
 };
+const reasonColor = (code) =>
+  REASON_COLORS[code] || { bg: "#64748b", text: "#fff" };
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
+const VISIBLE_REASONS = 2; // shown inline; rest behind +N badge
 
+// ── Compact reason cell ──────────────────────────────────────────────────────
+function ReasonCell({ reasons }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  const visible = reasons.slice(0, VISIBLE_REASONS);
+  const overflow = reasons.slice(VISIBLE_REASONS);
+
+  useEffect(() => {
+    if (!open) return;
+    const h = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, [open]);
+
+  if (!reasons.length) return <span style={{ color: "#cbd5e1" }}>—</span>;
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        flexWrap: "nowrap",
+      }}
+    >
+      {visible.map((rsn) => {
+        const c = reasonColor(rsn);
+        return (
+          <span
+            key={rsn}
+            style={{
+              padding: "3px 8px",
+              borderRadius: 5,
+              fontSize: 10,
+              fontWeight: 700,
+              background: c.bg,
+              color: c.text,
+              whiteSpace: "nowrap",
+              letterSpacing: ".3px",
+            }}
+          >
+            {rsn}
+          </span>
+        );
+      })}
+
+      {overflow.length > 0 && (
+        <div ref={ref} style={{ position: "relative" }}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen((v) => !v);
+            }}
+            style={{
+              padding: "3px 8px",
+              borderRadius: 5,
+              fontSize: 10,
+              fontWeight: 700,
+              background: open ? "#1e40af" : "#e0e7ff",
+              color: open ? "#fff" : "#1e40af",
+              border: "none",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              transition: "all .15s",
+            }}
+          >
+            +{overflow.length}
+          </button>
+
+          {open && (
+            <div
+              style={{
+                position: "absolute",
+                top: "calc(100% + 6px)",
+                left: 0,
+                background: "#fff",
+                border: "1px solid #e2e8f0",
+                borderRadius: 10,
+                padding: "10px 12px",
+                boxShadow: "0 8px 24px rgba(0,0,0,.14)",
+                zIndex: 999,
+                minWidth: 160,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: "#94a3b8",
+                  marginBottom: 7,
+                  textTransform: "uppercase",
+                  letterSpacing: ".6px",
+                }}
+              >
+                All Reasons ({reasons.length})
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                {reasons.map((rsn) => {
+                  const c = reasonColor(rsn);
+                  return (
+                    <span
+                      key={rsn}
+                      style={{
+                        padding: "4px 10px",
+                        borderRadius: 6,
+                        fontSize: 11,
+                        fontWeight: 700,
+                        background: c.bg,
+                        color: c.text,
+                        display: "block",
+                      }}
+                    >
+                      {rsn}
+                    </span>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Column definitions ────────────────────────────────────────────────────────
+const COLS = [
+  { key: "sr", label: "Sr.", w: 44, noSort: true },
+  { key: "id", label: "ID", w: 170, mono: true },
+  { key: "time", label: "Time", w: 115 },
+  { key: "network", label: "Network", w: 155 },
+  { key: "apk", label: "APK", w: 155, mono: true },
+  { key: "userIp", label: "User IP", w: 125, mono: true },
+  { key: "msisdn", label: "MSISDN", w: 80 },
+  { key: "status", label: "Status", w: 80 },
+  { key: "reasons", label: "Reason", w: 200, noSort: true },
+  { key: "interaction", label: "Interaction", w: 90 },
+  { key: "view", label: "View", w: 60, noSort: true },
+];
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function TransactionsModal({
   onClose,
   title = "Clicked Clean — Transactions",
   ipFilter: initialIp = "",
 }) {
   const [selectedRow, setSelectedRow] = useState(null);
-  const [dashMode, setDashMode] = useState(null); // null | 'dashboard' | 'excluded'
+  const [dashMode, setDashMode] = useState(null);
   const [ipFilter, setIpFilter] = useState(initialIp);
   const [search, setSearch] = useState(initialIp);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [sortKey, setSortKey] = useState(null);
+  const [sortDir, setSortDir] = useState("asc");
 
-  // Close on Escape
   useEffect(() => {
-    const handler = (e) => {
+    const h = (e) => {
       if (e.key === "Escape") onClose();
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
-  const filtered = transactionRows.filter(
+  const toggleSort = (key) => {
+    if (sortKey === key) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  let filtered = transactionRows.filter(
     (r) =>
       r.id.includes(search) ||
       r.network.toLowerCase().includes(search.toLowerCase()) ||
@@ -40,17 +200,46 @@ export default function TransactionsModal({
       r.userIp.includes(search),
   );
 
+  if (sortKey) {
+    filtered = [...filtered].sort((a, b) => {
+      const av = a[sortKey] ?? "";
+      const bv = b[sortKey] ?? "";
+      return sortDir === "asc"
+        ? String(av).localeCompare(String(bv))
+        : String(bv).localeCompare(String(av));
+    });
+  }
+
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
-  const totalEntries = 112003; // simulate large dataset
+  const totalEntries = 112003;
 
-  // Page buttons
   const pageNums = [];
   if (totalPages <= 7) {
     for (let i = 1; i <= totalPages; i++) pageNums.push(i);
-  } else {
-    pageNums.push(1, 2, 3, 4, 5, "…", totalPages);
-  }
+  } else pageNums.push(1, 2, 3, "…", totalPages - 1, totalPages);
+
+  // Shared TD helper — fixed height, vertically centred, no row blow-out
+  const TD = ({ col, children, extra = {} }) => (
+    <td
+      style={{
+        padding: "0 12px",
+        height: 46,
+        verticalAlign: "middle",
+        fontFamily: col.mono
+          ? "'IBM Plex Mono','Courier New',monospace"
+          : "inherit",
+        fontSize: col.mono ? 11 : 12,
+        color: "#334155",
+        overflow: col.key === "reasons" ? "visible" : "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: col.key === "reasons" ? "normal" : "nowrap",
+        ...extra,
+      }}
+    >
+      {children}
+    </td>
+  );
 
   return (
     <>
@@ -62,18 +251,18 @@ export default function TransactionsModal({
           inset: 0,
           background: "rgba(15,23,42,.55)",
           backdropFilter: "blur(3px)",
-          zIndex: 700,
+          zIndex: 900,
         }}
       />
 
-      {/* Modal */}
+      {/* Modal shell */}
       <div
         style={{
           position: "fixed",
           top: "50%",
           left: "50%",
           transform: "translate(-50%,-50%)",
-          width: "min(98vw, 1300px)",
+          width: "min(98vw, 1340px)",
           maxHeight: "90vh",
           background: "#fff",
           borderRadius: 16,
@@ -90,9 +279,11 @@ export default function TransactionsModal({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "16px 24px",
+            padding: "14px 20px",
             borderBottom: "1px solid #f1f5f9",
             background: "linear-gradient(135deg,#f0fdf4,#dcfce7)",
+            flexWrap: "wrap",
+            gap: 10,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -101,19 +292,20 @@ export default function TransactionsModal({
                 width: 36,
                 height: 36,
                 borderRadius: 10,
+                flexShrink: 0,
                 background: "linear-gradient(135deg,#22c55e,#16a34a)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 18,
                 color: "#fff",
-                fontWeight: 700,
+                fontWeight: 900,
               }}
             >
               ✓
             </div>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#14532d" }}>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "#14532d" }}>
                 {ipFilter ? `Transactions — IP: ${ipFilter}` : title}
               </div>
               <div style={{ fontSize: 11, color: "#16a34a", fontWeight: 600 }}>
@@ -122,51 +314,45 @@ export default function TransactionsModal({
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <button
-              style={{
-                padding: "7px 14px",
-                borderRadius: 8,
-                border: "none",
-                cursor: "pointer",
-                background: "#1d4ed8",
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: 700,
-              }}
-            >
-              Export Transactions
-            </button>
-            <button
-              onClick={() => setDashMode("dashboard")}
-              style={{
-                padding: "7px 14px",
-                borderRadius: 8,
-                border: "none",
-                cursor: "pointer",
-                background: "#0f766e",
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: 700,
-              }}
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => setDashMode("excluded")}
-              style={{
-                padding: "7px 14px",
-                borderRadius: 8,
-                border: "none",
-                cursor: "pointer",
-                background: "#7c3aed",
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: 700,
-              }}
-            >
-              Excluded Dashboard
-            </button>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            {[
+              { label: "Export Transactions", bg: "#1d4ed8", fn: null },
+              {
+                label: "Dashboard",
+                bg: "#0f766e",
+                fn: () => setDashMode("dashboard"),
+              },
+              {
+                label: "Excluded Dashboard",
+                bg: "#7c3aed",
+                fn: () => setDashMode("excluded"),
+              },
+            ].map(({ label, bg, fn }) => (
+              <button
+                key={label}
+                onClick={fn}
+                style={{
+                  padding: "7px 14px",
+                  borderRadius: 8,
+                  border: "none",
+                  cursor: "pointer",
+                  background: bg,
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {label}
+              </button>
+            ))}
             <button
               onClick={onClose}
               style={{
@@ -176,12 +362,11 @@ export default function TransactionsModal({
                 border: "1px solid #e2e8f0",
                 background: "#f8fafc",
                 cursor: "pointer",
-                fontSize: 18,
+                fontSize: 20,
                 color: "#64748b",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontWeight: 700,
               }}
             >
               ×
@@ -189,11 +374,11 @@ export default function TransactionsModal({
           </div>
         </div>
 
-        {/* Active IP filter pill */}
+        {/* IP filter pill */}
         {ipFilter && (
           <div
             style={{
-              padding: "8px 24px",
+              padding: "8px 20px",
               background: "#eff6ff",
               borderBottom: "1px solid #dbeafe",
               display: "flex",
@@ -223,7 +408,6 @@ export default function TransactionsModal({
                 setSearch("");
               }}
               style={{
-                marginLeft: 4,
                 padding: "2px 10px",
                 borderRadius: 20,
                 border: "none",
@@ -245,9 +429,11 @@ export default function TransactionsModal({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "12px 24px",
+            padding: "10px 20px",
             borderBottom: "1px solid #f1f5f9",
             background: "#fafafa",
+            flexWrap: "wrap",
+            gap: 8,
           }}
         >
           <div
@@ -300,6 +486,7 @@ export default function TransactionsModal({
                 setSearch(e.target.value);
                 setPage(1);
               }}
+              placeholder="ID, network, APK, IP…"
               style={{
                 border: "1px solid #e2e8f0",
                 borderRadius: 8,
@@ -313,10 +500,22 @@ export default function TransactionsModal({
         </div>
 
         {/* Table */}
-        <div style={{ overflowY: "auto", flex: 1 }}>
+        <div style={{ overflowY: "auto", overflowX: "auto", flex: 1 }}>
           <table
-            style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              fontSize: 12,
+              tableLayout: "fixed",
+              minWidth: 900,
+            }}
           >
+            <colgroup>
+              {COLS.map((col) => (
+                <col key={col.key} style={{ width: col.w }} />
+              ))}
+            </colgroup>
+
             <thead
               style={{
                 position: "sticky",
@@ -326,40 +525,44 @@ export default function TransactionsModal({
               }}
             >
               <tr style={{ borderBottom: "2px solid #e2e8f0" }}>
-                {[
-                  "Sr.",
-                  "ID",
-                  "Time",
-                  "Network",
-                  "APK",
-                  "User IP",
-                  "MSISDN",
-                  "Status",
-                  "Reason",
-                  "Interaction",
-                  "View",
-                ].map((h) => (
+                {COLS.map((col) => (
                   <th
-                    key={h}
+                    key={col.key}
+                    onClick={() => !col.noSort && toggleSort(col.key)}
                     style={{
                       padding: "10px 12px",
                       textAlign: "left",
-                      fontSize: 11,
+                      fontSize: 10,
                       fontWeight: 700,
                       color: "#64748b",
                       textTransform: "uppercase",
                       letterSpacing: ".6px",
                       whiteSpace: "nowrap",
+                      cursor: col.noSort ? "default" : "pointer",
+                      userSelect: "none",
                     }}
                   >
-                    {h}{" "}
-                    {h !== "View" && h !== "Sr." && (
-                      <span style={{ opacity: 0.4, fontSize: 9 }}>↕</span>
+                    {col.label}
+                    {!col.noSort && (
+                      <span
+                        style={{
+                          marginLeft: 3,
+                          opacity: sortKey === col.key ? 1 : 0.3,
+                          fontSize: 9,
+                        }}
+                      >
+                        {sortKey === col.key
+                          ? sortDir === "asc"
+                            ? "↑"
+                            : "↓"
+                          : "↕"}
+                      </span>
                     )}
                   </th>
                 ))}
               </tr>
             </thead>
+
             <tbody>
               {paged.map((r, i) => (
                 <tr
@@ -372,77 +575,29 @@ export default function TransactionsModal({
                     (e.currentTarget.style.background = "transparent")
                   }
                 >
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      fontWeight: 700,
-                      color: "#94a3b8",
-                    }}
+                  <TD
+                    col={COLS[0]}
+                    extra={{ color: "#94a3b8", fontWeight: 700 }}
                   >
                     {(page - 1) * pageSize + i + 1}
-                  </td>
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      fontFamily: "monospace",
-                      fontSize: 11,
-                      color: "#334155",
-                      maxWidth: 200,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {r.id}
-                  </td>
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      color: "#475569",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+                  </TD>
+                  <TD col={COLS[1]} extra={{ color: "#475569" }}>
+                    <span title={r.id}>{r.id}</span>
+                  </TD>
+                  <TD col={COLS[2]} extra={{ color: "#475569" }}>
                     {r.time}
-                  </td>
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      color: "#334155",
-                      maxWidth: 160,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {r.network}
-                  </td>
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      fontFamily: "monospace",
-                      fontSize: 10,
-                      color: "#475569",
-                      maxWidth: 160,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {r.apk || "—"}
-                  </td>
-                  <td
-                    style={{
-                      padding: "10px 12px",
-                      fontFamily: "monospace",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {r.userIp}
-                  </td>
-                  <td style={{ padding: "10px 12px", color: "#64748b" }}>
+                  </TD>
+                  <TD col={COLS[3]}>
+                    <span title={r.network}>{r.network}</span>
+                  </TD>
+                  <TD col={COLS[4]} extra={{ color: "#64748b" }}>
+                    <span title={r.apk}>{r.apk || "—"}</span>
+                  </TD>
+                  <TD col={COLS[5]}>{r.userIp}</TD>
+                  <TD col={COLS[6]} extra={{ color: "#94a3b8" }}>
                     {r.msisdn || "—"}
-                  </td>
-                  <td style={{ padding: "10px 12px" }}>
+                  </TD>
+                  <TD col={COLS[7]}>
                     <span
                       style={{
                         padding: "3px 10px",
@@ -452,38 +607,20 @@ export default function TransactionsModal({
                         background:
                           r.status === "Block" ? "#fef2f2" : "#f0fdf4",
                         color: r.status === "Block" ? "#dc2626" : "#16a34a",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {r.status}
                     </span>
-                  </td>
-                  <td style={{ padding: "10px 12px" }}>
-                    <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-                      {r.reasons.map((rsn) => {
-                        const col = REASON_COLORS[rsn] || {
-                          bg: "#64748b",
-                          text: "#fff",
-                        };
-                        return (
-                          <span
-                            key={rsn}
-                            style={{
-                              padding: "2px 8px",
-                              borderRadius: 5,
-                              fontSize: 10,
-                              fontWeight: 700,
-                              background: col.bg,
-                              color: col.text,
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {rsn}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </td>
-                  <td style={{ padding: "10px 12px" }}>
+                  </TD>
+                  {/* Reason — always 1 line height, overflow in popover */}
+                  <TD
+                    col={COLS[8]}
+                    extra={{ overflow: "visible", position: "relative" }}
+                  >
+                    <ReasonCell reasons={r.reasons || []} />
+                  </TD>
+                  <TD col={COLS[9]}>
                     <span
                       style={{
                         padding: "3px 10px",
@@ -492,16 +629,17 @@ export default function TransactionsModal({
                         fontWeight: 700,
                         background: "#fef2f2",
                         color: "#dc2626",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {r.interaction}
                     </span>
-                  </td>
-                  <td style={{ padding: "10px 12px" }}>
+                  </TD>
+                  <TD col={COLS[10]}>
                     <button
                       onClick={() => setSelectedRow(r)}
                       style={{
-                        padding: "5px 14px",
+                        padding: "5px 12px",
                         borderRadius: 6,
                         border: "none",
                         cursor: "pointer",
@@ -513,9 +651,25 @@ export default function TransactionsModal({
                     >
                       View
                     </button>
-                  </td>
+                  </TD>
                 </tr>
               ))}
+
+              {paged.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={COLS.length}
+                    style={{
+                      padding: 48,
+                      textAlign: "center",
+                      color: "#94a3b8",
+                      fontSize: 13,
+                    }}
+                  >
+                    No transactions match your search.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -526,17 +680,30 @@ export default function TransactionsModal({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            padding: "12px 24px",
+            padding: "12px 20px",
             borderTop: "1px solid #f1f5f9",
             background: "#fafafa",
+            flexWrap: "wrap",
+            gap: 8,
           }}
         >
           <div style={{ fontSize: 12, color: "#64748b" }}>
-            Showing {Math.min((page - 1) * pageSize + 1, filtered.length)} to{" "}
-            {Math.min(page * pageSize, filtered.length)} of{" "}
+            Showing{" "}
+            {Math.min(
+              (page - 1) * pageSize + 1,
+              filtered.length,
+            ).toLocaleString()}{" "}
+            to {Math.min(page * pageSize, filtered.length).toLocaleString()} of{" "}
             {totalEntries.toLocaleString()} entries
           </div>
-          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
@@ -553,26 +720,27 @@ export default function TransactionsModal({
             >
               Previous
             </button>
-            {pageNums.map((n, i) => (
+
+            {pageNums.map((n, idx) => (
               <button
-                key={i}
+                key={idx}
                 onClick={() => typeof n === "number" && setPage(n)}
                 style={{
                   width: 34,
                   height: 34,
                   borderRadius: 6,
-                  border: "none",
-                  cursor: typeof n === "number" ? "pointer" : "default",
+                  border: page === n ? "none" : "1px solid #e2e8f0",
                   background: page === n ? "#1d4ed8" : "#fff",
                   color: page === n ? "#fff" : "#475569",
                   fontWeight: 700,
                   fontSize: 12,
-                  border: page === n ? "none" : "1px solid #e2e8f0",
+                  cursor: typeof n === "number" ? "pointer" : "default",
                 }}
               >
                 {n}
               </button>
             ))}
+
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
@@ -592,6 +760,7 @@ export default function TransactionsModal({
           </div>
         </div>
       </div>
+
       {selectedRow && (
         <TransactionDetailModal
           row={selectedRow}
