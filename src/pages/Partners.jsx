@@ -38,42 +38,24 @@ const FLAG = { ZA:"🇿🇦", TH:"🇹🇭", TZ:"🇹🇿", NG:"🇳🇬", SN:"�
 function PartnerModal({ partner, onClose }) {
   if (!partner) return null;
   return (
-    <div style={{
-      position: "fixed", inset: 0, zIndex: 1000,
-      background: "rgba(10,22,40,.55)", backdropFilter: "blur(4px)",
-      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
-    }} onClick={e => e.target === e.currentTarget && onClose()}>
-      <div style={{
-        background: "#fff", borderRadius: 16, width: "100%", maxWidth: 560,
-        boxShadow: "0 24px 64px rgba(0,0,0,.2)", overflow: "hidden",
-      }}>
+    <div className="partner-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="partner-box">
         {/* Header */}
-        <div style={{
-          background: "linear-gradient(135deg,#0a1628,#0f2040)",
-          padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 10,
-              background: "linear-gradient(135deg,#e8a020,#f5c842)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 20, fontWeight: 900, color: "#0a1628",
-            }}>{partner.name[0]}</div>
+        <div className="partner-modal-header">
+          <div className="f-gap-14">
+            <div className="partner-avatar">{partner.name[0]}</div>
             <div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>{partner.name}</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,.5)", marginTop: 2 }}>
+              <div className="txt-white-hd">{partner.name}</div>
+              <div className="txt-white-sub">
                 {FLAG[partner.country]} {partner.id}
               </div>
             </div>
           </div>
-          <button onClick={onClose} style={{
-            background: "rgba(255,255,255,.1)", border: "1px solid rgba(255,255,255,.2)",
-            borderRadius: 8, color: "#fff", width: 32, height: 32, cursor: "pointer", fontSize: 18,
-          }}>×</button>
+          <button onClick={onClose} className="partner-modal-close">×</button>
         </div>
 
         {/* Body */}
-        <div style={{ padding: "22px 24px" }}>
+        <div className="p-section">
           {/* Stats row */}
           <div className="g-stats3 mb-section">
             {[
@@ -81,12 +63,9 @@ function PartnerModal({ partner, onClose }) {
               { label: "Users",    value: partner.users,    color: VIOLET },
               { label: "Revenue",  value: partner.revenue,  color: GREEN },
             ].map(s => (
-              <div key={s.label} style={{
-                textAlign: "center", padding: "14px 10px",
-                borderRadius: 10, background: "#f8fafc", border: "1px solid #e8ecf3",
-              }}>
-                <div style={{ fontSize: 22, fontWeight: 700, color: s.color }}>{s.value}</div>
-                <div style={{ fontSize: 11, color: SLATE, fontWeight: 600, marginTop: 2 }}>{s.label}</div>
+              <div key={s.label} className="partner-stat-cell">
+                <div className="stat-num" style={{ '--c': s.color }}>{s.value}</div>
+                <div className="stat-label">{s.label}</div>
               </div>
             ))}
           </div>
@@ -100,50 +79,24 @@ function PartnerModal({ partner, onClose }) {
             ["Joined",      partner.joined],
             ["Last Active", partner.lastActive],
           ].map(([label, value]) => (
-            <div key={label} style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "10px 0", borderBottom: "1px solid #f1f5f9",
-            }}>
-              <span style={{ fontSize: 12, color: SLATE, fontWeight: 600 }}>{label}</span>
+            <div key={label} className="partner-detail-row">
+              <span className="stat-sublabel">{label}</span>
               {label === "Status" ? (
-                <span style={{
-                  fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 20,
-                  background: STATUS_BG(value), color: STATUS_TEXT(value),
-                  textTransform: "capitalize",
-                }}>{value}</span>
+                <span className="partner-status-badge" style={{ '--bg': STATUS_BG(value), '--c': STATUS_TEXT(value) }}>{value}</span>
               ) : (
-                <span style={{ fontSize: 12, fontWeight: 600, color: "#1a1a2e" }}>{value}</span>
+                <span className="detail-val">{value}</span>
               )}
             </div>
           ))}
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-            <button style={{
-              flex: 1, padding: "10px", borderRadius: 8,
-              background: BLUE, color: "#fff", border: "none",
-              fontSize: 12, fontWeight: 700, cursor: "pointer",
-            }}>Edit Partner</button>
-            <button style={{
-              flex: 1, padding: "10px", borderRadius: 8,
-              background: "#f8fafc", color: "#64748b",
-              border: "1px solid #e2e8f0",
-              fontSize: 12, fontWeight: 700, cursor: "pointer",
-            }}>View Services</button>
+          <div className="mt-20-acts">
+            <button className="partner-btn-primary">Edit Partner</button>
+            <button className="partner-btn-ghost">View Services</button>
             {partner.status !== "blocked" ? (
-              <button style={{
-                padding: "10px 16px", borderRadius: 8,
-                background: "#fee2e2", color: "#dc2626",
-                border: "1px solid #fecaca",
-                fontSize: 12, fontWeight: 700, cursor: "pointer",
-              }}>Block</button>
+              <button className="partner-btn-danger">Block</button>
             ) : (
-              <button style={{
-                padding: "10px 16px", borderRadius: 8,
-                background: "#dcfce7", color: "#15803d",
-                border: "1px solid #bbf7d0",
-                fontSize: 12, fontWeight: 700, cursor: "pointer",
-              }}>Unblock</button>
+              <button className="partner-btn-success">Unblock</button>
             )}
           </div>
         </div>
@@ -183,9 +136,9 @@ export default function PagePartners() {
           { label: "Needs Attention",  value: stats.warning, color: AMBER },
           { label: "Blocked",          value: stats.blocked, color: ROSE  },
         ].map(s => (
-          <Card key={s.label} style={{ textAlign: "center", borderTop: `3px solid ${s.color}` }}>
-            <div className="kpi-stat" style={{ color: s.color }}>{s.value}</div>
-            <div style={{ fontSize: 12, color: SLATE, fontWeight: 600, marginTop: 4 }}>{s.label}</div>
+          <Card key={s.label} className="stat-top" style={{ '--c': s.color }}>
+            <div className="kpi-stat" className="stat-accent" style={{ '--c': s.color }}>{s.value}</div>
+            <div className="stat-label">{s.label}</div>
           </Card>
         ))}
       </div>
@@ -206,20 +159,17 @@ export default function PagePartners() {
 
         <Card>
           <SectionTitle>By Status</SectionTitle>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 8 }}>
+          <div className="f-col-10">
             {[
               { label: "Active",          count: stats.active,  color: GREEN,  bg: "#dcfce7", pct: Math.round(stats.active  / stats.total * 100) },
               { label: "Needs Attention", count: stats.warning, color: AMBER,  bg: "#fef3c7", pct: Math.round(stats.warning / stats.total * 100) },
               { label: "Blocked",         count: stats.blocked, color: ROSE,   bg: "#fee2e2", pct: Math.round(stats.blocked / stats.total * 100) },
             ].map(s => (
-              <div key={s.label} style={{
-                display: "flex", alignItems: "center", gap: 12,
-                padding: "10px 14px", borderRadius: 10, background: s.bg,
-              }}>
-                <div style={{ width: 10, height: 10, borderRadius: "50%", background: s.color, flexShrink: 0 }} />
-                <div style={{ flex: 1, fontSize: 12, fontWeight: 700, color: "#1a1a2e" }}>{s.label}</div>
-                <span style={{ fontSize: 13, fontWeight: 700, color: s.color }}>{s.count}</span>
-                <span style={{ fontSize: 11, color: SLATE }}>{s.pct}%</span>
+              <div key={s.label} className="partner-status-row" style={{ '--bg': s.bg }}>
+                <div className="color-dot" className="stat-bg" style={{ '--c': s.color }} />
+                <div className="rep-legend-lbl">{s.label}</div>
+                <span className="stat-num-val" style={{ '--c': s.color }}>{s.count}</span>
+                <span className="stat-sublabel">{s.pct}%</span>
               </div>
             ))}
           </div>
@@ -229,113 +179,77 @@ export default function PagePartners() {
       {/* ── Partner Table ── */}
       <Card>
         {/* Toolbar */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexWrap: "wrap", gap: 12, marginBottom: 16,
-        }}>
-          <SectionTitle style={{ margin: 0 }}>All Partners</SectionTitle>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div className="partner-toolbar">
+          <SectionTitle className="m-0">All Partners</SectionTitle>
+          <div className="f-wrap-10">
             {/* Status filter pills */}
-            <div style={{ display: "flex", gap: 6 }}>
+            <div className="f-gap-6">
               {["All", "Active", "Warning", "Blocked"].map(f => (
-                <button key={f} onClick={() => setFilter(f)} style={{
-                  padding: "5px 12px", borderRadius: 20, cursor: "pointer",
-                  fontSize: 11, fontWeight: 700,
-                  border: filter === f ? "none" : "1px solid #e2e8f0",
-                  background: filter === f ? BLUE : "#f8fafc",
-                  color: filter === f ? "#fff" : "#64748b",
-                  transition: "all .15s",
-                }}>{f}</button>
+                <button key={f} onClick={() => setFilter(f)} className={`partner-filter-pill ${filter === f ? "active" : "inactive"}`}>{f}</button>
               ))}
             </div>
             {/* Search */}
-            <div style={{ position: "relative" }}>
-              <span style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "#94a3b8" }}>🔍</span>
+            <div className="p-rel">
+              <span className="partner-search-icon">🔍</span>
               <input
                 placeholder="Search partners…"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{
-                  border: "1px solid #e2e8f0", borderRadius: 8,
-                  padding: "7px 12px 7px 30px", fontSize: 12, outline: "none", width: 200,
-                }}
+                className="partner-search"
               />
             </div>
             {/* Add button */}
-            <button style={{
-              display: "flex", alignItems: "center", gap: 6,
-              padding: "7px 16px", borderRadius: 8,
-              background: BLUE, color: "#fff", border: "none",
-              fontSize: 12, fontWeight: 700, cursor: "pointer",
-            }}>+ Add Partner</button>
+            <button className="partner-add-btn">+ Add Partner</button>
           </div>
         </div>
 
         {/* Table */}
         <div className="table-wrap">
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+          <table className="dt">
             <thead>
-              <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+              <tr className="dt-head-row">
                 {["Partner", "Contact", "Country", "Services", "Users", "Revenue", "Status", "Last Active", ""].map(h => (
-                  <th key={h} style={{
-                    textAlign: "left", padding: "8px 12px",
-                    fontSize: 10, fontWeight: 700, color: SLATE,
-                    textTransform: "uppercase", letterSpacing: ".8px",
-                  }}>{h}</th>
+                  <th key={h} className="dt-th">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filtered.map((p, i) => (
                 <tr key={p.id}
-                  style={{ borderBottom: "1px solid #f8fafc", cursor: "pointer" }}
+                  className="dt-tr"
                   onClick={() => setSelected(p)}
                   onMouseEnter={e => e.currentTarget.style.background = "#f8fafc"}
                   onMouseLeave={e => e.currentTarget.style.background = "transparent"}
                 >
                   {/* Partner name + id */}
-                  <td style={{ padding: "11px 12px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 8, flexShrink: 0,
-                        background: `linear-gradient(135deg, ${BLUE}22, ${BLUE}44)`,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 14, fontWeight: 700, color: BLUE,
-                      }}>{p.name[0]}</div>
+                  <td className="p-sm">
+                    <div className="f-gap-10">
+                      <div className="partner-row-avatar">{p.name[0]}</div>
                       <div>
-                        <div style={{ fontWeight: 700, color: "#1a1a2e", fontSize: 12 }}>{p.name}</div>
-                        <div style={{ fontSize: 10, color: SLATE, fontFamily: "monospace" }}>{p.id}</div>
+                        <div className="txt-strong-sm">{p.name}</div>
+                        <div className="txt-mono">{p.id}</div>
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: "11px 12px", color: "#334155" }}>{p.contact}</td>
-                  <td style={{ padding: "11px 12px", fontSize: 14 }}>{FLAG[p.country]} {p.country}</td>
-                  <td style={{ padding: "11px 12px", fontWeight: 700, color: BLUE, textAlign: "center" }}>{p.services}</td>
-                  <td style={{ padding: "11px 12px", fontWeight: 700, color: VIOLET, textAlign: "center" }}>{p.users}</td>
-                  <td style={{ padding: "11px 12px", fontFamily: "monospace", fontSize: 11, color: "#334155" }}>{p.revenue}</td>
-                  <td style={{ padding: "11px 12px" }}>
-                    <span style={{
-                      fontSize: 10, fontWeight: 700, padding: "3px 10px",
-                      borderRadius: 20, textTransform: "capitalize",
-                      background: STATUS_BG(p.status),
-                      color: STATUS_TEXT(p.status),
-                    }}>{p.status}</span>
+                  <td className="td-p-body">{p.contact}</td>
+                  <td className="td-p-flag">{FLAG[p.country]} {p.country}</td>
+                  <td className="td-p-blue">{p.services}</td>
+                  <td className="td-p-violet">{p.users}</td>
+                  <td className="td-p-mono">{p.revenue}</td>
+                  <td className="p-sm">
+                    <span className="partner-status-badge" style={{ '--bg': STATUS_BG(p.status), '--c': STATUS_TEXT(p.status) }}>{p.status}</span>
                   </td>
-                  <td style={{ padding: "11px 12px", color: SLATE, fontSize: 11 }}>{p.lastActive}</td>
-                  <td style={{ padding: "11px 12px" }}>
+                  <td className="td-p-slate">{p.lastActive}</td>
+                  <td className="p-sm">
                     <button
                       onClick={e => { e.stopPropagation(); setSelected(p); }}
-                      style={{
-                        padding: "5px 12px", borderRadius: 6, cursor: "pointer",
-                        border: "1px solid #e2e8f0", background: "#f8fafc",
-                        fontSize: 11, fontWeight: 600, color: "#64748b",
-                      }}>View</button>
+                      className="partner-view-btn">View</button>
                   </td>
                 </tr>
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={9} style={{ padding: "40px", textAlign: "center", color: SLATE, fontSize: 13 }}>
+                  <td colSpan={9} className="td-empty">
                     No partners match your search.
                   </td>
                 </tr>
@@ -345,7 +259,7 @@ export default function PagePartners() {
         </div>
 
         {/* Footer count */}
-        <div style={{ marginTop: 12, fontSize: 11, color: SLATE }}>
+        <div className="partner-footer-txt">
           Showing {filtered.length} of {PARTNER_ROWS.length} partners
         </div>
       </Card>

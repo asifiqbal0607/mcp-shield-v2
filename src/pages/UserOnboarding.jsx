@@ -25,8 +25,8 @@ const ACCOUNT_TYPES = [
 
 function Label({ children, required }) {
   return (
-    <label style={{ display: "block", fontSize: 13, fontWeight: 700, color: "#1e293b", marginBottom: 6 }}>
-      {children}{required && <span style={{ color: ROSE, marginLeft: 2 }}>*</span>}
+    <label className="onb-label-lg">
+      {children}{required && <span className="txt-danger">*</span>}
     </label>
   );
 }
@@ -34,13 +34,13 @@ function Label({ children, required }) {
 function Input({ placeholder, type = "text", value, onChange, right }) {
   const [focused, setFocused] = useState(false);
   return (
-    <div style={{ position: "relative" }}>
+    <div className="onb-input-pw-wrap">
       <input
         type={type} placeholder={placeholder} value={value} onChange={onChange}
         onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-        style={{ width: "100%", boxSizing: "border-box", border: `1px solid ${focused ? T : "#e2e8f0"}`, borderRadius: 8, padding: right ? "10px 44px 10px 12px" : "10px 12px", fontSize: 13, color: "#334155", outline: "none", background: "#fff", transition: "border-color .15s" }}
+        className="onb-input" style={{ '--bdr': focused ? T : '#e2e8f0' }}
       />
-      {right && <div style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)" }}>{right}</div>}
+      {right && <div className="onb-pw-toggle">{right}</div>}
     </div>
   );
 }
@@ -52,7 +52,7 @@ function Textarea({ placeholder, value, onChange }) {
       placeholder={placeholder} value={value} onChange={onChange}
       onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
       rows={3}
-      style={{ width: "100%", boxSizing: "border-box", border: `1px solid ${focused ? T : "#e2e8f0"}`, borderRadius: 8, padding: "10px 12px", fontSize: 13, color: "#334155", outline: "none", background: "#fff", resize: "vertical", transition: "border-color .15s" }}
+      className="onb-input" style={{ '--bdr': focused ? T : '#e2e8f0' }}
     />
   );
 }
@@ -62,7 +62,7 @@ function Select({ placeholder, options, value, onChange }) {
   return (
     <select value={value} onChange={onChange}
       onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-      style={{ width: "100%", boxSizing: "border-box", border: `1px solid ${focused ? T : "#e2e8f0"}`, borderRadius: 8, padding: "10px 12px", fontSize: 13, color: value ? "#334155" : "#94a3b8", outline: "none", background: "#fff", cursor: "pointer", transition: "border-color .15s" }}
+      className="onb-input" style={{ '--bdr': focused ? T : '#e2e8f0' }}
     >
       <option value="">{placeholder}</option>
       {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -72,8 +72,8 @@ function Select({ placeholder, options, value, onChange }) {
 
 function Radio({ name, value, checked, onChange, label }) {
   return (
-    <label style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", fontSize: 13, color: "#334155", fontWeight: checked ? 700 : 500 }}>
-      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} style={{ accentColor: T, width: 14, height: 14 }} />
+    <label className="onb-select-opt">
+      <input type="radio" name={name} value={value} checked={checked} onChange={onChange} className="onb-radio-accent" />
       {label}
     </label>
   );
@@ -81,8 +81,8 @@ function Radio({ name, value, checked, onChange, label }) {
 
 function SectionCard({ title, children }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 12, border: "1px solid #e8ecf3", padding: "22px 24px", marginBottom: 16, boxShadow: "0 1px 4px rgba(0,0,0,.04)" }}>
-      {title && <div style={{ fontSize: 13, fontWeight: 800, color: "#0f172a", marginBottom: 16, paddingBottom: 12, borderBottom: "1px solid #f1f5f9" }}>{title}</div>}
+    <div className="onb-card-lg">
+      {title && <div className="onb-step-title">{title}</div>}
       {children}
     </div>
   );
@@ -93,20 +93,20 @@ function EmailRow({ emails, setEmails }) {
   return (
     <div>
       {emails.map((email, i) => (
-        <div key={i} style={{ display: "flex", gap: 8, marginBottom: i < emails.length - 1 ? 8 : 0 }}>
-          <div style={{ flex: 1 }}>
+        <div key={i} className="onb-email-row">
+          <div className="flex-1">
             <Input placeholder="Enter email" type="email" value={email} onChange={(e) => {
               const next = [...emails]; next[i] = e.target.value; setEmails(next);
             }} />
           </div>
           {emails.length > 1 && (
             <button onClick={() => setEmails(emails.filter((_, j) => j !== i))}
-              style={{ width: 36, height: 40, borderRadius: 8, border: "1px solid #fecaca", background: "#fef2f2", color: "#dc2626", fontSize: 16, cursor: "pointer", flexShrink: 0 }}>×</button>
+              className="onb-email-del-btn">×</button>
           )}
         </div>
       ))}
       <button onClick={() => setEmails([...emails, ""])}
-        style={{ marginTop: 8, display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 14px", borderRadius: 6, border: `1.5px solid ${T}`, background: "#f0fdfa", color: T, fontSize: 11, fontWeight: 700, cursor: "pointer" }}
+        className="onb-add-tag-btn onb-tag active"
         onMouseEnter={(e) => (e.currentTarget.style.background = "#ccfbf1")}
         onMouseLeave={(e) => (e.currentTarget.style.background = "#f0fdfa")}
       >+ Add More</button>
@@ -131,18 +131,18 @@ export default function PageUserOnboarding({ setPage }) {
   const TIMEZONES = ["UTC-12:00","UTC-11:00","UTC-10:00","UTC-09:00","UTC-08:00","UTC-07:00","UTC-06:00","UTC-05:00","UTC-04:00","UTC-03:00","UTC-02:00","UTC-01:00","UTC+00:00","UTC+01:00","UTC+02:00","UTC+03:00","UTC+04:00","UTC+05:00","UTC+05:30","UTC+06:00","UTC+07:00","UTC+08:00","UTC+09:00","UTC+10:00","UTC+11:00","UTC+12:00"];
 
   return (
-    <div style={{ maxWidth: 960, margin: "0 auto" }}>
+    <div className="onb-max-container">
 
       {/* Page header */}
-      <div style={{ background: "linear-gradient(135deg, #0f172a 0%, #1a3050 100%)", borderRadius: 14, padding: "22px 28px", marginBottom: 20, boxShadow: "0 4px 24px rgba(0,0,0,.15)" }}>
-        <div style={{ fontSize: 9, fontWeight: 800, letterSpacing: "2.5px", textTransform: "uppercase", color: T, marginBottom: 8 }}>MCP Shield · User Management</div>
-        <div style={{ fontSize: 22, fontWeight: 800, color: "#fff" }}>Add User</div>
-        <div style={{ fontSize: 12, color: "#64748b", marginTop: 5 }}>Create a new user account and configure their access permissions.</div>
+      <div className="onb-dark-banner">
+        <div className="onb-dark-eyebrow">MCP Shield · User Management</div>
+        <div className="onb-dark-title">Add User</div>
+        <div className="onb-dark-sub">Create a new user account and configure their access permissions.</div>
       </div>
 
       {/* ── Basic Info ── */}
       <SectionCard>
-        <div className="g-halves" style={{ gap: 16 }}>
+        <div className="g-halves" className="onb-gap-16">
           <div>
             <Label required>Name</Label>
             <Input placeholder="Name" value={form.name} onChange={set("name")} />
@@ -164,18 +164,18 @@ export default function PageUserOnboarding({ setPage }) {
               onChange={set("password")}
               right={
                 <button onClick={() => setShowPwd(s => !s)}
-                  style={{ width: 28, height: 28, borderRadius: 6, border: "none", background: T, color: "#fff", cursor: "pointer", fontSize: 13, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  className="onb-step-num">
                   {showPwd ? "🙈" : "👁"}
                 </button>
               }
             />
           </div>
         </div>
-        <div style={{ marginTop: 16 }}>
+        <div className="mt-16">
           <Label>Description</Label>
           <Textarea placeholder="Description" value={form.description} onChange={set("description")} />
         </div>
-        <div style={{ marginTop: 16 }}>
+        <div className="mt-16">
           <Label>Time Zone</Label>
           <Select placeholder="Select from the list" options={TIMEZONES} value={form.timezone} onChange={set("timezone")} />
         </div>
@@ -185,9 +185,9 @@ export default function PageUserOnboarding({ setPage }) {
       <SectionCard title="Permissions">
         <div className="g-perms5">
           {PERMISSIONS.map(p => (
-            <div key={p.key} style={{ background: "#f8fafc", borderRadius: 8, padding: "12px 14px", border: "1px solid #e8ecf3" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#334155", marginBottom: 10, lineHeight: 1.4 }}>{p.label}</div>
-              <div style={{ display: "flex", gap: 12 }}>
+            <div key={p.key} className="onb-services-grid">
+              <div className="onb-services-hd">{p.label}</div>
+              <div className="f-gap-12">
                 <Radio name={p.key} value="yes" checked={permissions[p.key] === "yes"} onChange={() => setPermissions(prev => ({ ...prev, [p.key]: "yes" }))} label="Yes" />
                 <Radio name={p.key} value="no"  checked={permissions[p.key] === "no"}  onChange={() => setPermissions(prev => ({ ...prev, [p.key]: "no"  }))} label="No"  />
               </div>
@@ -198,23 +198,23 @@ export default function PageUserOnboarding({ setPage }) {
 
       {/* ── Account Type ── */}
       <SectionCard title="Account Type">
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 20 }}>
+        <div className="onb-select-row">
           {ACCOUNT_TYPES.map(t => (
-            <label key={t} style={{ display: "flex", alignItems: "center", gap: 7, padding: "8px 16px", borderRadius: 8, border: `1.5px solid ${accountType === t ? T : "#e2e8f0"}`, background: accountType === t ? "#f0fdfa" : "#f8fafc", cursor: "pointer", fontSize: 13, fontWeight: accountType === t ? 700 : 500, color: accountType === t ? T : "#64748b", transition: "all .12s" }}>
-              <input type="radio" name="accountType" value={t} checked={accountType === t} onChange={() => setAccountType(t)} style={{ accentColor: T }} />
+            <label key={t} className={`onb-select-opt ${accountType === t ? 'active' : 'inactive'}`}>
+              <input type="radio" name="accountType" value={t} checked={accountType === t} onChange={() => setAccountType(t)} className="onb-radio-accent" />
               {t}
             </label>
           ))}
         </div>
 
-        <div style={{ marginBottom: 16 }}>
+        <div className="onb-mb-16">
           <Label>C Admins</Label>
           <Select placeholder="Select from the list" options={["Admin One", "Admin Two", "Admin Three"]} value={form.cadmin} onChange={set("cadmin")} />
         </div>
 
         <div>
           <Label>Environment</Label>
-          <div style={{ display: "flex", gap: 16, marginTop: 4 }}>
+          <div className="onb-gap-16">
             <Radio name="environment" value="trial" checked={environment === "trial"} onChange={() => setEnvironment("trial")} label="Trial" />
             <Radio name="environment" value="live"  checked={environment === "live"}  onChange={() => setEnvironment("live")}  label="Live"  />
           </div>
@@ -222,15 +222,15 @@ export default function PageUserOnboarding({ setPage }) {
       </SectionCard>
 
       {/* ── Footer ── */}
-      <div style={{ display: "flex", gap: 12, paddingBottom: 32 }}>
+      <div className="onb-action-row">
         <button
-          style={{ padding: "10px 32px", borderRadius: 8, border: "none", background: `linear-gradient(135deg, ${T}, #0891b2)`, color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", boxShadow: `0 4px 14px ${T}50` }}
+          className="onb-btn-submit"
           onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
         >Save</button>
         <button
           onClick={() => setPage && setPage("users")}
-          style={{ padding: "10px 24px", borderRadius: 8, border: "1px solid #e2e8f0", background: "#f8fafc", color: "#64748b", fontSize: 13, fontWeight: 700, cursor: "pointer" }}
+          className="onb-btn-back"
           onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "#f8fafc")}
         >Cancel</button>

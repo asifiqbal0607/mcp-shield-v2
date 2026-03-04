@@ -39,16 +39,11 @@ function GeoMap({ data, onCountryClick }) {
 
   return (
     <div
-      style={{
-        background: "#f0f7ff",
-        borderRadius: 12,
-        padding: 12,
-        overflow: "hidden",
-      }}
+      className="map-wrap"
     >
       <svg
         viewBox="0 0 600 420"
-        style={{ width: "100%", height: "auto", display: "block" }}
+        className="map-img"
       >
         <rect width="600" height="420" fill="#d6eaf8" rx="8" />
 
@@ -99,7 +94,7 @@ function GeoMap({ data, onCountryClick }) {
             <g
               key={c.code}
               onClick={() => onCountryClick && onCountryClick(c.name)}
-              style={{ cursor: onCountryClick ? "pointer" : "default" }}
+              className={onCountryClick ? "p-rel clickable" : ""}
             >
               <rect
                 x={x}
@@ -138,24 +133,13 @@ function GeoMap({ data, onCountryClick }) {
       </svg>
 
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginTop: 8,
-          padding: "0 8px",
-        }}
+        className="geo-legend-row"
       >
-        <span style={{ fontSize: 10, color: SLATE, fontWeight: 600 }}>30</span>
+        <span className="stat-label-sm">30</span>
         <div
-          style={{
-            flex: 1,
-            height: 10,
-            borderRadius: 5,
-            background: `linear-gradient(to right, #93c5fd, ${BLUE})`,
-          }}
+          className="geo-grad-bar"
         />
-        <span style={{ fontSize: 10, color: SLATE, fontWeight: 600 }}>
+        <span className="stat-label-sm">
           {Math.max(...geoSpreadData.map((d) => d.visits)).toLocaleString()}
         </span>
       </div>
@@ -204,12 +188,7 @@ export default function PageGeo() {
             onClick={
               s.clickable ? () => open(`${s.label} — Transactions`) : undefined
             }
-            style={{
-              textAlign: "center",
-              borderTop: `3px solid ${s.color}`,
-              cursor: s.clickable ? "pointer" : "default",
-              transition: "box-shadow .15s",
-            }}
+            className={s.clickable ? "stat-card-click" : "stat-card-click-opt"} style={{ '--c': s.color }}
             onMouseEnter={
               s.clickable
                 ? (e) =>
@@ -224,24 +203,17 @@ export default function PageGeo() {
             }
           >
             <div className="kpi-stat-sm"
-              style={{
-                color: s.color,
-              }}
+              className="dyn-color" style={{ '--c': s.color }}
             >
               {s.value}
             </div>
             <div
-              style={{
-                fontSize: 12,
-                color: SLATE,
-                marginTop: 4,
-                fontWeight: 600,
-              }}
+              className="stat-lbl-12"
             >
               {s.label}
             </div>
             {s.clickable && (
-              <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 4 }}>
+              <div className="stat-hint">
                 View Transactions ↗
               </div>
             )}
@@ -250,24 +222,13 @@ export default function PageGeo() {
       </div>
 
       {/* World map */}
-      <Card style={{ marginBottom: 18 }}>
+      <Card className="mb-18">
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 12,
-          }}
+          className="toolbar"
         >
           <SectionTitle>Geo Spread</SectionTitle>
           <button
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: SLATE,
-              fontSize: 16,
-            }}
+            className="geo-collapse-btn"
           >
             ≡
           </button>
@@ -282,7 +243,7 @@ export default function PageGeo() {
       <div className="g-halves">
         <Card>
           <SectionTitle>Visits by Country</SectionTitle>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart
               data={sortedData}
               layout="vertical"
@@ -308,7 +269,7 @@ export default function PageGeo() {
                 name="Visits"
                 radius={[0, 4, 4, 0]}
                 onClick={(data) => open(`${data.country} — Transactions`)}
-                style={{ cursor: "pointer" }}
+                className="p-rel clickable"
               >
                 {sortedData.map((_, i) => (
                   <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -321,21 +282,14 @@ export default function PageGeo() {
         <Card>
           <SectionTitle>Country Breakdown</SectionTitle>
           <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
+          className="dt"
           >
             <thead>
-              <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+              <tr className="dt-head-row">
                 {["Country", "Visits", "Clicks", "Share", ""].map((h) => (
                   <th
                     key={h}
-                    style={{
-                      textAlign: "left",
-                      padding: "6px 10px",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: SLATE,
-                      textTransform: "uppercase",
-                    }}
+                    className="dt-th"
                   >
                     {h}
                   </th>
@@ -346,10 +300,7 @@ export default function PageGeo() {
               {sortedData.map((r, i) => (
                 <tr
                   key={i}
-                  style={{
-                    borderBottom: "1px solid #f8fafc",
-                    cursor: "pointer",
-                  }}
+                  className="dt-tr"
                   onClick={() => open(`${r.country} — Transactions`)}
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.background = "#f8fafc")
@@ -358,51 +309,33 @@ export default function PageGeo() {
                     (e.currentTarget.style.background = "transparent")
                   }
                 >
-                  <td style={{ padding: "8px 10px", fontWeight: 700 }}>
+                  <td className="td-p-num">
                     <div
-                      style={{ display: "flex", alignItems: "center", gap: 7 }}
+                      className="f-gap-7"
                     >
                       <div
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: 2,
-                          background: PALETTE[i % PALETTE.length],
-                        }}
+                        className="color-square" style={{ '--c': PALETTE[i % PALETTE.length] }}
                       />
                       {r.country}
                     </div>
                   </td>
-                  <td style={{ padding: "8px 10px", fontFamily: "monospace" }}>
+                  <td className="td-p-mono-sm">
                     {r.visits.toLocaleString()}
                   </td>
-                  <td style={{ padding: "8px 10px", fontFamily: "monospace" }}>
+                  <td className="td-p-mono-sm">
                     {r.clicks.toLocaleString()}
                   </td>
                   <td
-                    style={{
-                      padding: "8px 10px",
-                      fontWeight: 700,
-                      color: BLUE,
-                    }}
+                    className="geo-td-blue"
                   >
                     {r.pct}%
                   </td>
-                  <td style={{ padding: "8px 10px", width: 80 }}>
+                  <td className="geo-td-narrow">
                     <div
-                      style={{
-                        height: 5,
-                        background: "#f1f5f9",
-                        borderRadius: 3,
-                      }}
+                      className="progress-track"
                     >
                       <div
-                        style={{
-                          height: "100%",
-                          width: `${r.pct}%`,
-                          background: PALETTE[i % PALETTE.length],
-                          borderRadius: 3,
-                        }}
+                        className="progress-bar" style={{ '--w': `${r.pct}%`, '--c': PALETTE[i % PALETTE.length] }}
                       />
                     </div>
                   </td>

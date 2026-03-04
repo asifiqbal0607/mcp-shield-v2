@@ -26,7 +26,7 @@ export default function AppLayout({ role, page, setPage, children }) {
       <TopNav role={role} page={page} setPage={setPage} />
 
       {/* Body */}
-      <div style={{ display: 'flex', flex: 1, minHeight: 0, position: 'relative' }}>
+      <div className="app-body">
 
         {/* Backdrop */}
         {sidebarOpen && (
@@ -77,16 +77,12 @@ export default function AppLayout({ role, page, setPage, children }) {
             display: 'flex', alignItems: 'center',
             justifyContent: 'space-between', marginBottom: 'var(--section-gap)',
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: 12, color: SLATE }}>Shield</span>
-              <span style={{ fontSize: 12, color: 'var(--border2)' }}>›</span>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{curLabel}</span>
+            <div className="app-breadcrumb-left">
+              <span className="app-bc-sep">Shield</span>
+              <span className="app-bc-trail">›</span>
+              <span className="app-bc-current">{curLabel}</span>
               {isAdminOnly && (
-                <span style={{
-                  fontSize: 9, fontWeight: 800, padding: '2px 8px',
-                  borderRadius: 10, background: '#fef3c7', color: '#92400e',
-                  border: '1px solid #fde68a', textTransform: 'uppercase', letterSpacing: '0.5px',
-                }}>Admin only</span>
+                <span className="app-env-badge">Admin only</span>
               )}
             </div>
 

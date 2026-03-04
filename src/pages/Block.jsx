@@ -47,35 +47,21 @@ export default function PageBlocking() {
           <Card
             key={s.label}
             onClick={() => open(`${s.label} — Transactions`)}
-            style={{
-              textAlign: "center",
-              borderTop: `3px solid ${s.color}`,
-              cursor: "pointer",
-              transition: "box-shadow .15s",
-            }}
+            className="stat-card-click" style={{ '--c': s.color }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,.1)")
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
           >
-            <div className="kpi-stat-sm"
-              style={{
-                color: s.color,
-              }}
-            >
+            <div className="kpi-stat-sm dyn-color" style={{ '--c': s.color }}>
               {s.value}
             </div>
             <div
-              style={{
-                fontSize: 11,
-                color: SLATE,
-                marginTop: 4,
-                fontWeight: 600,
-              }}
+              className="stat-lbl"
             >
               {s.label}
             </div>
-            <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 4 }}>
+            <div className="stat-hint">
               View Transactions ↗
             </div>
           </Card>
@@ -86,7 +72,7 @@ export default function PageBlocking() {
       <div className="g-split mb-section">
         <Card>
           <BlockRadarChart
-            height={300}
+            height={200}
             showBadge={true}
             onDayClick={(day) => open(`${day} Block Pattern — Transactions`)}
           />
@@ -94,7 +80,7 @@ export default function PageBlocking() {
 
         <Card>
           <SectionTitle>Volume by Reason</SectionTitle>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={210}>
             <BarChart
               data={blkRows}
               layout="vertical"
@@ -123,7 +109,7 @@ export default function PageBlocking() {
                 name="Share %"
                 radius={[0, 4, 4, 0]}
                 onClick={(data) => open(`${data.reason} — Transactions`)}
-                style={{ cursor: "pointer" }}
+                className="p-rel clickable"
               >
                 {blkRows.map((d, i) => (
                   <Cell key={i} fill={d.color} />
@@ -138,10 +124,10 @@ export default function PageBlocking() {
       <Card>
         <SectionTitle>Full Breakdown Block Reasons</SectionTitle>
         <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
+          className="dt"
         >
           <thead>
-            <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+            <tr className="dt-head-row">
               {[
                 "Block Reason",
                 "Count",
@@ -152,15 +138,7 @@ export default function PageBlocking() {
               ].map((h) => (
                 <th
                   key={h}
-                  style={{
-                    textAlign: "left",
-                    padding: "8px 12px",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: SLATE,
-                    textTransform: "uppercase",
-                    letterSpacing: ".8px",
-                  }}
+                  className="dt-th"
                 >
                   {h}
                 </th>
@@ -171,7 +149,7 @@ export default function PageBlocking() {
             {blkRows.map((r, i) => (
               <tr
                 key={i}
-                style={{ borderBottom: "1px solid #f8fafc", cursor: "pointer" }}
+                className="dt-tr"
                 onClick={() => open(`${r.reason} — Transactions`)}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#f8fafc")
@@ -180,70 +158,42 @@ export default function PageBlocking() {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <td style={{ padding: "11px 12px" }}>
+                <td className="p-sm">
                   <div
-                    style={{ display: "flex", alignItems: "center", gap: 9 }}
+                    className="f-gap-9"
                   >
                     <div
-                      style={{
-                        width: 11,
-                        height: 11,
-                        borderRadius: 3,
-                        background: r.color,
-                        flexShrink: 0,
-                      }}
+                      className="bl-color-square" style={{ '--c': r.color }}
                     />
-                    <span style={{ fontWeight: 700, color: "#1a1a2e" }}>
+                    <span className="txt-strong">
                       {r.reason}
                     </span>
                   </div>
                 </td>
                 <td
-                  style={{
-                    padding: "11px 12px",
-                    fontFamily: "monospace",
-                    fontWeight: 700,
-                  }}
+                  className="bl-td-mono"
                 >
                   {r.count}
                 </td>
                 <td
-                  style={{
-                    padding: "11px 12px",
-                    fontWeight: 700,
-                    color: r.color,
-                  }}
+                  className="bl-td-color" style={{ '--c': r.color }}
                 >
                   {r.pct}%
                 </td>
                 <td
-                  style={{
-                    padding: "11px 12px",
-                    fontWeight: 700,
-                    color: r.trend.startsWith("+") ? ROSE : GREEN,
-                  }}
+                  className={`bl-td-trend ${r.trend.startsWith("+") ? "txt-danger" : "txt-success"}`}
                 >
                   {r.trend}
                 </td>
-                <td style={{ padding: "11px 12px" }}>
+                <td className="p-sm">
                   <Badge color={SEVERITY_COLORS[r.sev]}>{r.sev}</Badge>
                 </td>
-                <td style={{ padding: "11px 12px", width: 140 }}>
+                <td className="bl-td-wide">
                   <div
-                    style={{
-                      height: 6,
-                      background: "#f1f5f9",
-                      borderRadius: 3,
-                    }}
+                    className="progress-track"
                   >
                     <div
-                      style={{
-                        height: "100%",
-                        width: `${r.pct * 3.5}%`,
-                        maxWidth: "100%",
-                        background: r.color,
-                        borderRadius: 3,
-                      }}
+                      className="progress-bar" style={{ '--w': `${r.pct * 3.5}%`, '--c': r.color }}
                     />
                   </div>
                 </td>

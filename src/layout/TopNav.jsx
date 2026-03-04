@@ -20,7 +20,7 @@ export default function TopNav({ role, page, setPage }) {
   const toggleGroup = (g) => setOpenGroup((open) => (open === g ? null : g));
 
   const NavTabs = () => (
-    <div style={{ display: "flex", alignItems: "center", height: "100%" }}>
+    <div className="tnav-nav-hl">
       {isPartner ? (
         <>
           {partnerVisible.map((p) => (
@@ -38,12 +38,7 @@ export default function TopNav({ role, page, setPage }) {
           ))}
           {partnerMore.length > 0 && (
             <div
-              style={{
-                position: "relative",
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-              }}
+              className="tnav-nav-link"
             >
               <button
                 className={`group-btn${moreHasActive ? " active" : ""}${openGroup === "__more__" ? " open" : ""}`}
@@ -54,12 +49,12 @@ export default function TopNav({ role, page, setPage }) {
               {openGroup === "__more__" && (
                 <>
                   <div
-                    style={{ position: "fixed", inset: 0, zIndex: 499 }}
+                    className="tnav-overlay"
                     onClick={closeAll}
                   />
                   <div
                     className="group-drop"
-                    style={{ left: "auto", right: 0 }}
+                    className="tnav-dropdown"
                   >
                     {partnerMore.map((p) => (
                       <button
@@ -71,7 +66,7 @@ export default function TopNav({ role, page, setPage }) {
                         }}
                       >
                         <span className="di-ic">{p.icon}</span>
-                        <span style={{ flex: 1 }}>{p.label}</span>
+                        <span className="tnav-dropdown-flex">{p.label}</span>
                       </button>
                     ))}
                   </div>
@@ -101,12 +96,7 @@ export default function TopNav({ role, page, setPage }) {
             return (
               <div
                 key={sec.group}
-                style={{
-                  position: "relative",
-                  height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                }}
+                className="tnav-nav-link"
               >
                 <button
                   className={`group-btn${secActive ? " active" : ""}${isOpen ? " open" : ""}`}
@@ -117,20 +107,12 @@ export default function TopNav({ role, page, setPage }) {
                 {isOpen && (
                   <>
                     <div
-                      style={{ position: "fixed", inset: 0, zIndex: 499 }}
+                      className="tnav-overlay"
                       onClick={closeAll}
                     />
                     <div className="group-drop">
                       <div
-                        style={{
-                          padding: "4px 12px 8px",
-                          fontSize: 9,
-                          fontWeight: 600,
-                          color: "var(--gold)",
-                          textTransform: "uppercase",
-                          letterSpacing: "2px",
-                          fontFamily: "'Poppins Condensed', sans-serif",
-                        }}
+                        className="tnav-dropdown-label"
                       >
                         {sec.group}
                       </div>
@@ -144,17 +126,10 @@ export default function TopNav({ role, page, setPage }) {
                           }}
                         >
                           <span className="di-ic">{p.icon}</span>
-                          <span style={{ flex: 1 }}>{p.label}</span>
+                          <span className="tnav-dropdown-flex">{p.label}</span>
                           {p.badge && (
                             <span
-                              style={{
-                                background: `${p.badge.c}25`,
-                                color: p.badge.c,
-                                fontSize: 9,
-                                fontWeight: 600,
-                                padding: "2px 6px",
-                                borderRadius: 6,
-                              }}
+                              className="tnav-dropdown-badge" style={{ '--bg': `${p.badge.c}25`, '--c': p.badge.c }}
                             >
                               {p.badge.n}
                             </span>
@@ -185,135 +160,61 @@ export default function TopNav({ role, page, setPage }) {
       }}
     >
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          padding: "0 28px",
-          height: 54,
-          gap: 0,
-        }}
+        className="tnav-inner"
         onClick={(e) => {
           if (e.currentTarget === e.target) closeAll();
         }}
       >
         {/* Logo */}
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginRight: 24,
-            flexShrink: 0,
-          }}
+          className="tnav-brand"
         >
           <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 6,
-              background: "linear-gradient(135deg, var(--gold), #f5c842)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 18,
-              fontWeight: 700,
-              color: "var(--navy)",
-              boxShadow: "0 2px 10px rgba(232,160,32,.4)",
-            }}
+            className="tnav-logo"
           >
             S
           </div>
           <div>
             <div
               className="topnav-logo-text"
-              style={{
-                fontSize: 15,
-                fontWeight: 700,
-                color: "#fff",
-                fontFamily: "'Poppins Condensed', sans-serif",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-              }}
+              className="tnav-product-name"
             >
               MCP Shield
             </div>
             <div
               className="topnav-portal-sub"
-              style={{
-                fontSize: 8,
-                color: "rgba(255,255,255,.5)",
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                marginTop: 1,
-                fontFamily: "'IBM Plex Mono', monospace",
-              }}
+              className="tnav-product-sub"
             >
               {isPartner ? "Partner Portal" : "Admin Portal"}
             </div>
           </div>
           <div
             className="topnav-admin-badge"
-            style={{
-              padding: "3px 10px",
-              borderRadius: 4,
-              fontSize: 9,
-              fontWeight: 600,
-              letterSpacing: "1.5px",
-              textTransform: "uppercase",
-              background: "rgba(232,160,32,.15)",
-              color: "var(--gold)",
-              border: "1px solid rgba(232,160,32,.35)",
-              fontFamily: "'IBM Plex Mono', monospace",
-            }}
+            className="tnav-env-badge"
           >
             {isPartner ? "Partner" : "Admin"}
           </div>
         </div>
 
         <div className="nav-divider" />
-        <div style={{ flex: 1, height: "100%", overflow: "visible" }}>
+        <div className="tnav-nav-area">
           <NavTabs />
         </div>
 
         {/* Right */}
         <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            flexShrink: 0,
-          }}
+          className="tnav-right"
         >
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "4px 11px",
-              borderRadius: 4,
-              background: "rgba(13,158,110,.15)",
-              border: "1px solid rgba(13,158,110,.3)",
-            }}
+            className="tnav-status"
           >
             <span
               className="live-dot"
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "#0d9e6e",
-                display: "inline-block",
-              }}
+              className="tnav-status-dot"
             />
             <span
               className="topnav-live-label"
-              style={{
-                fontSize: 10,
-                fontWeight: 600,
-                color: "#0d9e6e",
-                fontFamily: "'IBM Plex Mono', monospace",
-                letterSpacing: "1px",
-              }}
+              className="tnav-status-text"
             >
               LIVE · ZA
             </span>
@@ -331,50 +232,18 @@ export default function TopNav({ role, page, setPage }) {
             ))}
           </div>
           <div className="nav-divider" />
-          <div style={{ position: "relative" }}>
+          <div className="tnav-notif-wrap">
             <button
-              style={{
-                width: 32,
-                height: 32,
-                borderRadius: 6,
-                border: "1px solid rgba(255,255,255,.2)",
-                background: "rgba(255,255,255,.08)",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 14,
-              }}
+              className="tnav-notif-btn"
             >
               🔔
             </button>
             <span
-              style={{
-                position: "absolute",
-                top: 4,
-                right: 4,
-                width: 7,
-                height: 7,
-                borderRadius: "50%",
-                background: "#dc2626",
-                border: "2px solid var(--navy)",
-              }}
+              className="tnav-notif-pip"
             />
           </div>
           <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 6,
-              background: "linear-gradient(135deg, var(--gold), #f5c842)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--navy)",
-              cursor: "pointer",
-            }}
+            className="tnav-avatar"
           >
             {isPartner ? "P" : "A"}
           </div>

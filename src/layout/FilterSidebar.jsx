@@ -21,32 +21,15 @@ const FILTER_DATA = {
 
 function SelectFilter({ label }) {
   return (
-    <div style={{ marginBottom: 9 }}>
+    <div className="mb-9">
       <label
-        style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: "#475569",
-          display: "block",
-          marginBottom: 4,
-        }}
+        className="fsb-label"
       >
         {label}
       </label>
       <select
         defaultValue=""
-        style={{
-          width: "100%",
-          border: "1px solid #e2e8f0",
-          borderRadius: 7,
-          padding: "8px 10px",
-          fontSize: 12,
-          color: "#334155",
-          background: "#fff",
-          cursor: "pointer",
-          outline: "none",
-          appearance: "auto",
-        }}
+        className="fsb-input"
         onFocus={(e) => (e.currentTarget.style.borderColor = "#3b82f6")}
         onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
       >
@@ -81,68 +64,35 @@ export default function FilterSidebar() {
   };
   return (
     <aside
-      style={{
-        width: 220,
-        height: "100%",
-        background: "#fff",
-        borderRight: "1px solid #e8ecf3",
-        padding: "16px 14px 20px",
-        overflowY: "auto",
-        display: "flex",
-        flexDirection: "column",
-      }}
+      className="fsb-root"
     >
       {/* Header */}
-      <div style={{ marginBottom: 16 }}>
+      <div className="fsb-section">
         <div
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            color: SLATE,
-            letterSpacing: "1.5px",
-            textTransform: "uppercase",
-          }}
+          className="fsb-section-hd"
         >
           Filters
         </div>
       </div>
 
       {/* GEO */}
-      <div style={{ marginBottom: 12 }}>
+      <div className="mb-12">
         <label
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            color: "#475569",
-            display: "block",
-            marginBottom: 5,
-          }}
+          className="fsb-label-lg"
         >
           GEO
         </label>
         <div
-          style={{
-            border: "1px solid #e2e8f0",
-            borderRadius: 7,
-            padding: "9px 12px",
-            fontSize: 12,
-            color: "#334155",
-          }}
+          className="fsb-select"
         >
           South Africa (ZA)
         </div>
       </div>
 
       {/* Date Range */}
-      <div style={{ marginBottom: 12 }}>
+      <div className="mb-12">
         <label
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            color: "#475569",
-            display: "block",
-            marginBottom: 5,
-          }}
+          className="fsb-label-lg"
         >
           Date From
         </label>
@@ -155,15 +105,9 @@ export default function FilterSidebar() {
           onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
         />
       </div>
-      <div style={{ marginBottom: 12 }}>
+      <div className="mb-12">
         <label
-          style={{
-            fontSize: 10,
-            fontWeight: 700,
-            color: "#475569",
-            display: "block",
-            marginBottom: 5,
-          }}
+          className="fsb-label-lg"
         >
           Date To
         </label>
@@ -178,34 +122,14 @@ export default function FilterSidebar() {
       </div>
 
       {/* Action buttons */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+      <div className="fsb-btn-row">
         <button
-          style={{
-            flex: 1,
-            padding: 8,
-            borderRadius: 7,
-            border: "1px solid #e2e8f0",
-            background: "#f8fafc",
-            fontSize: 12,
-            color: "#64748b",
-            cursor: "pointer",
-            fontWeight: 700,
-          }}
+          className="fsb-btn-clear"
         >
           Reset
         </button>
         <button
-          style={{
-            flex: 1,
-            padding: 8,
-            borderRadius: 7,
-            border: "none",
-            background: BLUE,
-            fontSize: 12,
-            color: "#fff",
-            cursor: "pointer",
-            fontWeight: 700,
-          }}
+          className="fsb-btn-apply"
         >
           Apply
         </button>
@@ -213,14 +137,7 @@ export default function FilterSidebar() {
 
       {/* Options */}
       <div
-        style={{
-          fontSize: 10,
-          fontWeight: 700,
-          color: SLATE,
-          letterSpacing: "1.5px",
-          textTransform: "uppercase",
-          marginBottom: 10,
-        }}
+        className="fsb-section-hd"
       >
         Options
       </div>

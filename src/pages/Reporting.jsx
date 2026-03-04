@@ -30,15 +30,15 @@ export default function PageReporting() {
         {SUMMARY_STATS.map(({ label, value, color }) => (
           <Card
             key={label}
-            style={{ textAlign: "center", borderTop: `4px solid ${color}` }}
+            className="stat-top-4" style={{ '--c': color }}
           >
             <div
               className="kpi-stat"
-              style={{ color }}
+              className="dyn-color" style={{ '--c': color }}
             >
               {value}
             </div>
-            <div style={{ fontSize: 12, color: SLATE, fontWeight: 600 }}>
+            <div className="stat-sublabel">
               {label}
             </div>
           </Card>
@@ -49,7 +49,7 @@ export default function PageReporting() {
       <div className="grid-2 mb-24">
         <Card>
           <SectionTitle>30-Day Reporting Trends</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={repTrend}>
               <XAxis dataKey="d" />
               <YAxis />
@@ -64,12 +64,7 @@ export default function PageReporting() {
         <Card>
           <SectionTitle>Report Type Split</SectionTitle>
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 14,
-            }}
+            className="rep-summary-col"
           >
             <PieChart width={150} height={150}>
               <Pie
@@ -86,12 +81,7 @@ export default function PageReporting() {
               </Pie>
             </PieChart>
             <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-              }}
+              className="rep-list-col"
             >
               {[
                 [VIOLET, "Scheduled", "4 reports"],
@@ -99,34 +89,17 @@ export default function PageReporting() {
               ].map(([c, l, v]) => (
                 <div
                   key={l}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 14px",
-                    borderRadius: 8,
-                    background: "#f8fafc",
-                  }}
+                  className="rep-legend-row"
                 >
                   <div
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: 2,
-                      background: c,
-                    }}
+                    className="rep-color-sq" style={{ '--c': c }}
                   />
                   <div
-                    style={{
-                      flex: 1,
-                      fontSize: 12,
-                      fontWeight: 700,
-                      color: "#1a1a2e",
-                    }}
+                    className="rep-legend-lbl"
                   >
                     {l}
                   </div>
-                  <span style={{ fontSize: 11, color: SLATE }}>{v}</span>
+                  <span className="stat-sublabel">{v}</span>
                 </div>
               ))}
             </div>
@@ -137,25 +110,21 @@ export default function PageReporting() {
       {/* Reports table */}
       <Card>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: 12,
-          }}
+          className="toolbar"
         >
           <SectionTitle>All Reports</SectionTitle>
           <button
             className="btn-primary"
-            style={{ borderRadius: 20, padding: "8px 16px", fontSize: 12 }}
+            className="tab-pill"
           >
             + New Report
           </button>
         </div>
         <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
+          className="dt dt-lg"
         >
           <thead>
-            <tr style={{ borderBottom: "2px solid #eee" }}>
+            <tr className="dt-head-row">
               {[
                 "Report Name",
                 "Type",
@@ -167,12 +136,7 @@ export default function PageReporting() {
               ].map((h) => (
                 <th
                   key={h}
-                  style={{
-                    textAlign: "left",
-                    padding: 10,
-                    color: SLATE,
-                    fontSize: 11,
-                  }}
+                  className="dt-th"
                 >
                   {h}
                 </th>
@@ -181,25 +145,25 @@ export default function PageReporting() {
           </thead>
           <tbody>
             {repReports.map((r, i) => (
-              <tr key={i} style={{ borderBottom: "1px solid #f1f5f9" }}>
-                <td style={{ padding: 10, fontWeight: 700 }}>{r.name}</td>
-                <td style={{ padding: 10 }}>
+              <tr key={i} className="dt-tr-plain">
+                <td className="td-p-10">{r.name}</td>
+                <td className="p-10">
                   <Badge color={r.type === "Scheduled" ? VIOLET : CYAN}>
                     {r.type}
                   </Badge>
                 </td>
-                <td style={{ padding: 10 }}>{r.freq}</td>
-                <td style={{ padding: 10 }}>{r.lastRun}</td>
-                <td style={{ padding: 10, fontFamily: "monospace" }}>
+                <td className="p-10">{r.freq}</td>
+                <td className="p-10">{r.lastRun}</td>
+                <td className="td-p-10m">
                   {r.rows}
                 </td>
-                <td style={{ padding: 10 }}>
+                <td className="p-10">
                   <Badge color={r.status === "active" ? GREEN : AMBER}>
                     {r.status}
                   </Badge>
                 </td>
-                <td style={{ padding: 10 }}>
-                  <div style={{ display: "flex", gap: 6 }}>
+                <td className="p-10">
+                  <div className="f-gap-6">
                     <button className="btn-primary">Run Now</button>
                     <button className="btn-secondary">Download Now</button>
                   </div>

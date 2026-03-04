@@ -36,27 +36,16 @@ function StatPieCard({ title, data, onSliceClick }) {
   return (
     <Card>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 4,
-        }}
+        className="ov-chart-header"
       >
         <SectionTitle>{title}</SectionTitle>
         <button
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: SLATE,
-            fontSize: 16,
-          }}
+          className="geo-collapse-btn"
         >
           ≡
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={200}>
         <PieChart>
           <Pie
             data={data}
@@ -68,7 +57,7 @@ function StatPieCard({ title, data, onSliceClick }) {
             label={renderLabel}
             labelLine={true}
             onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
-            style={{ cursor: "pointer" }}
+            className="p-rel clickable"
           >
             {data.map((_, i) => (
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -78,12 +67,7 @@ function StatPieCard({ title, data, onSliceClick }) {
         </PieChart>
       </ResponsiveContainer>
       <div
-        style={{
-          textAlign: "center",
-          fontSize: 9,
-          color: "#94a3b8",
-          marginTop: 4,
-        }}
+        className="stat-hint-center"
       >
         Click a slice to view transactions ↗
       </div>
@@ -128,12 +112,7 @@ export default function PageDevice() {
             onClick={
               s.clickable ? () => open(`${s.label} — Transactions`) : undefined
             }
-            style={{
-              textAlign: "center",
-              borderTop: `3px solid ${s.color}`,
-              cursor: s.clickable ? "pointer" : "default",
-              transition: "box-shadow .15s",
-            }}
+            className={s.clickable ? "stat-card-click" : "stat-card-click-opt"} style={{ '--c': s.color }}
             onMouseEnter={
               s.clickable
                 ? (e) =>
@@ -148,24 +127,17 @@ export default function PageDevice() {
             }
           >
             <div className="kpi-stat"
-              style={{
-                color: s.color,
-              }}
+              className="dyn-color" style={{ '--c': s.color }}
             >
               {s.value}
             </div>
             <div
-              style={{
-                fontSize: 12,
-                color: SLATE,
-                marginTop: 4,
-                fontWeight: 600,
-              }}
+              className="stat-lbl-12"
             >
               {s.label}
             </div>
             {s.clickable && (
-              <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 4 }}>
+              <div className="stat-hint">
                 View Transactions ↗
               </div>
             )}

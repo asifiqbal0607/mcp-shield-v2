@@ -153,69 +153,32 @@ function Modal({ title, subtitle, onClose, children, width = 520 }) {
     <>
       <div
         onClick={onClose}
-        style={{
-          position: "fixed",
-          inset: 0,
-          zIndex: 1000,
-          background: "rgba(15,23,42,0.55)",
-          backdropFilter: "blur(3px)",
-        }}
+        className="usr-backdrop"
       />
       <div
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-          zIndex: 1001,
-          width: `min(${width}px,95vw)`,
-          background: "#fff",
-          borderRadius: 16,
-          boxShadow: "0 24px 60px rgba(0,0,0,.2)",
-          display: "flex",
-          flexDirection: "column",
-          maxHeight: "90vh",
-        }}
+        className="usr-modal-box" style={{ '--modal-w': `min(${width}px,95vw)` }}
       >
         <div
-          style={{
-            padding: "20px 24px 16px",
-            borderBottom: "1px solid #f1f5f9",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-          }}
+          className="usr-modal-hdr"
         >
           <div>
-            <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>
+            <div className="modal-title">
               {title}
             </div>
             {subtitle && (
-              <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 3 }}>
+              <div className="modal-subtitle">
                 {subtitle}
               </div>
             )}
           </div>
           <button
             onClick={onClose}
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: "50%",
-              border: "1px solid #e2e8f0",
-              background: "#f8fafc",
-              color: "#94a3b8",
-              fontSize: 16,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            className="usr-modal-close"
           >
             ✕
           </button>
         </div>
-        <div style={{ overflowY: "auto", padding: "20px 24px", flex: 1 }}>
+        <div className="modal-scroll">
           {children}
         </div>
       </div>
@@ -225,26 +188,14 @@ function Modal({ title, subtitle, onClose, children, width = 520 }) {
 
 function Field({ label, value, mono }) {
   return (
-    <div style={{ marginBottom: 14 }}>
+    <div className="mb-14">
       <div
-        style={{
-          fontSize: 11,
-          fontWeight: 700,
-          color: "#94a3b8",
-          textTransform: "uppercase",
-          letterSpacing: ".6px",
-          marginBottom: 4,
-        }}
+        className="txt-section-hd"
       >
         {label}
       </div>
       <div
-        style={{
-          fontSize: 13,
-          fontWeight: 600,
-          color: "#0f172a",
-          fontFamily: mono ? "monospace" : "inherit",
-        }}
+        className={mono ? "usr-field-val-mono" : "usr-field-val"}
       >
         {value || "—"}
       </div>
@@ -254,30 +205,16 @@ function Field({ label, value, mono }) {
 
 function FormInput({ label, defaultValue, type = "text" }) {
   return (
-    <div style={{ marginBottom: 14 }}>
+    <div className="mb-14">
       <label
-        style={{
-          display: "block",
-          fontSize: 12,
-          fontWeight: 700,
-          color: "#1e293b",
-          marginBottom: 5,
-        }}
+        className="usr-field-label"
       >
         {label}
       </label>
       <input
         type={type}
         defaultValue={defaultValue}
-        style={{
-          width: "100%",
-          boxSizing: "border-box",
-          border: "1px solid #e2e8f0",
-          borderRadius: 7,
-          padding: "9px 12px",
-          fontSize: 12,
-          outline: "none",
-        }}
+        className="usr-input"
         onFocus={(e) => (e.currentTarget.style.borderColor = T)}
         onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
       />
@@ -287,30 +224,15 @@ function FormInput({ label, defaultValue, type = "text" }) {
 
 function FormSelect({ label, defaultValue, options }) {
   return (
-    <div style={{ marginBottom: 14 }}>
+    <div className="mb-14">
       <label
-        style={{
-          display: "block",
-          fontSize: 12,
-          fontWeight: 700,
-          color: "#1e293b",
-          marginBottom: 5,
-        }}
+        className="usr-field-label"
       >
         {label}
       </label>
       <select
         defaultValue={defaultValue}
-        style={{
-          width: "100%",
-          boxSizing: "border-box",
-          border: "1px solid #e2e8f0",
-          borderRadius: 7,
-          padding: "9px 12px",
-          fontSize: 12,
-          outline: "none",
-          background: "#fff",
-        }}
+        className="usr-input-white"
         onFocus={(e) => (e.currentTarget.style.borderColor = T)}
         onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
       >
@@ -328,16 +250,7 @@ function ActionBtn({ label, onClick }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        padding: "9px 20px",
-        borderRadius: 8,
-        border: "none",
-        background: `linear-gradient(135deg,${T},#0891b2)`,
-        color: "#fff",
-        fontSize: 12,
-        fontWeight: 700,
-        cursor: "pointer",
-      }}
+      className="usr-btn-save" style={{ '--c': T }}
     >
       {label}
     </button>
@@ -348,16 +261,7 @@ function CancelBtn({ onClick }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        padding: "9px 20px",
-        borderRadius: 8,
-        border: "1px solid #e2e8f0",
-        background: "#f8fafc",
-        color: "#64748b",
-        fontSize: 12,
-        fontWeight: 700,
-        cursor: "pointer",
-      }}
+      className="usr-btn-cancel"
     >
       Cancel
     </button>
@@ -373,53 +277,20 @@ function ViewModal({ user, onClose }) {
       onClose={onClose}
     >
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 16,
-          marginBottom: 20,
-          padding: "16px",
-          background: "#f8fafc",
-          borderRadius: 10,
-        }}
+        className="usr-preview-row"
       >
         <div
-          style={{
-            width: 52,
-            height: 52,
-            borderRadius: "50%",
-            background: TYPE_COLORS[user.role]
-              ? `${TYPE_COLORS[user.role]}22`
-              : "#e2e8f0",
-            border: `2px solid ${TYPE_COLORS[user.role] || "#cbd5e1"}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 600,
-            color: TYPE_COLORS[user.role] || "#334155",
-            fontSize: 20,
-          }}
+          className="usr-avatar-lg" style={{ '--bg': TYPE_COLORS[user.role] ? `${TYPE_COLORS[user.role]}22` : "#e2e8f0", '--bdr': TYPE_COLORS[user.role] || "#cbd5e1", '--c': TYPE_COLORS[user.role] || "#334155" }}
         >
           {user.name[0]}
         </div>
         <div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: "#0f172a" }}>
+          <div className="modal-title">
             {user.name}
           </div>
-          <div style={{ fontSize: 12, color: "#64748b" }}>{user.email}</div>
+          <div className="txt-body">{user.email}</div>
           <span
-            style={{
-              display: "inline-block",
-              marginTop: 4,
-              padding: "2px 10px",
-              borderRadius: 10,
-              fontSize: 11,
-              fontWeight: 700,
-              background: TYPE_COLORS[user.role]
-                ? `${TYPE_COLORS[user.role]}20`
-                : "#f1f5f9",
-              color: TYPE_COLORS[user.role] || "#64748b",
-            }}
+            className="usr-role-badge" style={{ '--bg': TYPE_COLORS[user.role] ? `${TYPE_COLORS[user.role]}20` : "#f1f5f9", '--c': TYPE_COLORS[user.role] || "#64748b" }}
           >
             {user.role}
           </span>
@@ -432,7 +303,7 @@ function ViewModal({ user, onClose }) {
         <Field label="Status" value={user.status} />
       </div>
       <div
-        style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}
+        className="mt-8-end"
       >
         <CancelBtn onClick={onClose} />
       </div>
@@ -449,11 +320,7 @@ function EditModal({ user, onSave, onClose }) {
       onClose={onClose}
     >
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "0 16px",
-        }}
+        className="usr-grid-2"
       >
         <FormInput label="Full Name" defaultValue={user.name} />
         <FormInput label="Email" defaultValue={user.email} type="email" />
@@ -470,12 +337,7 @@ function EditModal({ user, onSave, onClose }) {
         />
       </div>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 10,
-          marginTop: 8,
-        }}
+        className="usr-action-row-end"
       >
         <CancelBtn onClick={onClose} />
         <ActionBtn
@@ -503,25 +365,14 @@ function LoginAsModal({ user, onClose }) {
       {!confirmed ? (
         <>
           <div
-            style={{
-              background: "#fffbeb",
-              border: "1px solid #fde68a",
-              borderRadius: 10,
-              padding: "14px 16px",
-              marginBottom: 16,
-            }}
+            className="alert-warning"
           >
             <div
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                color: "#92400e",
-                marginBottom: 4,
-              }}
+              className="alert-title dyn-color" style={{ '--c': "#92400e" }}
             >
               ⚠️ Admin Impersonation
             </div>
-            <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.6 }}>
+            <div className="alert-body">
               You are about to log in as <strong>{user.name}</strong>. All
               actions performed will be under their account. This session will
               be logged for auditing purposes.
@@ -531,12 +382,7 @@ function LoginAsModal({ user, onClose }) {
           <Field label="Email" value={user.email} />
           <Field label="Role" value={user.role} />
           <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              gap: 10,
-              marginTop: 8,
-            }}
+            className="usr-action-row-end"
           >
             <CancelBtn onClick={onClose} />
             <ActionBtn
@@ -546,19 +392,14 @@ function LoginAsModal({ user, onClose }) {
           </div>
         </>
       ) : (
-        <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>🔑</div>
+        <div className="txt-center-20">
+          <div className="txt-img-icon">🔑</div>
           <div
-            style={{
-              fontSize: 15,
-              fontWeight: 600,
-              color: "#0f172a",
-              marginBottom: 6,
-            }}
+            className="usr-modal-title"
           >
             Session Started
           </div>
-          <div style={{ fontSize: 12, color: "#64748b", marginBottom: 20 }}>
+          <div className="txt-body-mb">
             You are now logged in as <strong>{user.name}</strong>. Session has
             been logged.
           </div>
@@ -581,47 +422,29 @@ function UpdatePlansModal({ user, onClose }) {
       width={440}
     >
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          marginBottom: 20,
-        }}
+        className="usr-col-gap8"
       >
         {plans.map((p) => (
           <label
             key={p}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "10px 14px",
-              borderRadius: 8,
-              border: `1.5px solid ${selected === p ? T : "#e2e8f0"}`,
-              background: selected === p ? "#f0fdfa" : "#f8fafc",
-              cursor: "pointer",
-            }}
+            className="usr-plan-opt" style={{ '--bdr': selected === p ? T : "#e2e8f0", '--bg': selected === p ? "#f0fdfa" : "#f8fafc" }}
           >
             <input
               type="radio"
               name="plan"
               checked={selected === p}
               onChange={() => setSelected(p)}
-              style={{ accentColor: T }}
+              className="perm-check usr-radio-accent" style={{ '--ac': T }}
             />
             <span
-              style={{
-                fontSize: 13,
-                fontWeight: 600,
-                color: selected === p ? T : "#334155",
-              }}
+              className="usr-plan-lbl" style={{ '--c': selected === p ? T : "#334155" }}
             >
               {p}
             </span>
           </label>
         ))}
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+      <div className="toolbar-end">
         <CancelBtn onClick={onClose} />
         <ActionBtn label="Update Plan" onClick={onClose} />
       </div>
@@ -663,46 +486,32 @@ function MakeStatusModal({ user, onSave, onClose }) {
       width={440}
     >
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 8,
-          marginBottom: 20,
-        }}
+        className="usr-col-gap8"
       >
         {statuses.map((s) => (
           <label
             key={s.value}
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 10,
-              padding: "12px 14px",
-              borderRadius: 8,
-              border: `1.5px solid ${selected === s.value ? s.color : "#e2e8f0"}`,
-              background: selected === s.value ? s.bg : "#f8fafc",
-              cursor: "pointer",
-            }}
+            className="usr-perm-opt" style={{ '--bdr': selected === s.value ? s.color : "#e2e8f0", '--bg': selected === s.value ? s.bg : "#f8fafc" }}
           >
             <input
               type="radio"
               name="status"
               checked={selected === s.value}
               onChange={() => setSelected(s.value)}
-              style={{ accentColor: s.color, marginTop: 2 }}
+              className="perm-check usr-radio-accent" style={{ '--ac': s.color }}
             />
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: s.color }}>
+              <div className="stat-num-val" style={{ '--c': s.color }}>
                 {s.label}
               </div>
-              <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>
+              <div className="txt-body-mt">
                 {s.desc}
               </div>
             </div>
           </label>
         ))}
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+      <div className="toolbar-end">
         <CancelBtn onClick={onClose} />
         <ActionBtn
           label="Apply Status"
@@ -729,62 +538,37 @@ function ClearHistoryModal({ user, onClose }) {
       {!done ? (
         <>
           <div
-            style={{
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              borderRadius: 10,
-              padding: "14px 16px",
-              marginBottom: 16,
-            }}
+            className="alert-danger"
           >
             <div
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                color: "#dc2626",
-                marginBottom: 4,
-              }}
+              className="alert-title dyn-color" style={{ '--c': "#dc2626" }}
             >
               ⚠️ This action cannot be undone
             </div>
-            <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6 }}>
+            <div className="alert-body">
               You are about to permanently delete all login history, session
               logs and activity records for <strong>{user.name}</strong>.
             </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+          <div className="toolbar-end">
             <CancelBtn onClick={onClose} />
             <button
               onClick={() => setDone(true)}
-              style={{
-                padding: "9px 20px",
-                borderRadius: 8,
-                border: "none",
-                background: "#dc2626",
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
+              className="usr-btn-danger"
             >
               Yes, Clear History
             </button>
           </div>
         </>
       ) : (
-        <div style={{ textAlign: "center", padding: "20px 0" }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+        <div className="txt-center-20">
+          <div className="txt-img-icon">✅</div>
           <div
-            style={{
-              fontSize: 15,
-              fontWeight: 600,
-              color: "#0f172a",
-              marginBottom: 6,
-            }}
+            className="usr-modal-title"
           >
             History Cleared
           </div>
-          <div style={{ fontSize: 12, color: "#64748b", marginBottom: 20 }}>
+          <div className="txt-body-mb">
             All history for <strong>{user.name}</strong> has been removed.
           </div>
           <ActionBtn label="Close" onClick={onClose} />
@@ -835,42 +619,29 @@ function UpdateHistoryModal({ user, onClose }) {
       onClose={onClose}
       width={580}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="f-col-8">
         {history.map((h, i) => (
           <div
             key={i}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "140px 1fr 1fr 120px",
-              gap: 10,
-              alignItems: "center",
-              padding: "10px 14px",
-              borderRadius: 8,
-              background: "#f8fafc",
-              border: "1px solid #e8ecf3",
-            }}
+            className="usr-history-row"
           >
             <div
-              style={{
-                fontSize: 10,
-                color: "#64748b",
-                fontFamily: "monospace",
-              }}
+              className="txt-mono"
             >
               {h.date}
             </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a" }}>
+            <div className="txt-label-md">
               {h.action}
             </div>
-            <div style={{ fontSize: 11, color: "#475569" }}>{h.detail}</div>
-            <div style={{ fontSize: 10, color: "#94a3b8", textAlign: "right" }}>
+            <div className="txt-body-3">{h.detail}</div>
+            <div className="txt-muted-r">
               {h.by}
             </div>
           </div>
         ))}
       </div>
       <div
-        style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}
+        className="mt-16-end"
       >
         <CancelBtn onClick={onClose} />
       </div>
@@ -888,46 +659,26 @@ function DeleteModal({ user, onDelete, onClose }) {
       width={400}
     >
       <div
-        style={{
-          background: "#fef2f2",
-          border: "1px solid #fecaca",
-          borderRadius: 10,
-          padding: "14px 16px",
-          marginBottom: 16,
-        }}
+        className="alert-danger"
       >
         <div
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#dc2626",
-            marginBottom: 4,
-          }}
+          className="alert-title dyn-color" style={{ '--c': "#dc2626" }}
         >
           ⚠️ Cannot be undone
         </div>
-        <div style={{ fontSize: 12, color: "#7f1d1d", lineHeight: 1.6 }}>
+        <div className="alert-body">
           Are you sure you want to permanently delete{" "}
           <strong>{user.name}</strong>? All associated data will be removed.
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+      <div className="toolbar-end">
         <CancelBtn onClick={onClose} />
         <button
           onClick={() => {
             onDelete();
             onClose();
           }}
-          style={{
-            padding: "9px 20px",
-            borderRadius: 8,
-            border: "none",
-            background: "#dc2626",
-            color: "#fff",
-            fontSize: 12,
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
+          className="usr-btn-danger"
         >
           Delete User
         </button>
@@ -947,72 +698,34 @@ function NinjaUserModal({ user, onClose }) {
       width={420}
     >
       <div
-        style={{
-          background: "#0f172a",
-          borderRadius: 10,
-          padding: "16px",
-          marginBottom: 16,
-          textAlign: "center",
-        }}
+        className="onb-dark-card"
       >
-        <div style={{ fontSize: 36, marginBottom: 8 }}>🥷</div>
+        <div className="txt-hero-icon">🥷</div>
         <div
-          style={{
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#fff",
-            marginBottom: 4,
-          }}
+          className="txt-hero-title"
         >
           Ninja Mode for {user.name}
         </div>
-        <div style={{ fontSize: 11, color: "#64748b" }}>
+        <div className="txt-body-2">
           Access this account invisibly. User will not be notified.
         </div>
       </div>
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 14px",
-          background: "#f8fafc",
-          borderRadius: 8,
-          border: "1px solid #e8ecf3",
-          marginBottom: 16,
-        }}
+        className="action-row mb-10"
       >
-        <span style={{ fontSize: 13, fontWeight: 600, color: "#334155" }}>
+        <span className="txt-name">
           Enable Ninja Mode
         </span>
         <div
           onClick={() => setActive((a) => !a)}
-          style={{
-            width: 44,
-            height: 24,
-            borderRadius: 12,
-            cursor: "pointer",
-            background: active ? "#0d9488" : "#cbd5e1",
-            position: "relative",
-            transition: "background .2s",
-          }}
+          className="usr-toggle" style={{ '--c': active ? "#0d9488" : "#cbd5e1" }}
         >
           <div
-            style={{
-              position: "absolute",
-              top: 3,
-              left: active ? 23 : 3,
-              width: 18,
-              height: 18,
-              borderRadius: "50%",
-              background: "#fff",
-              boxShadow: "0 1px 4px rgba(0,0,0,.25)",
-              transition: "left .2s",
-            }}
+            className="usr-toggle-thumb" style={{ '--left': active ? '23px' : '3px' }}
           />
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+      <div className="toolbar-end">
         <CancelBtn onClick={onClose} />
         <ActionBtn
           label={active ? "Activate Ninja Mode" : "Close"}
@@ -1033,11 +746,7 @@ function AddUserModal({ onAdd, onClose }) {
       width={560}
     >
       <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "0 16px",
-        }}
+        className="usr-grid-2"
       >
         <FormInput label="Full Name" placeholder="e.g. John Doe" />
         <FormInput label="Email" placeholder="email@example.com" type="email" />
@@ -1054,12 +763,7 @@ function AddUserModal({ onAdd, onClose }) {
         />
       </div>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 10,
-          marginTop: 8,
-        }}
+        className="usr-action-row-end"
       >
         <CancelBtn onClick={onClose} />
         <ActionBtn
@@ -1136,26 +840,13 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
         />
       )}
 
-      <div ref={ref} style={{ display: "flex", alignItems: "center", gap: 4 }}>
+      <div ref={ref} className="f-gap-4">
         {PRIMARY_ACTIONS.map((a) => (
           <button
             key={a.key}
             title={a.title}
             onClick={() => openModal(a.key)}
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: 8,
-              border: "none",
-              cursor: "pointer",
-              background: `${a.color}15`,
-              color: a.color,
-              fontSize: 13,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transition: "background .15s",
-            }}
+            className="usr-action-icon" style={{ '--bg': `${a.color}15`, '--c': a.color }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.background = `${a.color}30`)
             }
@@ -1170,72 +861,33 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
         <button
           title={isBlocked ? "Active" : "InActive"}
           onClick={() => onBlock(user)}
-          style={{
-            padding: "4px 10px",
-            borderRadius: 8,
-            border: "none",
-            cursor: "pointer",
-            fontSize: 11,
-            fontWeight: 700,
-            background: isBlocked ? "#dcfce7" : "#fee2e2",
-            color: isBlocked ? "#16a34a" : "#dc2626",
-            transition: "opacity .15s",
-          }}
+          className={`usr-toggle-block-btn ${isBlocked ? "blocked" : "unblocked"}`}
         >
           {isBlocked ? "Active" : "InActive"}
         </button>
 
-        <div style={{ position: "relative" }}>
+        <div className="p-rel">
           <button
             onClick={() => setOpen((o) => !o)}
             title="More actions"
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: 8,
-              border: "1px solid #e2e8f0",
-              background: open ? "#f1f5f9" : "#fff",
-              cursor: "pointer",
-              fontSize: 16,
-              color: "#64748b",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 700,
-              letterSpacing: 1,
-            }}
+            className={`usr-action-dots ${open ? "open" : "closed"}`}
           >
             ⋯
           </button>
 
           {open && (
             <div
-              style={{
-                position: "absolute",
-                right: 0,
-                top: 36,
-                zIndex: 200,
-                background: "#fff",
-                borderRadius: 12,
-                border: "1px solid #e8ecf3",
-                boxShadow: "0 12px 36px rgba(0,0,0,.14)",
-                minWidth: 200,
-                padding: "6px 0",
-              }}
+              className="usr-action-menu"
             >
               <div
-                style={{
-                  padding: "6px 14px 8px",
-                  borderBottom: "1px solid #f1f5f9",
-                  marginBottom: 4,
-                }}
+                className="usr-action-hdr"
               >
                 <div
-                  style={{ fontSize: 11, fontWeight: 600, color: "#1a1a2e" }}
+                  className="txt-label"
                 >
                   {user.name}
                 </div>
-                <div style={{ fontSize: 10, color: "#94a3b8" }}>
+                <div className="txt-slate">
                   {user.email}
                 </div>
               </div>
@@ -1243,18 +895,7 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
                 <button
                   key={a.key}
                   onClick={() => openModal(a.key)}
-                  style={{
-                    width: "100%",
-                    padding: "9px 14px",
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    textAlign: "left",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    transition: "background .1s",
-                  }}
+                  className="usr-action-item"
                   onMouseEnter={(e) =>
                     (e.currentTarget.style.background = "#f8fafc")
                   }
@@ -1263,43 +904,23 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
                   }
                 >
                   <span
-                    style={{
-                      width: 28,
-                      height: 28,
-                      borderRadius: 8,
-                      background: `${a.color}15`,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 14,
-                      flexShrink: 0,
-                    }}
+                    className="usr-action-icon" style={{ '--bg': `${a.color}15`, '--c': a.color }}
                   >
                     {a.icon}
                   </span>
                   <span
-                    style={{ fontSize: 12, fontWeight: 600, color: "#334155" }}
+                    className="txt-name"
                   >
                     {a.label}
                   </span>
                 </button>
               ))}
               <div
-                style={{ borderTop: "1px solid #f1f5f9", margin: "4px 0" }}
+                className="detail-sep"
               />
               <button
                 onClick={() => openModal("delete")}
-                style={{
-                  width: "100%",
-                  padding: "9px 14px",
-                  border: "none",
-                  background: "transparent",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                }}
+                className="usr-action-item"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#fef2f2")
                 }
@@ -1308,22 +929,12 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
                 }
               >
                 <span
-                  style={{
-                    width: 28,
-                    height: 28,
-                    borderRadius: 8,
-                    background: "#fee2e2",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 14,
-                    flexShrink: 0,
-                  }}
+                  className="usr-action-icon-del"
                 >
                   🗑
                 </span>
                 <span
-                  style={{ fontSize: 12, fontWeight: 600, color: "#dc2626" }}
+                  className="txt-danger"
                 >
                   Delete User
                 </span>
@@ -1357,51 +968,21 @@ function ActiveInactiveTabs({ value, onChange, activeCount, inactiveCount }) {
     },
   ];
   return (
-    <div style={{ display: "flex", borderBottom: "2px solid #f1f5f9", gap: 0 }}>
+    <div className="tab-bar">
       {tabs.map(({ key, label, count, color, bg, dot }) => {
         const on = value === key;
         return (
           <button
             key={key}
             onClick={() => onChange(key)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 22px",
-              border: "none",
-              cursor: "pointer",
-              background: "transparent",
-              fontWeight: 700,
-              fontSize: 13,
-              color: on ? color : "#94a3b8",
-              borderBottom: on
-                ? `2.5px solid ${color}`
-                : "2.5px solid transparent",
-              marginBottom: -2,
-              transition: "all .15s",
-            }}
+            className={`svc-tab-btn ${on ? "on" : "off"}`} style={{ '--c': color }}
           >
             <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: on ? dot : "#cbd5e1",
-                display: "inline-block",
-                flexShrink: 0,
-              }}
+              className={`svc-tab-dot ${on ? "on" : "off"}`} style={{ '--c': dot }}
             />
             {label}
             <span
-              style={{
-                padding: "2px 9px",
-                borderRadius: 20,
-                fontSize: 11,
-                fontWeight: 600,
-                background: on ? bg : "#f1f5f9",
-                color: on ? color : "#94a3b8",
-              }}
+              className={`svc-tab-pill ${on ? "on" : "off"}`} style={{ '--bg': bg, '--c': color }}
             >
               {count}
             </span>
@@ -1490,46 +1071,23 @@ export default function PageUsers({ role = "admin", setPage }) {
     return (
       <div>
         <div
-          style={{
-            background: "#fff",
-            borderRadius: 14,
-            border: "1px solid #e8ecf3",
-            marginBottom: 16,
-            overflow: "hidden",
-          }}
+          className="usr-table-card"
         >
           <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "16px 20px",
-            }}
+            className="flex-between p-10-14"
           >
             <div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: "#1a1a2e" }}>
+              <div className="txt-label-lg">
                 My Sub-Accounts
               </div>
-              <div style={{ fontSize: 12, color: SLATE, marginTop: 2 }}>
+              <div className="txt-slate-11">
                 {partnerAccounts.length} accounts ·{" "}
                 {partnerAccounts.reduce((s, u) => s + u.services.length, 0)}{" "}
                 total services
               </div>
             </div>
             <button
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "8px 18px",
-                borderRadius: 8,
-                border: "none",
-                cursor: "pointer",
-                background: T,
-                color: "#fff",
-                fontSize: 12,
-                fontWeight: 700,
-              }}
+              className="usr-btn-save" style={{ '--c': T }}
             >
               ⊕ New Account
             </button>
@@ -1542,18 +1100,10 @@ export default function PageUsers({ role = "admin", setPage }) {
           />
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div className="f-col-12">
           {filteredPartnerAccounts.length === 0 && (
             <div
-              style={{
-                textAlign: "center",
-                padding: 40,
-                color: SLATE,
-                fontSize: 13,
-                background: "#fff",
-                borderRadius: 14,
-                border: "1px solid #e8ecf3",
-              }}
+              className="usr-empty"
             >
               No {partnerTab} accounts found.
             </div>
@@ -1565,163 +1115,79 @@ export default function PageUsers({ role = "admin", setPage }) {
             return (
               <div
                 key={u.id}
-                style={{
-                  background: "#fff",
-                  borderRadius: 14,
-                  border: `1px solid ${u.status ? "#e8ecf3" : "#fee2e2"}`,
-                  boxShadow: "0 2px 8px rgba(0,0,0,.05)",
-                  overflow: "hidden",
-                }}
+                className="usr-partner-card" style={{ '--bdr': u.status ? "#e8ecf3" : "#fee2e2" }}
               >
                 <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns:
-                      "200px 200px 160px 180px 80px 1fr auto",
-                    alignItems: "center",
-                    borderBottom: isExpanded ? "1px solid #f1f5f9" : "none",
-                    background: u.status ? "#fff" : "#fff9f9",
-                  }}
+                  className="usr-partner-row" style={{ '--bb': isExpanded ? '1px solid #f1f5f9' : 'none', '--bg': u.status ? '#fff' : '#fff9f9' }}
                 >
                   <div
-                    style={{
-                      padding: "16px 20px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 12,
-                    }}
+                    className="usr-table-cell"
                   >
                     <div
-                      style={{
-                        width: 38,
-                        height: 38,
-                        borderRadius: 10,
-                        flexShrink: 0,
-                        background: u.status
-                          ? "linear-gradient(135deg,#0d9488,#0891b2)"
-                          : "#f1f5f9",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 13,
-                        fontWeight: 600,
-                        color: u.status ? "#fff" : "#94a3b8",
-                      }}
+                      className="usr-partner-avatar" style={{ '--bg': u.status ? 'linear-gradient(135deg,#0d9488,#0891b2)' : '#f1f5f9', '--c': u.status ? '#fff' : '#94a3b8' }}
                     >
                       {u.name.slice(0, 3)}
                     </div>
                     <div>
                       <div
-                        style={{
-                          fontSize: 13,
-                          fontWeight: 600,
-                          color: "#1a1a2e",
-                        }}
+                        className="txt-label"
                       >
                         {u.name}
                       </div>
-                      <div style={{ fontSize: 10, color: SLATE, marginTop: 1 }}>
+                      <div className="txt-muted-xs">
                         ID: {u.id}
                       </div>
                     </div>
                   </div>
-                  <div style={{ padding: "16px 12px" }}>
+                  <div className="p-card">
                     <span
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: 20,
-                        fontSize: 11,
-                        fontWeight: 700,
-                        background: "#f0fdfa",
-                        color: T,
-                        border: "1px solid #99f6e4",
-                      }}
+                      className="usr-plan-badge"
                     >
                       {u.type}
                     </span>
                   </div>
-                  <div style={{ padding: "16px 12px" }}>
+                  <div className="p-card">
                     <div
-                      style={{ fontSize: 11, color: SLATE, marginBottom: 2 }}
+                      className="txt-body-2"
                     >
                       Last Login
                     </div>
                     <div
-                      style={{
-                        fontSize: 12,
-                        fontWeight: 600,
-                        color: "#334155",
-                      }}
+                      className="usr-login-val"
                     >
                       {u.lastLogin}
                     </div>
                   </div>
-                  <div style={{ padding: "16px 12px" }}>
+                  <div className="p-card">
                     <div
-                      style={{ fontSize: 11, color: SLATE, marginBottom: 2 }}
+                      className="txt-body-2"
                     >
                       Last Accessed From
                     </div>
                     <div
-                      style={{
-                        fontSize: 12,
-                        fontFamily: "monospace",
-                        color: "#334155",
-                      }}
+                      className="usr-txt-mono"
                     >
                       {u.lastAccessed}
                     </div>
                   </div>
                   {/* Clickable status toggle */}
-                  <div style={{ padding: "16px 12px" }}>
+                  <div className="p-card">
                     <div
                       onClick={() => handlePartnerToggle(u.id)}
-                      style={{
-                        width: 44,
-                        height: 24,
-                        borderRadius: 12,
-                        cursor: "pointer",
-                        background: u.status ? T : "#cbd5e1",
-                        position: "relative",
-                        transition: "background .2s",
-                      }}
+                      className="usr-toggle" style={{ '--c': u.status ? T : "#cbd5e1" }}
                     >
                       <div
-                        style={{
-                          position: "absolute",
-                          top: 3,
-                          left: u.status ? 23 : 3,
-                          width: 18,
-                          height: 18,
-                          borderRadius: "50%",
-                          background: "#fff",
-                          boxShadow: "0 1px 4px rgba(0,0,0,.25)",
-                          transition: "left .2s",
-                        }}
+                        className="usr-toggle-thumb" style={{ '--left': u.status ? '23px' : '3px' }}
                       />
                     </div>
                   </div>
                   <div
-                    style={{
-                      padding: "14px 12px",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: 5,
-                      alignItems: "center",
-                    }}
+                    className="usr-service-wrap"
                   >
                     {preview.map((svc) => (
                       <span
                         key={svc}
-                        style={{
-                          padding: "3px 9px",
-                          borderRadius: 6,
-                          fontSize: 10,
-                          fontWeight: 600,
-                          background: T,
-                          color: "#fff",
-                          whiteSpace: "nowrap",
-                        }}
+                        className="usr-svc-tag" style={{ '--c': T }}
                       >
                         {svc}
                       </span>
@@ -1729,58 +1195,24 @@ export default function PageUsers({ role = "admin", setPage }) {
                     {rest.length > 0 && (
                       <button
                         onClick={() => toggleAccount(u.id)}
-                        style={{
-                          padding: "3px 10px",
-                          borderRadius: 6,
-                          fontSize: 10,
-                          fontWeight: 700,
-                          border: `1.5px dashed ${T}`,
-                          background: "transparent",
-                          color: T,
-                          cursor: "pointer",
-                          whiteSpace: "nowrap",
-                        }}
+                        className="usr-svc-add" style={{ '--c': T }}
                       >
                         {isExpanded ? "▲ Less" : `+${rest.length} more`}
                       </button>
                     )}
                   </div>
                   <div
-                    style={{ padding: "16px 18px", display: "flex", gap: 6 }}
+                    className="usr-tabs-wrap"
                   >
                     <button
                       title="View"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 8,
-                        border: "none",
-                        cursor: "pointer",
-                        background: "#f0fdfa",
-                        color: T,
-                        fontSize: 14,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                      className="usr-icon-teal"
                     >
                       👁
                     </button>
                     <button
                       title="Edit"
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 8,
-                        border: "none",
-                        cursor: "pointer",
-                        background: "#eff6ff",
-                        color: "#1d4ed8",
-                        fontSize: 14,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
+                      className="usr-icon-blue"
                     >
                       ✏️
                     </button>
@@ -1788,58 +1220,26 @@ export default function PageUsers({ role = "admin", setPage }) {
                 </div>
                 {isExpanded && (
                   <div
-                    style={{ padding: "14px 20px 16px", background: "#f8fafc" }}
+                    className="tab-body"
                   >
                     <div
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 700,
-                        color: SLATE,
-                        marginBottom: 10,
-                        textTransform: "uppercase",
-                        letterSpacing: ".6px",
-                      }}
+                      className="txt-section-hd mb-10"
                     >
                       All Services ({u.services.length})
                     </div>
                     <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns:
-                          "repeat(auto-fill,minmax(220px,1fr))",
-                        gap: 6,
-                      }}
+                      className="usr-permission-grid"
                     >
                       {u.services.map((svc) => {
                         const isTrue = svc.endsWith("True");
                         return (
                           <div
                             key={svc}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                              padding: "7px 12px",
-                              borderRadius: 8,
-                              fontSize: 11,
-                              fontWeight: 600,
-                              background: "#fff",
-                              border: `1px solid ${isTrue ? "#99f6e4" : "#fecaca"}`,
-                              color: "#334155",
-                            }}
+                            className="usr-perm-item" style={{ '--bdr': isTrue ? "#99f6e4" : "#fecaca" }}
                           >
                             <span>{svc.replace(/ - (True|False)$/, "")}</span>
                             <span
-                              style={{
-                                padding: "2px 8px",
-                                borderRadius: 20,
-                                fontSize: 10,
-                                fontWeight: 700,
-                                background: isTrue ? T : "#dc2626",
-                                color: "#fff",
-                                marginLeft: 8,
-                                flexShrink: 0,
-                              }}
+                              className="usr-perm-badge" style={{ '--c': isTrue ? T : "#dc2626" }}
                             >
                               {isTrue ? "True" : "False"}
                             </span>
@@ -1881,16 +1281,14 @@ export default function PageUsers({ role = "admin", setPage }) {
         ].map(({ label, value, color }) => (
           <Card
             key={label}
-            style={{ textAlign: "center", borderTop: `4px solid ${color}` }}
+            className="stat-top-4" style={{ '--c': color }}
           >
             <div
-              style={{
-                fontSize: 'var(--text-stat)',
-              }}
+              className="kpi-stat"
             >
               {value}
             </div>
-            <div style={{ fontSize: 12, color: SLATE, fontWeight: 600 }}>
+            <div className="stat-sublabel">
               {label}
             </div>
           </Card>
@@ -1900,7 +1298,7 @@ export default function PageUsers({ role = "admin", setPage }) {
       <div className="g-split2 mb-section">
         <Card>
           <SectionTitle>Login &amp; Action Activity</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={repTrend}>
               <XAxis dataKey="d" />
               <YAxis />
@@ -1917,8 +1315,8 @@ export default function PageUsers({ role = "admin", setPage }) {
         </Card>
         <Card>
           <SectionTitle>Users by Type</SectionTitle>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ position: "relative", flexShrink: 0 }}>
+          <div className="f-gap-14">
+            <div className="p-rel-sh">
               <PieChart width={110} height={110}>
                 <Pie
                   data={TYPE_COUNTS}
@@ -1935,62 +1333,29 @@ export default function PageUsers({ role = "admin", setPage }) {
                 </Pie>
               </PieChart>
               <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%,-50%)",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: "#1a1a2e",
-                  textAlign: "center",
-                  lineHeight: 1,
-                }}
+                className="usr-donut-label"
               >
                 {TOTAL_USERS}
               </div>
             </div>
             <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 5,
-                flex: 1,
-                overflow: "hidden",
-              }}
+              className="usr-legend-item"
             >
               {TYPE_COUNTS.map((t) => (
                 <div
                   key={t.label}
-                  style={{ display: "flex", alignItems: "center", gap: 7 }}
+                  className="f-gap-7"
                 >
                   <div
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: 2,
-                      background: t.color,
-                      flexShrink: 0,
-                    }}
+                    className="usr-legend-dot" style={{ '--c': t.color }}
                   />
                   <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: "#1a1a2e",
-                      whiteSpace: "nowrap",
-                    }}
+                    className="usr-legend-count"
                   >
                     {t.count}
                   </span>
                   <span
-                    style={{
-                      fontSize: 10,
-                      color: SLATE,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
+                    className="usr-legend-name"
                   >
                     {t.label}
                   </span>
@@ -2003,28 +1368,15 @@ export default function PageUsers({ role = "admin", setPage }) {
 
       <Card>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 14,
-            flexWrap: "wrap",
-            gap: 10,
-          }}
+          className="usr-filter-wrap"
         >
           <SectionTitle>User Directory</SectionTitle>
-          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <div className="f-gap-8">
             <input
               placeholder="Search..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              style={{
-                border: "1px solid #e2e8f0",
-                borderRadius: 20,
-                padding: "6px 14px",
-                fontSize: 12,
-                outline: "none",
-              }}
+              className="usr-filter-select"
             />
             <button
               onClick={() => setPage && setPage("user-onboarding")}
@@ -2046,15 +1398,7 @@ export default function PageUsers({ role = "admin", setPage }) {
         />
 
         <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 6,
-            marginTop: 16,
-            marginBottom: 16,
-            paddingBottom: 14,
-            borderBottom: "1px solid #f1f5f9",
-          }}
+          className="usr-perm-filter-bar"
         >
           {USER_TYPES.map((t) => {
             const isActive = activeType === t;
@@ -2063,19 +1407,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               <button
                 key={t}
                 onClick={() => setActiveType(t)}
-                style={{
-                  padding: "5px 14px",
-                  borderRadius: 20,
-                  border: isActive
-                    ? `1.5px solid ${color}`
-                    : "1.5px solid #e2e8f0",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  background: isActive ? color : "#fff",
-                  color: isActive ? "#fff" : "#64748b",
-                  transition: "all .15s",
-                }}
+                className="usr-perm-filter-pill" style={{ '--bdr': color, '--bg': isActive ? color : "#fff", '--c': isActive ? "#fff" : "#64748b" }}
               >
                 {t}
               </button>
@@ -2084,10 +1416,10 @@ export default function PageUsers({ role = "admin", setPage }) {
         </div>
 
         <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
+          className="dt dt-lg"
         >
           <thead>
-            <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+            <tr className="dt-head-row">
               {[
                 "User",
                 "Email",
@@ -2100,12 +1432,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               ].map((h) => (
                 <th
                   key={h}
-                  style={{
-                    textAlign: "left",
-                    padding: 10,
-                    fontSize: 11,
-                    color: SLATE,
-                  }}
+                  className="dt-th"
                 >
                   {h}
                 </th>
@@ -2116,7 +1443,7 @@ export default function PageUsers({ role = "admin", setPage }) {
             {filtered.map((u, i) => (
               <tr
                 key={i}
-                style={{ borderBottom: "1px solid #f8fafc" }}
+                className="dt-tr-plain"
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#f8fafc")
                 }
@@ -2124,57 +1451,36 @@ export default function PageUsers({ role = "admin", setPage }) {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <td style={{ padding: 10 }}>
+                <td className="p-10">
                   <div
-                    style={{ display: "flex", alignItems: "center", gap: 10 }}
+                    className="f-gap-10"
                   >
                     <div
-                      style={{
-                        width: 32,
-                        height: 32,
-                        borderRadius: "50%",
-                        background: TYPE_COLORS[u.role]
-                          ? `${TYPE_COLORS[u.role]}22`
-                          : "#e2e8f0",
-                        border: `2px solid ${TYPE_COLORS[u.role] || "#cbd5e1"}`,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontWeight: 600,
-                        color: TYPE_COLORS[u.role] || "#334155",
-                        fontSize: 13,
-                      }}
+                      className="usr-avatar-sm" style={{ '--bg': TYPE_COLORS[u.role] ? `${TYPE_COLORS[u.role]}22` : "#e2e8f0", '--bdr': TYPE_COLORS[u.role] || "#cbd5e1", '--c': TYPE_COLORS[u.role] || "#334155" }}
                     >
                       {u.name[0]}
                     </div>
-                    <span style={{ fontWeight: 700 }}>{u.name}</span>
+                    <span className="txt-strong-w">{u.name}</span>
                   </div>
                 </td>
-                <td style={{ padding: 10, color: "#64748b" }}>{u.email}</td>
-                <td style={{ padding: 10 }}>
+                <td className="td-p-10s">{u.email}</td>
+                <td className="p-10">
                   <Badge color={TYPE_COLORS[u.role] || BLUE}>{u.role}</Badge>
                 </td>
-                <td style={{ padding: 10 }}>{u.region}</td>
-                <td style={{ padding: 10 }}>{u.sessions}</td>
-                <td style={{ padding: 10, color: "#64748b" }}>{u.lastLogin}</td>
-                <td style={{ padding: 10 }}>
+                <td className="p-10">{u.region}</td>
+                <td className="p-10">{u.sessions}</td>
+                <td className="td-p-10s">{u.lastLogin}</td>
+                <td className="p-10">
                   <span
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: STATUS_COLOR(u.status),
-                      display: "inline-block",
-                      marginRight: 6,
-                    }}
+                    className="usr-status-dot" style={{ '--c': STATUS_COLOR(u.status) }}
                   />
                   <span
-                    style={{ fontWeight: 600, textTransform: "capitalize" }}
+                    className="txt-cap"
                   >
                     {u.status}
                   </span>
                 </td>
-                <td style={{ padding: "8px 10px" }}>
+                <td className="td-p">
                   <UserActions
                     user={u}
                     onBlock={handleBlock}
@@ -2188,12 +1494,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               <tr>
                 <td
                   colSpan={8}
-                  style={{
-                    padding: 30,
-                    textAlign: "center",
-                    color: SLATE,
-                    fontSize: 13,
-                  }}
+                  className="dt-empty"
                 >
                   No {statusTab} users found
                   {activeType !== "All" ? ` for ${activeType}` : ""}.

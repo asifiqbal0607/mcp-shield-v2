@@ -239,61 +239,27 @@ const ADMIN_ACTIONS = [
 function ActionsDropdown() {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ position: "relative", display: "inline-block" }}>
+    <div className="p-rel-ib">
       <button
         onClick={() => setOpen((o) => !o)}
-        style={{
-          padding: "3px 10px",
-          borderRadius: 6,
-          fontSize: 15,
-          fontWeight: 700,
-          border: "1px solid #cbd5e1",
-          cursor: "pointer",
-          background: open ? "#f1f5f9" : "#fff",
-          color: "#475569",
-          letterSpacing: 2,
-          lineHeight: 1,
-        }}
+        className={`svc-ver-btn ${open ? "open" : "closed"}`}
       >
         ···
       </button>
       {open && (
         <>
           <div
-            style={{ position: "fixed", inset: 0, zIndex: 998 }}
+            className="p-fixed-0"
             onClick={() => setOpen(false)}
           />
           <div
-            style={{
-              position: "absolute",
-              right: 0,
-              top: "calc(100% + 4px)",
-              zIndex: 999,
-              background: "#fff",
-              borderRadius: 8,
-              minWidth: 160,
-              border: "1px solid #e2e8f0",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
-              overflow: "hidden",
-            }}
+            className="svc-dropdown"
           >
             {ADMIN_ACTIONS.map((a, i) => (
               <button
                 key={a.label}
                 onClick={() => setOpen(false)}
-                style={{
-                  display: "block",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "8px 14px",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  border: "none",
-                  borderTop: i > 0 ? "1px solid #f1f5f9" : "none",
-                  cursor: "pointer",
-                  background: "transparent",
-                  color: a.color,
-                }}
+                className="svc-dropdown-item" style={{ '--c': a.color }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#f8fafc")
                 }
@@ -313,22 +279,12 @@ function ActionsDropdown() {
 
 function PartnerActions() {
   return (
-    <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+    <div className="f-gap-4">
       {PARTNER_ACTIONS.map((a) => (
         <button
           key={a.label}
           title={a.title}
-          style={{
-            padding: "2px 8px",
-            borderRadius: 4,
-            fontSize: 11,
-            fontWeight: 600,
-            border: `1px solid ${a.color}`,
-            cursor: "pointer",
-            background: a.label.length <= 2 ? a.color : "#fff",
-            color: a.label.length <= 2 ? "#fff" : a.color,
-            whiteSpace: "nowrap",
-          }}
+          className="svc-action-badge" style={{ '--c': a.color, '--bg': a.label.length <= 2 ? a.color : "#fff" }}
         >
           {a.label}
         </button>
@@ -406,17 +362,17 @@ export default function PageServices({ role = "admin", setPage }) {
   function renderCell(col, row, idx) {
     switch (col.key) {
       case "sr":
-        return <span style={{ color: "#94a3b8" }}>{idx + 1}</span>;
+        return <span className="txt-muted">{idx + 1}</span>;
       case "name":
         return (
-          <span style={{ fontWeight: 600, color: "#0f172a", fontSize: 12 }}>
+          <span className="txt-label-md">
             {row.name}
           </span>
         );
       case "serviceId":
         return (
           <span
-            style={{ fontFamily: "monospace", fontSize: 11, color: "#64748b" }}
+            className="txt-mono"
           >
             {row.serviceId}
           </span>
@@ -424,78 +380,55 @@ export default function PageServices({ role = "admin", setPage }) {
       case "status":
         return (
           <span
-            style={{
-              display: "inline-block",
-              padding: "2px 10px",
-              borderRadius: 4,
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: 0.5,
-              background: row.status === "active" ? "#16a34a" : "#f59e0b",
-              color: "#fff",
-            }}
+            className="svc-status-badge" style={{ '--c': row.status === "active" ? "#16a34a" : "#f59e0b" }}
           >
             {row.status.toUpperCase()}
           </span>
         );
       case "client":
-        return <span style={{ fontSize: 12 }}>{row.client || "--"}</span>;
+        return <span className="txt-body">{row.client || "--"}</span>;
       case "vsBrand":
-        return <span style={{ color: "#94a3b8" }}>{row.vsBrand || "--"}</span>;
+        return <span className="txt-muted">{row.vsBrand || "--"}</span>;
       case "serviceType":
-        return <span style={{ color: "#94a3b8" }}>{row.type || "--"}</span>;
+        return <span className="txt-muted">{row.type || "--"}</span>;
       case "mno":
-        return <span style={{ color: "#94a3b8" }}>{row.mno || "--"}</span>;
+        return <span className="txt-muted">{row.mno || "--"}</span>;
       case "carrierGradeNat":
         return (
-          <span style={{ color: "#94a3b8" }}>
+          <span className="txt-muted">
             {row.carrierGradeNat || "--"}
           </span>
         );
       case "shieldMode":
         return row.shieldMode && row.shieldMode !== "--" ? (
           <span
-            style={{
-              padding: "2px 10px",
-              borderRadius: 4,
-              fontSize: 11,
-              fontWeight: 600,
-              background: "#0dcaf0",
-              color: "#fff",
-            }}
+            className="svc-pill"
           >
             {row.shieldMode}
           </span>
         ) : (
-          <span style={{ color: "#94a3b8" }}>--</span>
+          <span className="txt-muted">--</span>
         );
       case "headerEnrichedFlow":
         return (
-          <span style={{ color: "#94a3b8" }}>
+          <span className="txt-muted">
             {row.headerEnrichedFlow || "--"}
           </span>
         );
       case "hePaymentFlow":
         return (
-          <span style={{ color: "#94a3b8" }}>{row.hePaymentFlow || "--"}</span>
+          <span className="txt-muted">{row.hePaymentFlow || "--"}</span>
         );
       case "wifiPaymentFlow":
         return (
-          <span style={{ color: "#94a3b8" }}>
+          <span className="txt-muted">
             {row.wifiPaymentFlow || "--"}
           </span>
         );
       case "serviceCreated":
         return (
           <span
-            style={{
-              fontFamily: "monospace",
-              fontSize: 11,
-              padding: "2px 6px",
-              borderRadius: 4,
-              background: "#e0f2fe",
-              color: "#0369a1",
-            }}
+            className="svc-code"
           >
             {row.serviceCreated}
           </span>
@@ -503,14 +436,7 @@ export default function PageServices({ role = "admin", setPage }) {
       case "lastUpdate":
         return (
           <span
-            style={{
-              fontFamily: "monospace",
-              fontSize: 11,
-              padding: "2px 6px",
-              borderRadius: 4,
-              background: "#e0f2fe",
-              color: "#0369a1",
-            }}
+            className="svc-code"
           >
             {row.lastUpdate}
           </span>
@@ -529,15 +455,15 @@ export default function PageServices({ role = "admin", setPage }) {
         {SUMMARY_STATS.map(({ label, value, color }) => (
           <Card
             key={label}
-            style={{ textAlign: "center", borderTop: `4px solid ${color}` }}
+            className="stat-top-4" style={{ '--c': color }}
           >
             <div
               className="kpi-stat"
-              style={{ color }}
+              className="dyn-color" style={{ '--c': color }}
             >
               {value}
             </div>
-            <div style={{ fontSize: 12, color: SLATE, fontWeight: 600 }}>
+            <div className="stat-sublabel">
               {label}
             </div>
           </Card>
@@ -548,7 +474,7 @@ export default function PageServices({ role = "admin", setPage }) {
       <div className="g-split2 mb-section">
         <Card>
           <SectionTitle>Uptime Trend (14 days)</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={200}>
             <LineChart data={repTrend}>
               <XAxis dataKey="d" />
               <YAxis />
@@ -559,7 +485,7 @@ export default function PageServices({ role = "admin", setPage }) {
         </Card>
         <Card>
           <SectionTitle>API Calls by Service</SectionTitle>
-          <ResponsiveContainer width="100%" height={240}>
+          <ResponsiveContainer width="100%" height={200}>
             <BarChart data={API_CALL_DATA}>
               <XAxis dataKey="name" />
               <YAxis />
@@ -577,32 +503,14 @@ export default function PageServices({ role = "admin", setPage }) {
       {/* Service Registry */}
       <Card>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
+          className="toolbar"
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div className="f-gap-14">
             <SectionTitle>Service Registration</SectionTitle>
             {isPartner && (
               <button
                 onClick={() => setPage && setPage("onboarding")}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "7px 16px",
-                  borderRadius: 7,
-                  cursor: "pointer",
-                  background: `linear-gradient(135deg, ${T}, #0891b2)`,
-                  color: "#fff",
-                  border: "none",
-                  fontSize: 11,
-                  fontWeight: 700,
-                  boxShadow: `0 3px 12px ${T}55`,
-                }}
+                className="svc-add-btn" style={{ '--c': T }}
                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
               >
@@ -611,7 +519,7 @@ export default function PageServices({ role = "admin", setPage }) {
             )}
           </div>
 
-          <div style={{ display: "flex", gap: 0 }}>
+          <div className="f-gap-0">
             {[
               ["active", GREEN, "22c55e", "dcfce7", "16a34a"],
               ["inactive", AMBER, "f59e0b", "fef3c7", "d97706"],
@@ -626,42 +534,14 @@ export default function PageServices({ role = "admin", setPage }) {
                 <button
                   key={key}
                   onClick={() => setTab(key)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "8px 20px",
-                    border: "none",
-                    cursor: "pointer",
-                    background: "transparent",
-                    fontWeight: 700,
-                    fontSize: 13,
-                    color: isOn ? `#${textHex}` : "#94a3b8",
-                    borderBottom: isOn
-                      ? `2.5px solid ${borderColor}`
-                      : "2.5px solid transparent",
-                    transition: "all .15s",
-                  }}
+                  className={`svc-tab-btn ${isOn ? "on" : "off"}`} style={{ '--c': `#${textHex}` }}
                 >
                   <span
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: isOn ? `#${dotHex}` : "#cbd5e1",
-                      display: "inline-block",
-                    }}
+                    className={`svc-tab-dot ${isOn ? "on" : "off"}`} style={{ '--c': `#${dotHex}` }}
                   />
                   {label}
                   <span
-                    style={{
-                      padding: "2px 9px",
-                      borderRadius: 20,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      background: isOn ? `#${bgHex}` : "#f1f5f9",
-                      color: isOn ? `#${textHex}` : "#94a3b8",
-                    }}
+                    className={`svc-tab-pill ${isOn ? "on" : "off"}`} style={{ '--bg': `#${bgHex}`, '--c': `#${textHex}` }}
                   >
                     {count}
                   </span>
@@ -672,20 +552,14 @@ export default function PageServices({ role = "admin", setPage }) {
         </div>
 
         <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}
+          className="dt dt-lg"
           >
             <thead>
-              <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+              <tr className="dt-head-row">
                 {visibleCols.map((col) => (
                   <th
                     key={col.key}
-                    style={{
-                      textAlign: "left",
-                      padding: 10,
-                      fontSize: 11,
-                      color: SLATE,
-                      whiteSpace: "nowrap",
-                    }}
+                    className="dt-th"
                   >
                     {col.label}
                   </th>
@@ -697,12 +571,7 @@ export default function PageServices({ role = "admin", setPage }) {
                 <tr>
                   <td
                     colSpan={visibleCols.length}
-                    style={{
-                      padding: 30,
-                      textAlign: "center",
-                      color: SLATE,
-                      fontSize: 13,
-                    }}
+                    className="dt-empty"
                   >
                     No {tab} services found.
                   </td>
@@ -711,7 +580,7 @@ export default function PageServices({ role = "admin", setPage }) {
                 displayed.map((row, idx) => (
                   <tr
                     key={idx}
-                    style={{ borderBottom: "1px solid #f8fafc" }}
+                    className="dt-tr-plain"
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.background = "#f8fafc")
                     }
@@ -722,11 +591,7 @@ export default function PageServices({ role = "admin", setPage }) {
                     {visibleCols.map((col) => (
                       <td
                         key={col.key}
-                        style={{
-                          padding: 10,
-                          verticalAlign: "middle",
-                          whiteSpace: "nowrap",
-                        }}
+                        className="td-svc"
                       >
                         {renderCell(col, row, idx)}
                       </td>

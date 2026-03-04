@@ -25,20 +25,11 @@ const SERIES = [
   { key: "subs", color: BLUE },
 ];
 
-// Reusable click-to-open helper styles
-const clickable = {
-  cursor: "pointer",
-  transition: "box-shadow .15s, transform .15s",
-};
-const hoverOn = (e) => {
-  e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,0,0,.12)";
-  e.currentTarget.style.transform = "translateY(-2px)";
-};
-const hoverOff = (e) => {
-  e.currentTarget.style.boxShadow = "";
-  e.currentTarget.style.transform = "";
-};
+// ── Recharts shared config constants (no inline objects in JSX) ────────────
+const CHART_TICK = { fontSize: 9, fill: "#cbd5e1" };
+const CHART_MARGIN = { top: 5, right: 5, bottom: 0, left: -30 };
 
+// Reusable click-to-open helper styles
 export default function PageOverview() {
   const [active, setActive] = useState({
     visits: true,
@@ -54,56 +45,20 @@ export default function PageOverview() {
   return (
     <div>
       {/* ── Row 1: KPI cards + gauge + line chart ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: 14,
-          marginBottom: 16,
-        }}
-      >
+      <div className="ov-row1">
         {/* KPI summary — each stat clickable */}
-        <Card style={{ padding: 0, overflow: "hidden" }}>
+        <Card className="p-0-of">
           {/* Total Visits */}
           <div
             onClick={() => open("Total Visits — Transactions")}
-            style={{
-              ...clickable,
-              padding: "18px 18px 14px",
-              borderBottom: "1px solid #f1f5f9",
-            }}
-            onMouseEnter={hoverOn}
-            onMouseLeave={hoverOff}
+            className="ov-kpi-header"
           >
-            <div
-              className="kpi-stat"
-              style={{ color: "#1a1a2e", letterSpacing: -1, lineHeight: 1 }}
-            >
-              1.5m
-            </div>
-            <div
-              style={{
-                fontSize: 11,
-                color: SLATE,
-                fontWeight: 600,
-                marginTop: 4,
-              }}
-            >
-              Total Visits
-            </div>
-            <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 2 }}>
-              View Transactions ↗
-            </div>
+            <div className="ov-kpi-main-num">1.5m</div>
+            <div className="stat-lbl">Total Visits</div>
+            <div className="stat-hint">View Transactions ↗</div>
           </div>
           {/* Sub-stats */}
-          <div
-            style={{
-              padding: "12px 18px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
-          >
+          <div className="ov-kpi-sub-section">
             {[
               ["500k", "Total Clicks"],
               ["170", "Unique Apps"],
@@ -111,28 +66,11 @@ export default function PageOverview() {
               <div
                 key={l}
                 onClick={() => open(`${l} — Transactions`)}
-                style={{
-                  ...clickable,
-                  padding: "8px 10px",
-                  borderRadius: 8,
-                  background: "#f8fafc",
-                }}
-                onMouseEnter={hoverOn}
-                onMouseLeave={hoverOff}
+                className="ov-kpi-substat"
               >
-                <div
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 700,
-                    fontFamily: "Poppins,serif",
-                  }}
-                >
-                  {v}
-                </div>
-                <div style={{ fontSize: 11, color: SLATE }}>{l}</div>
-                <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 2 }}>
-                  View Transactions ↗
-                </div>
+                <div className="ov-kpi-sub-num">{v}</div>
+                <div className="stat-sublabel">{l}</div>
+                <div className="stat-hint">View Transactions ↗</div>
               </div>
             ))}
           </div>
@@ -141,90 +79,21 @@ export default function PageOverview() {
         {/* Clicked Clean */}
         <div
           onClick={() => open("Clicked Clean — Transactions")}
-          style={{
-            background: "linear-gradient(145deg,#22c55e,#16a34a)",
-            borderRadius: 14,
-            padding: "20px 16px",
-            boxShadow: "0 6px 24px rgba(34,197,94,.28)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-            ...clickable,
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.03)";
-            e.currentTarget.style.boxShadow = "0 10px 32px rgba(34,197,94,.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.boxShadow = "0 6px 24px rgba(34,197,94,.28)";
-          }}
+          className="ov-clean-card"
         >
-          <div
-            className="kpi-stat"
-            style={{
-              color: "#fff",
-              letterSpacing: -2,
-              lineHeight: 1,
-            }}
-          >
-            50k
-          </div>
-          <div
-            style={{
-              fontSize: 12,
-              color: "rgba(255,255,255,.85)",
-              fontWeight: 700,
-              textAlign: "center",
-            }}
-          >
-            Clicked Clean
-          </div>
-          <div
-            style={{
-              fontSize: 10,
-              color: "rgba(255,255,255,.65)",
-              marginTop: 2,
-            }}
-          >
-            View Transactions ↗
-          </div>
+          <div className="ov-clean-num">50k</div>
+          <div className="ov-clean-lbl">Clicked Clean</div>
+          <div className="ov-clean-link">View Transactions ↗</div>
         </div>
 
         {/* Gauge — each legend item clickable */}
-        <Card style={{ padding: "18px 14px 12px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-            }}
-          >
-            <span style={{ fontSize: 14, fontWeight: 600, color: "#1a1a2e" }}>
-              Page Clicks
-            </span>
-            <span
-              style={{
-                fontSize: 12,
-                color: SLATE,
-                fontFamily: "monospace",
-                letterSpacing: 1,
-              }}
-            >
-              5,00,437
-            </span>
+        <Card className="p-md">
+          <div className="ov-gauge-header">
+            <span className="txt-label">Page Clicks</span>
+            <span className="ov-gauge-value">5,00,437</span>
           </div>
           <TaperedGauge />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 12,
-              marginTop: 2,
-            }}
-          >
+          <div className="ov-gauge-legend">
             {[
               ["#43a84a", "Clean"],
               ["#ffc107", "Low Risk"],
@@ -233,80 +102,37 @@ export default function PageOverview() {
               <div
                 key={l}
                 onClick={() => open(`${l} — Transactions`)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 5,
-                  fontSize: 11,
-                  color: "#475569",
-                  fontWeight: 600,
-                  ...clickable,
-                  padding: "4px 8px",
-                  borderRadius: 8,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#f1f5f9";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                }}
+                className="ov-legend-item-btn"
               >
-                <div
-                  style={{
-                    width: 11,
-                    height: 11,
-                    borderRadius: 3,
-                    background: c,
-                  }}
-                />
+                <div className="ov-legend-sq" style={{ "--c": c }} />
                 {l}
-                <span style={{ fontSize: 9, color: "#94a3b8" }}>↗</span>
+                <span className="txt-muted-hint">↗</span>
               </div>
             ))}
           </div>
         </Card>
 
         {/* Line chart — each series toggle still works; chart area itself clickable */}
-        <Card style={{ padding: "18px 18px 12px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 12,
-            }}
-          >
-            <span style={{ fontSize: 13, fontWeight: 600, color: "#1a1a2e" }}>
+        <Card className="p-md">
+          <div className="ov-chart-header">
+            <span className="txt-label">
               Visits, Clicks &amp; Subscriptions
             </span>
-            <div style={{ display: "flex", gap: 6 }}>
+            <div className="f-gap-6">
               {SERIES.map(({ key, color }) => (
                 <button
                   key={key}
                   onClick={() => toggle(key)}
+                  className="ov-series-btn"
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 5,
-                    padding: "4px 9px",
-                    borderRadius: 20,
-                    border: "none",
-                    cursor: "pointer",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    background: active[key] ? `${color}18` : "#f1f5f9",
-                    color: active[key] ? color : SLATE,
-                    outline: active[key] ? `1.5px solid ${color}` : "none",
+                    "--bg": active[key] ? `${color}18` : "#f1f5f9",
+                    "--tx": active[key] ? color : SLATE,
+                    "--ol": active[key] ? `1.5px solid ${color}` : "none",
                   }}
                 >
                   <span
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: "50%",
-                      background: active[key] ? color : "#cbd5e1",
-                      display: "inline-block",
-                    }}
+                    className="ov-series-dot"
+                    style={{ "--c": active[key] ? color : "#cbd5e1" }}
                   />
                   {key[0].toUpperCase() + key.slice(1)}
                 </button>
@@ -317,24 +143,17 @@ export default function PageOverview() {
             onClick={() =>
               open("Visits, Clicks & Subscriptions — Transactions")
             }
-            style={{ ...clickable }}
+            className="ov-clickable"
           >
-            <ResponsiveContainer width="100%" height={188}>
-              <LineChart
-                data={histogramData}
-                margin={{ top: 5, right: 5, bottom: 0, left: -30 }}
-              >
+            <ResponsiveContainer width="100%" height={110}>
+              <LineChart data={histogramData} margin={CHART_MARGIN}>
                 <XAxis
                   dataKey="x"
-                  tick={{ fontSize: 9, fill: "#cbd5e1" }}
+                  tick={CHART_TICK}
                   axisLine={false}
                   tickLine={false}
                 />
-                <YAxis
-                  tick={{ fontSize: 9, fill: "#cbd5e1" }}
-                  axisLine={false}
-                  tickLine={false}
-                />
+                <YAxis tick={CHART_TICK} axisLine={false} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} />
                 {active.visits && (
                   <Line
@@ -369,14 +188,7 @@ export default function PageOverview() {
                 )}
               </LineChart>
             </ResponsiveContainer>
-            <div
-              style={{
-                textAlign: "center",
-                fontSize: 9,
-                color: "#94a3b8",
-                marginTop: 4,
-              }}
-            >
+            <div className="ov-chart-link">
               Click chart to view transactions ↗
             </div>
           </div>
@@ -384,124 +196,45 @@ export default function PageOverview() {
       </div>
 
       {/* ── Row 2: Block Reasons radar + channel donuts ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 14,
-          alignItems: "stretch",
-        }}
-      >
-        {/* Radar — side stats clickable, radar itself clickable */}
+      <div className="ov-row2">
+        {/* Radar card */}
         <Card className="card-lg">
           <SectionTitle>Block Reasons — Past Week</SectionTitle>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 18,
-              alignItems: "flex-start",
-            }}
-          >
-            {/* Side stats — each clickable */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-                minWidth: 140,
-              }}
-            >
+          <div className="ov-radar-wrap">
+            {/* Side stats */}
+            <div className="ov-side-stats">
               <div
+                className="stat-bg"
+                style={{ "--c": "#1d4ed8" }}
                 onClick={() => open("Overall Blocks — Transactions")}
-                style={{
-                  background: BLUE,
-                  borderRadius: 10,
-                  padding: "14px 16px",
-                  color: "#fff",
-                  ...clickable,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = ".88";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                }}
               >
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    marginBottom: 3,
-                    opacity: 0.85,
-                  }}
-                >
-                  Overall
-                </div>
-                <div
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    fontFamily: "Poppins,serif",
-                  }}
-                >
-                  1,511,786
-                </div>
-                <div
-                  style={{
-                    fontSize: 9,
-                    color: "rgba(255,255,255,.6)",
-                    marginTop: 4,
-                  }}
-                >
-                  View Transactions ↗
-                </div>
+                <div className="ov-overall-label">Overall</div>
+                <div className="ov-overall-num">1,511,786</div>
+                <div className="ov-overall-link">View Transactions ↗</div>
               </div>
+
               {[
                 ["Apps", "2,26,767", "#22c55e"],
                 ["Browsing", "2,26,767", "#f59e0b"],
                 ["In-App", "1,89,034", "#1d4ed8"],
-              ].map(([l, v, c]) => (
+              ].map(([l, v, col]) => (
                 <div
                   key={l}
+                  className="bl-stat"
+                  style={{ "--c": col }}
                   onClick={() => open(`${l} — Transactions`)}
-                  style={{
-                    padding: "10px 14px",
-                    borderLeft: `3px solid ${c}`,
-                    background: "#f8fafc",
-                    borderRadius: "0 8px 8px 0",
-                    ...clickable,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "#eff6ff";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "#f8fafc";
-                  }}
                 >
-                  <div style={{ fontSize: 11, color: SLATE, fontWeight: 600 }}>
-                    {l}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: "#1a1a2e",
-                      fontFamily: "Poppins,serif",
-                    }}
-                  >
-                    {v}
-                  </div>
-                  <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 2 }}>
-                    View Transactions ↗
-                  </div>
+                  <div className="ov-stat-label">{l}</div>
+                  <div className="ov-stat-num">{v}</div>
+                  <div className="ov-stat-link">View Transactions ↗</div>
                 </div>
               ))}
             </div>
-            {/* Radar — only day labels are clickable */}
-            <div style={{ flex: 1 }}>
+
+            {/* Radar chart */}
+            <div className="ov-radar-expand">
               <BlockRadarChart
-                height={300}
+                height={380}
                 showBadge={false}
                 onDayClick={(day) =>
                   open(`${day} Block Pattern — Transactions`)
@@ -511,134 +244,40 @@ export default function PageOverview() {
           </div>
         </Card>
 
-        {/* Channel cards — title + each metric individually clickable */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: 12,
-          }}
-        >
+        {/* Channel cards — 2×2 grid */}
+        <div className="ov-channel-grid">
           {channelCards.map((c, i) => (
-            <Card
-              key={i}
-              style={{
-                padding: 16,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
-            >
-              {/* Title — opens full transactions */}
+            <Card key={i} className="ov-channel-card">
               <div
+                className="ov-channel-title dyn-border-bottom"
+                style={{ "--c": c.color }}
                 onClick={() => open(`${c.name} — Transactions`)}
-                style={{
-                  ...clickable,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: "#1a1a2e",
-                  paddingBottom: 8,
-                  marginBottom: 10,
-                  borderBottom: `2.5px solid ${c.color}`,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.7";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                }}
               >
                 {c.name}
-                <span
-                  style={{ fontSize: 9, color: "#94a3b8", fontWeight: 400 }}
-                >
-                  ↗
-                </span>
+                <span className="ov-channel-title-arrow">↗</span>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flex: 1,
-                }}
-              >
+
+              <div className="ov-channel-body">
                 <div>
-                  {/* Clicks */}
                   <div
+                    className="ov-metric-item"
                     onClick={() => open(`${c.name} Clicks — Transactions`)}
-                    style={{
-                      ...clickable,
-                      padding: "5px 7px",
-                      borderRadius: 7,
-                      marginBottom: 4,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#f1f5f9";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                    }}
                   >
-                    <div
-                      style={{ fontSize: 10, color: SLATE, marginBottom: 1 }}
-                    >
-                      Clicks
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 700,
-                        color: "#f97316",
-                        fontFamily: "Poppins,serif",
-                      }}
-                    >
+                    <div className="ov-metric-label">Clicks</div>
+                    <div className="ov-metric-num-clicks">
                       {c.clicks.toLocaleString()}
                     </div>
-                    <div
-                      style={{ fontSize: 9, color: "#94a3b8", marginTop: 2 }}
-                    >
-                      View Transactions ↗
-                    </div>
+                    <div className="ov-metric-link">View Transactions ↗</div>
                   </div>
-                  {/* Visits */}
                   <div
+                    className="ov-metric-item"
                     onClick={() => open(`${c.name} Visits — Transactions`)}
-                    style={{
-                      ...clickable,
-                      padding: "5px 7px",
-                      borderRadius: 7,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "#f1f5f9";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "transparent";
-                    }}
                   >
-                    <div
-                      style={{ fontSize: 10, color: SLATE, marginBottom: 1 }}
-                    >
-                      Visits
-                    </div>
-                    <div
-                      style={{
-                        fontSize: 14,
-                        fontWeight: 700,
-                        color: "#0d9488",
-                        fontFamily: "Poppins,serif",
-                      }}
-                    >
+                    <div className="ov-metric-label">Visits</div>
+                    <div className="ov-metric-num-visits">
                       {c.visits.toLocaleString()}
                     </div>
-                    <div
-                      style={{ fontSize: 9, color: "#94a3b8", marginTop: 2 }}
-                    >
-                      View Transactions ↗
-                    </div>
+                    <div className="ov-metric-link">View Transactions ↗</div>
                   </div>
                 </div>
                 <TinyDonut pct={c.pct} color={c.color} />

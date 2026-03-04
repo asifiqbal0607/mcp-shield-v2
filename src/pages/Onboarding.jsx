@@ -8,15 +8,9 @@ const ROSE = "#ef4444";
 function Label({ children, required }) {
   return (
     <label
-      style={{
-        display: "block",
-        fontSize: 12,
-        fontWeight: 700,
-        color: "#1e293b",
-        marginBottom: 5,
-      }}
+      className="onb-label"
     >
-      {children} {required && <span style={{ color: ROSE }}>*</span>}
+      {children} {required && <span className="txt-danger">*</span>}
     </label>
   );
 }
@@ -24,12 +18,7 @@ function Label({ children, required }) {
 function HelpText({ children }) {
   return (
     <p
-      style={{
-        margin: "4px 0 0",
-        fontSize: 11,
-        color: "#94a3b8",
-        lineHeight: 1.5,
-      }}
+      className="onb-hint"
     >
       {children}
     </p>
@@ -40,18 +29,7 @@ function Input({ placeholder, style }) {
   return (
     <input
       placeholder={placeholder}
-      style={{
-        width: "100%",
-        boxSizing: "border-box",
-        border: "1px solid #e2e8f0",
-        borderRadius: 7,
-        padding: "9px 12px",
-        fontSize: 12,
-        color: "#334155",
-        outline: "none",
-        background: "#fff",
-        ...style,
-      }}
+      className="onb-input"
       onFocus={(e) => (e.currentTarget.style.borderColor = T)}
       onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
     />
@@ -62,18 +40,7 @@ function Select({ placeholder }) {
   return (
     <select
       defaultValue=""
-      style={{
-        width: "100%",
-        boxSizing: "border-box",
-        border: "1px solid #e2e8f0",
-        borderRadius: 7,
-        padding: "9px 12px",
-        fontSize: 12,
-        color: "#94a3b8",
-        outline: "none",
-        background: "#fff",
-        cursor: "pointer",
-      }}
+      className="onb-input"
       onFocus={(e) => (e.currentTarget.style.borderColor = T)}
       onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
     >
@@ -87,24 +54,11 @@ function Select({ placeholder }) {
 function RadioGroup({ options, name }) {
   const [val, setVal] = useState(options[0]);
   return (
-    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 2 }}>
+    <div className="onb-tag-row">
       {options.map((o) => (
         <label
           key={o}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "6px 14px",
-            borderRadius: 6,
-            border: `1.5px solid ${val === o ? T : "#e2e8f0"}`,
-            background: val === o ? "#f0fdfa" : "#f8fafc",
-            cursor: "pointer",
-            fontSize: 12,
-            fontWeight: 600,
-            color: val === o ? T : "#64748b",
-            transition: "all .12s",
-          }}
+          className={`onb-tag ${val === o ? 'active' : 'inactive'}`}
         >
           <input
             type="radio"
@@ -112,7 +66,7 @@ function RadioGroup({ options, name }) {
             value={o}
             checked={val === o}
             onChange={() => setVal(o)}
-            style={{ display: "none" }}
+            className="hidden"
           />
           {o}
         </label>
@@ -122,27 +76,14 @@ function RadioGroup({ options, name }) {
 }
 
 function Divider() {
-  return <div style={{ height: 1, background: "#f1f5f9", margin: "18px 0" }} />;
+  return <div className="onb-divider" />;
 }
 
 function AddButton({ onClick, children }) {
   return (
     <button
       onClick={onClick}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "7px 16px",
-        borderRadius: 6,
-        border: `1.5px solid ${T}`,
-        background: "#f0fdfa",
-        color: T,
-        fontSize: 11,
-        fontWeight: 700,
-        cursor: "pointer",
-        marginTop: 10,
-      }}
+      className="onb-btn-next"
       onMouseEnter={(e) => (e.currentTarget.style.background = "#ccfbf1")}
       onMouseLeave={(e) => (e.currentTarget.style.background = "#f0fdfa")}
     >
@@ -157,63 +98,31 @@ function FormSection({ id, step, title, subtitle, optional, children }) {
   return (
     <div
       id={id}
-      style={{
-        background: "#fff",
-        borderRadius: 14,
-        border: "1px solid #e8ecf3",
-        padding: "26px 30px",
-        marginBottom: 16,
-        boxShadow: "0 1px 6px rgba(0,0,0,.04)",
-      }}
+      className="onb-card"
     >
       <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: 14,
-          marginBottom: 20,
-        }}
+        className="onb-step-row"
       >
         <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: "50%",
-            background: `linear-gradient(135deg, ${T}, #0891b2)`,
-            color: "#fff",
-            fontSize: 13,
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            boxShadow: `0 4px 12px ${T}40`,
-          }}
+          className="onb-step-num"
         >
           {step}
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 15, fontWeight: 600, color: "#0f172a" }}>
+        <div className="flex-1">
+          <div className="flex-center gap-8">
+            <span className="onb-step-title">
               {title}
             </span>
             {optional && (
               <span
-                style={{
-                  fontSize: 10,
-                  padding: "2px 9px",
-                  borderRadius: 10,
-                  background: "#f1f5f9",
-                  color: "#94a3b8",
-                  fontWeight: 600,
-                }}
+                className="onb-step-badge"
               >
                 Optional
               </span>
             )}
           </div>
           {subtitle && (
-            <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 3 }}>
+            <div className="onb-step-sub">
               {subtitle}
             </div>
           )}
@@ -237,40 +146,22 @@ export default function PageOnboarding({ setPage }) {
     <div>
       {/* Page header */}
       <div
-        style={{
-          background: "linear-gradient(135deg, #0f172a 0%, #1a3050 100%)",
-          borderRadius: 14,
-          padding: "26px 32px",
-          marginBottom: 20,
-          boxShadow: "0 4px 24px rgba(0,0,0,.15)",
-        }}
+        className="onb-dark-banner"
       >
         <div
-          style={{
-            fontSize: 9,
-            fontWeight: 600,
-            letterSpacing: "2.5px",
-            textTransform: "uppercase",
-            color: T,
-            marginBottom: 8,
-          }}
+          className="onb-dark-eyebrow"
         >
           MCP Shield · Partner Portal
         </div>
         <div
-          style={{
-            fontSize: 24,
-            fontWeight: 600,
-            color: "#fff",
-            lineHeight: 1.2,
-          }}
+          className="onb-dark-title"
         >
           New Service Onboarding
         </div>
-        <div style={{ fontSize: 13, color: "#64748b", marginTop: 8 }}>
+        <div className="onb-dark-sub">
           Configure your service details using the form below ·{" "}
           <span
-            style={{ color: T, cursor: "pointer", textDecoration: "underline" }}
+            className="onb-link"
           >
             User guide
           </span>
@@ -294,7 +185,7 @@ export default function PageOnboarding({ setPage }) {
         title="Basic Information"
         subtitle="Core identifiers for your service"
       >
-        <div style={{ marginBottom: 16 }}>
+        <div className="onb-mb-16">
           <Label required>Service Name</Label>
           <Input placeholder="e.g. GameZone UK MTN · Newsscape NG Airtel" />
           <HelpText>
@@ -314,21 +205,12 @@ export default function PageOnboarding({ setPage }) {
           </div>
           <div>
             <Label required>CSP/Merchant Name</Label>
-            <div style={{ display: "flex", gap: 8 }}>
-              <div style={{ flex: 1 }}>
+            <div className="f-gap-8">
+              <div className="flex-1">
                 <Select placeholder="Select…" />
               </div>
               <button
-                style={{
-                  padding: "9px 14px",
-                  borderRadius: 7,
-                  border: "none",
-                  background: T,
-                  color: "#fff",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
+                className="onb-btn-submit"
               >
                 +
               </button>
@@ -367,21 +249,12 @@ export default function PageOnboarding({ setPage }) {
           </div>
           <div>
             <Label required>Mobile Network Operator (MNO)</Label>
-            <div style={{ display: "flex", gap: 8 }}>
-              <div style={{ flex: 1 }}>
+            <div className="f-gap-8">
+              <div className="flex-1">
                 <Select placeholder="Select…" />
               </div>
               <button
-                style={{
-                  padding: "9px 14px",
-                  borderRadius: 7,
-                  border: "none",
-                  background: T,
-                  color: "#fff",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                }}
+                className="onb-btn-submit"
               >
                 +
               </button>
@@ -422,7 +295,7 @@ export default function PageOnboarding({ setPage }) {
         title="Service Flow Configuration"
         subtitle="Shield mode, enrichment and page flow settings"
       >
-        <div className="g-stats3" style={{ gap: 16, marginBottom: 16 }}>
+        <div className="g-stats3" className="onb-gap-16 onb-mb-16">
           <div>
             <Label required>Shield Mode</Label>
             <Select placeholder="Standard" />
@@ -451,9 +324,9 @@ export default function PageOnboarding({ setPage }) {
           </div>
         </div>
         <Divider />
-        <div style={{ marginBottom: 16 }}>
+        <div className="onb-mb-16">
           <Label required>Number of HTML Pages in Flow</Label>
-          <Input placeholder="1" style={{ width: 80 }} />
+          <Input placeholder="1" className="w-80" />
           <HelpText>
             Count the number of web pages (HTML documents) in your subscription
             flow. This includes the landing page and any subsequent pages before
@@ -463,17 +336,11 @@ export default function PageOnboarding({ setPage }) {
 
         {/* Page 1 URLs */}
         <div
-          style={{
-            background: "#f8fafc",
-            borderRadius: 10,
-            padding: "16px 18px",
-            marginBottom: 12,
-            border: "1px solid #e8ecf3",
-          }}
+          className="onb-card-sm"
         >
           <Label>Page 1 URL(s)</Label>
           {urls1.map((_, i) => (
-            <div key={i} style={{ marginBottom: 8 }}>
+            <div key={i} className="mb-8">
               <Input placeholder="Enter a landing page URL for this page" />
             </div>
           ))}
@@ -484,16 +351,11 @@ export default function PageOnboarding({ setPage }) {
 
         {/* Page 2 URLs */}
         <div
-          style={{
-            background: "#f8fafc",
-            borderRadius: 10,
-            padding: "16px 18px",
-            border: "1px solid #e8ecf3",
-          }}
+          className="onb-card-sm"
         >
           <Label>Page 2 URL(s)</Label>
           {urls2.map((_, i) => (
-            <div key={i} style={{ marginBottom: 8 }}>
+            <div key={i} className="mb-8">
               <Input placeholder="Enter a landing page URL for this page" />
             </div>
           ))}
@@ -545,24 +407,14 @@ export default function PageOnboarding({ setPage }) {
         subtitle="Configure payment flow settings"
       >
         <div
-          style={{
-            background: "#f8fafc",
-            borderRadius: 10,
-            padding: "18px 20px",
-            border: "1px solid #e8ecf3",
-          }}
+          className="onb-card-sm"
         >
           <div
-            style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: "#475569",
-              marginBottom: 6,
-            }}
+            className="onb-note-bold"
           >
             Payment Flow Options
           </div>
-          <div style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.6 }}>
+          <div className="onb-note-body">
             Payment flow configuration will be available after selecting your
             MNO and service type above.
           </div>
@@ -579,9 +431,9 @@ export default function PageOnboarding({ setPage }) {
         <HelpText>
           Your Server IP. You will use it to get response from Shield API.
         </HelpText>
-        <div style={{ marginTop: 12 }}>
+        <div className="mt-12">
           {ips.map((_, i) => (
-            <div key={i} style={{ marginBottom: 8 }}>
+            <div key={i} className="mb-8">
               <Input placeholder="0.0.0.0" />
             </div>
           ))}
@@ -597,11 +449,11 @@ export default function PageOnboarding({ setPage }) {
         subtitle="Custom URL parameters, referrers and API variables"
         optional
       >
-        <div style={{ marginBottom: 18 }}>
+        <div className="mb-18">
           <Label>Custom URL Parameters to Track</Label>
           <Input placeholder="eg. revenue_id" />
           {params.map((_, i) => (
-            <div key={i} style={{ marginTop: 8 }}>
+            <div key={i} className="mt-8">
               <Input placeholder="eg. revenue_id" />
             </div>
           ))}
@@ -615,11 +467,11 @@ export default function PageOnboarding({ setPage }) {
           </AddButton>
         </div>
         <Divider />
-        <div style={{ marginBottom: 18 }}>
+        <div className="mb-18">
           <Label>Custom Referrers (Referrer URL Parameters)</Label>
           <Input placeholder="eg. ref_source" />
           {referrers.map((_, i) => (
-            <div key={i} style={{ marginTop: 8 }}>
+            <div key={i} className="mt-8">
               <Input placeholder="eg. ref_source" />
             </div>
           ))}
@@ -637,7 +489,7 @@ export default function PageOnboarding({ setPage }) {
           <Label>Shield API Variables</Label>
           <Input placeholder="eg. user_attribute_age" />
           {variables.map((_, i) => (
-            <div key={i} style={{ marginTop: 8 }}>
+            <div key={i} className="mt-8">
               <Input placeholder="eg. user_attribute_age" />
             </div>
           ))}
@@ -660,21 +512,10 @@ export default function PageOnboarding({ setPage }) {
         subtitle="Auto-generated — review before saving"
       >
         <div
-          style={{
-            background: "#f8fafc",
-            borderRadius: 10,
-            padding: "18px 20px",
-            border: "1px dashed #cbd5e1",
-            minHeight: 80,
-          }}
+          className="onb-card-sm-dashed"
         >
           <div
-            style={{
-              fontSize: 12,
-              color: "#94a3b8",
-              fontStyle: "italic",
-              lineHeight: 1.7,
-            }}
+            className="onb-note"
           >
             This area will auto-generate a description of the service
             configuration once fields are completed. You can edit the text if
@@ -683,16 +524,10 @@ export default function PageOnboarding({ setPage }) {
           </div>
         </div>
         <label
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 10,
-            marginTop: 18,
-            cursor: "pointer",
-          }}
+          className="onb-check-row"
         >
-          <input type="checkbox" style={{ marginTop: 3, accentColor: T }} />
-          <span style={{ fontSize: 12, color: "#475569", lineHeight: 1.7 }}>
+          <input type="checkbox" className="onb-check-accent" />
+          <span className="onb-check-text">
             I confirm that the service summary above accurately describes my
             service configuration and I understand that Shield will enforce
             these parameters for fraud detection.
@@ -702,64 +537,26 @@ export default function PageOnboarding({ setPage }) {
 
       {/* ── Footer actions ── */}
       <div
-        style={{
-          background: "#fff",
-          borderRadius: 14,
-          border: "1px solid #e8ecf3",
-          padding: "18px 30px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          boxShadow: "0 2px 12px rgba(0,0,0,.06)",
-          marginBottom: 30,
-        }}
+        className="onb-footer"
       >
         <button
           onClick={() => setPage && setPage("services")}
-          style={{
-            padding: "10px 24px",
-            borderRadius: 8,
-            border: "1px solid #e2e8f0",
-            background: "#f8fafc",
-            color: "#64748b",
-            fontSize: 12,
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
+          className="onb-btn-back"
           onMouseEnter={(e) => (e.currentTarget.style.background = "#f1f5f9")}
           onMouseLeave={(e) => (e.currentTarget.style.background = "#f8fafc")}
         >
           ← Cancel
         </button>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div className="onb-footer-btn-group">
           <button
-            style={{
-              padding: "10px 22px",
-              borderRadius: 8,
-              border: `1.5px solid ${T}`,
-              background: "#f0fdfa",
-              color: T,
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
+            className="onb-btn-next"
             onMouseEnter={(e) => (e.currentTarget.style.background = "#ccfbf1")}
             onMouseLeave={(e) => (e.currentTarget.style.background = "#f0fdfa")}
           >
             Save as Profile
           </button>
           <button
-            style={{
-              padding: "10px 28px",
-              borderRadius: 8,
-              border: "none",
-              background: `linear-gradient(135deg, ${T}, #0891b2)`,
-              color: "#fff",
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: "pointer",
-              boxShadow: `0 4px 16px ${T}55`,
-            }}
+            className="onb-btn-submit"
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >

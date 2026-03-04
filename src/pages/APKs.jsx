@@ -58,27 +58,16 @@ function ApkPieCard({ title, data, onSliceClick }) {
   return (
     <Card>
       <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 4,
-        }}
+        className="ov-chart-header"
       >
         <SectionTitle>{title}</SectionTitle>
         <button
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: SLATE,
-            fontSize: 16,
-          }}
+          className="geo-collapse-btn"
         >
           ≡
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={280}>
+      <ResponsiveContainer width="100%" height={185}>
         <PieChart>
           <Pie
             data={data}
@@ -90,7 +79,7 @@ function ApkPieCard({ title, data, onSliceClick }) {
             labelLine={true}
             label={renderLabel}
             onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
-            style={{ cursor: "pointer" }}
+            className="p-rel clickable"
           >
             {data.map((_, i) => (
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
@@ -103,12 +92,7 @@ function ApkPieCard({ title, data, onSliceClick }) {
         </PieChart>
       </ResponsiveContainer>
       <div
-        style={{
-          textAlign: "center",
-          fontSize: 9,
-          color: "#94a3b8",
-          marginTop: 4,
-        }}
+        className="stat-hint-center"
       >
         Click a slice to view transactions ↗
       </div>
@@ -171,35 +155,23 @@ export default function PageAPKs() {
           <Card
             key={s.label}
             onClick={() => open(`${s.label} — Transactions`)}
-            style={{
-              textAlign: "center",
-              borderTop: `3px solid ${s.color}`,
-              cursor: "pointer",
-              transition: "box-shadow .15s",
-            }}
+            className="stat-card-click" style={{ '--c': s.color }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,.1)")
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
           >
             <div className="kpi-stat"
-              style={{
-                color: s.color,
-              }}
+              className="dyn-color" style={{ '--c': s.color }}
             >
               {s.value}
             </div>
             <div
-              style={{
-                fontSize: 12,
-                color: SLATE,
-                marginTop: 4,
-                fontWeight: 600,
-              }}
+              className="stat-lbl-12"
             >
               {s.label}
             </div>
-            <div style={{ fontSize: 9, color: "#94a3b8", marginTop: 4 }}>
+            <div className="stat-hint">
               View Transactions ↗
             </div>
           </Card>
@@ -221,7 +193,7 @@ export default function PageAPKs() {
       </div>
 
       {/* Specified APKs */}
-      <div style={{ marginBottom: 18 }}>
+      <div className="mb-18">
         <ApkPieCard
           title="Specified APKs"
           data={specifiedApkData}
@@ -230,7 +202,7 @@ export default function PageAPKs() {
       </div>
 
       {/* Hidden APKs */}
-      <div style={{ marginBottom: 18 }}>
+      <div className="mb-18">
         <ApkPieCard
           title="Hidden APKs"
           data={hiddenApkData}
@@ -241,39 +213,20 @@ export default function PageAPKs() {
       {/* Top 20 Apps table */}
       <Card>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 16,
-          }}
+          className="toolbar"
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <SectionTitle style={{ margin: 0 }}>Top 20 Apps</SectionTitle>
+          <div className="f-gap-8">
+            <SectionTitle className="m-0">Top 20 Apps</SectionTitle>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div className="f-gap-12">
             <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: 12,
-                color: SLATE,
-              }}
+              className="apk-filter-row"
             >
               <span>Show</span>
               <select
                 value={perPage}
                 onChange={(e) => setPerPage(Number(e.target.value))}
-                style={{
-                  border: "1px solid #e2e8f0",
-                  borderRadius: 6,
-                  padding: "4px 8px",
-                  fontSize: 12,
-                  color: "#334155",
-                  cursor: "pointer",
-                  outline: "none",
-                }}
+                className="apk-select"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -287,35 +240,20 @@ export default function PageAPKs() {
                 setQuery(e.target.value);
                 setApkPage(0);
               }}
-              style={{
-                border: "1px solid #e2e8f0",
-                borderRadius: 8,
-                padding: "7px 12px",
-                fontSize: 12,
-                outline: "none",
-                width: 180,
-              }}
+              className="apk-search"
             />
           </div>
         </div>
         <div className="table-wrap"><table
-          style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}
+          className="dt"
         >
           <thead>
-            <tr style={{ borderBottom: "2px solid #f1f5f9" }}>
+            <tr className="dt-head-row">
               {["#", "Package Name", "Type", "Share %", "Risk", "Status"].map(
                 (h) => (
                   <th
                     key={h}
-                    style={{
-                      textAlign: "left",
-                      padding: "8px 10px",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: SLATE,
-                      textTransform: "uppercase",
-                      letterSpacing: ".8px",
-                    }}
+                    className="dt-th"
                   >
                     {h}
                   </th>
@@ -327,7 +265,7 @@ export default function PageAPKs() {
             {rows.map((r, i) => (
               <tr
                 key={i}
-                style={{ borderBottom: "1px solid #f8fafc", cursor: "pointer" }}
+                className="dt-tr"
                 onClick={() => open(`${r.name} — Transactions`)}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#f8fafc")
@@ -336,20 +274,15 @@ export default function PageAPKs() {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <td style={{ padding: "10px", fontWeight: 700, color: SLATE }}>
+                <td className="td-p-10s">
                   {r.rank}
                 </td>
                 <td
-                  style={{
-                    padding: "10px",
-                    color: "#334155",
-                    fontFamily: "monospace",
-                    fontSize: 10,
-                  }}
+                  className="apk-td-mono"
                 >
                   {r.name}
                 </td>
-                <td style={{ padding: "10px" }}>
+                <td className="apk-td-p10">
                   <Badge
                     color={
                       r.type === "Blocked Apps"
@@ -364,27 +297,16 @@ export default function PageAPKs() {
                     {r.type}
                   </Badge>
                 </td>
-                <td style={{ padding: "10px", fontWeight: 700, color: BLUE }}>
+                <td className="td-p-blue">
                   {r.share}%
                 </td>
-                <td style={{ padding: "10px" }}>
+                <td className="apk-td-p10">
                   <Badge color={RISK_COLORS[r.risk]}>{r.risk}</Badge>
                 </td>
-                <td style={{ padding: "10px" }}>
+                <td className="apk-td-p10">
                   <StatusDot status={r.status} />
                   <span
-                    style={{
-                      color:
-                        r.status === "active"
-                          ? GREEN
-                          : r.status === "warning"
-                            ? AMBER
-                            : ROSE,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      textTransform: "capitalize",
-                      marginLeft: 4,
-                    }}
+                    className="apk-status" style={{ '--c': r.status === "active" ? GREEN : r.status === "warning" ? AMBER : ROSE }}
                   >
                     {r.status}
                   </span>
