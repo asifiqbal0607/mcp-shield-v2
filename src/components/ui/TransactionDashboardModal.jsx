@@ -65,6 +65,14 @@ function SectionHead({ color, children }) {
   );
 }
 
+
+// ── Recharts config constants ──────────────────────────────────────────────
+const TDM_TICK_SM    = { fontSize: 9, fill: '#cbd5e1' };
+const TDM_TICK_XS    = { fontSize: 8, fill: '#cbd5e1' };
+const TDM_MARGIN_LN  = { top: 5, right: 10, bottom: 0, left: -20 };
+const TDM_MARGIN_BAR = { top: 0, right: 8,  bottom: 0, left: -20 };
+const TDM_TOOLTIP    = { fontSize: 11, borderRadius: 8 };
+
 export default function TransactionDashboardModal({ title, mode = 'dashboard', onClose }) {
   const isExcluded = mode === 'excluded';
   const data = makeData(title);
@@ -116,11 +124,11 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
           <div className="tdm-chart-card">
             <SectionHead color={BLUE}>Transaction Trend — Last 14 Days</SectionHead>
             <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={data.trend} margin={{ top: 5, right: 10, bottom: 0, left: -20 }}>
+              <LineChart data={data.trend} margin={TDM_MARGIN_LN}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="d" tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                <XAxis dataKey="d" tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
+                <YAxis tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={TDM_TOOLTIP} />
                 <Line type="monotone" dataKey="visits" stroke={BLUE}  strokeWidth={2.5} dot={false} name="Visits" />
                 <Line type="monotone" dataKey="clicks" stroke={GREEN} strokeWidth={2}   dot={false} name="Clicks" />
                 <Line type="monotone" dataKey="blocks" stroke={ROSE}  strokeWidth={2}   dot={false} name="Blocks" strokeDasharray="4 2" />
@@ -140,11 +148,11 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
             <div className="tdm-chart-card">
               <SectionHead color={AMBER}>Transactions by Hour</SectionHead>
               <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={data.byHour} margin={{ top: 0, right: 8, bottom: 0, left: -20 }}>
-                  <XAxis dataKey="h" tick={{ fontSize: 8, fill: '#cbd5e1' }} axisLine={false} tickLine={false}
+                <BarChart data={data.byHour} margin={TDM_MARGIN_BAR}>
+                  <XAxis dataKey="h" tick={TDM_TICK_XS} axisLine={false} tickLine={false}
                     interval={2} />
-                  <YAxis tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+                  <YAxis tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={TDM_TOOLTIP} />
                   <Bar dataKey="count" name="Transactions" radius={[3,3,0,0]}>
                     {data.byHour.map((_, i) => <Cell key={i} fill={i >= 6 && i <= 20 ? BLUE : VIOLET} fillOpacity={0.8} />)}
                   </Bar>

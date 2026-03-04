@@ -53,7 +53,7 @@ export const theme = {
   // ── TYPOGRAPHY ──────────────────────────────────────────────────────────────
   // Change fontBody → every label, button, table cell updates
   typography: {
-    fontBody:    "'Poppins', sans-serif",
+    fontBody:    "'Nunito', sans-serif",
     fontMono:    "'IBM Plex Mono', 'Courier New', monospace",
 
     // Font size scale — used as CSS vars throughout
@@ -76,9 +76,9 @@ export const theme = {
     pagePad:     '22px',   // desktop horizontal page padding
     pagePadSm:   '14px',   // tablet horizontal padding
     pagePadXs:   '12px',   // mobile horizontal padding
-    sectionGap:  '18px',   // vertical gap between page sections
-    cardPad:     '20px 22px',
-    gridGap:     '14px',   // gap between grid cards
+    sectionGap:  '12px',   // vertical gap between page sections
+    cardPad:     '14px 16px',
+    gridGap:     '10px',   // gap between grid cards
   },
 
   // ── SHAPE ───────────────────────────────────────────────────────────────────

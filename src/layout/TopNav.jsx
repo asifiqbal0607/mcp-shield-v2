@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { groupsForRole } from "../constants/nav";
 
-export default function TopNav({ role, page, setPage }) {
+export default function TopNav({ role, page, setPage, onLogout }) {
   const [openGroup, setOpenGroup] = useState(null);
   const groups = groupsForRole(role);
   const isPartner = role === "partner";
@@ -37,9 +37,7 @@ export default function TopNav({ role, page, setPage }) {
             </button>
           ))}
           {partnerMore.length > 0 && (
-            <div
-              className="tnav-nav-link"
-            >
+            <div className="tnav-nav-link">
               <button
                 className={`group-btn${moreHasActive ? " active" : ""}${openGroup === "__more__" ? " open" : ""}`}
                 onClick={() => toggleGroup("__more__")}
@@ -48,14 +46,8 @@ export default function TopNav({ role, page, setPage }) {
               </button>
               {openGroup === "__more__" && (
                 <>
-                  <div
-                    className="tnav-overlay"
-                    onClick={closeAll}
-                  />
-                  <div
-                    className="group-drop"
-                    className="tnav-dropdown"
-                  >
+                  <div className="tnav-overlay" onClick={closeAll} />
+                  <div className="group-drop tnav-dropdown">
                     {partnerMore.map((p) => (
                       <button
                         key={p.key}
@@ -94,10 +86,7 @@ export default function TopNav({ role, page, setPage }) {
             const secActive = sec.items.some((i) => i.key === page);
             const isOpen = openGroup === sec.group;
             return (
-              <div
-                key={sec.group}
-                className="tnav-nav-link"
-              >
+              <div key={sec.group} className="tnav-nav-link">
                 <button
                   className={`group-btn${secActive ? " active" : ""}${isOpen ? " open" : ""}`}
                   onClick={() => toggleGroup(sec.group)}
@@ -106,16 +95,9 @@ export default function TopNav({ role, page, setPage }) {
                 </button>
                 {isOpen && (
                   <>
-                    <div
-                      className="tnav-overlay"
-                      onClick={closeAll}
-                    />
+                    <div className="tnav-overlay" onClick={closeAll} />
                     <div className="group-drop">
-                      <div
-                        className="tnav-dropdown-label"
-                      >
-                        {sec.group}
-                      </div>
+                      <div className="tnav-dropdown-label">{sec.group}</div>
                       {sec.items.map((p) => (
                         <button
                           key={p.key}
@@ -129,7 +111,11 @@ export default function TopNav({ role, page, setPage }) {
                           <span className="tnav-dropdown-flex">{p.label}</span>
                           {p.badge && (
                             <span
-                              className="tnav-dropdown-badge" style={{ '--bg': `${p.badge.c}25`, '--c': p.badge.c }}
+                              className="tnav-dropdown-badge"
+                              style={{
+                                "--bg": `${p.badge.c}25`,
+                                "--c": p.badge.c,
+                              }}
                             >
                               {p.badge.n}
                             </span>
@@ -148,17 +134,7 @@ export default function TopNav({ role, page, setPage }) {
   );
 
   return (
-    <header
-      style={{
-        background:
-          "linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%)",
-        borderBottom: "3px solid var(--gold)",
-        position: "sticky",
-        top: 0,
-        zIndex: 500,
-        boxShadow: "0 4px 20px rgba(10,22,40,.4)",
-      }}
-    >
+    <header className="tnav-header">
       <div
         className="tnav-inner"
         onClick={(e) => {
@@ -166,33 +142,13 @@ export default function TopNav({ role, page, setPage }) {
         }}
       >
         {/* Logo */}
-        <div
-          className="tnav-brand"
-        >
-          <div
-            className="tnav-logo"
-          >
-            S
-          </div>
+        <div className="tnav-brand">
+          <div className="tnav-logo">S</div>
           <div>
-            <div
-              className="topnav-logo-text"
-              className="tnav-product-name"
-            >
-              MCP Shield
-            </div>
-            <div
-              className="topnav-portal-sub"
-              className="tnav-product-sub"
-            >
+            <div className="tnav-product-name">MCP Shield</div>
+            <div className="tnav-product-sub">
               {isPartner ? "Partner Portal" : "Admin Portal"}
             </div>
-          </div>
-          <div
-            className="topnav-admin-badge"
-            className="tnav-env-badge"
-          >
-            {isPartner ? "Partner" : "Admin"}
           </div>
         </div>
 
@@ -202,22 +158,10 @@ export default function TopNav({ role, page, setPage }) {
         </div>
 
         {/* Right */}
-        <div
-          className="tnav-right"
-        >
-          <div
-            className="tnav-status"
-          >
-            <span
-              className="live-dot"
-              className="tnav-status-dot"
-            />
-            <span
-              className="topnav-live-label"
-              className="tnav-status-text"
-            >
-              LIVE · ZA
-            </span>
+        <div className="tnav-right">
+          <div className="tnav-status">
+            <span className="tnav-status-dot" />
+            <span className="tnav-status-text">LIVE · ZA</span>
           </div>
           <div className="nav-divider" />
           <div className="role-pill">
@@ -233,20 +177,14 @@ export default function TopNav({ role, page, setPage }) {
           </div>
           <div className="nav-divider" />
           <div className="tnav-notif-wrap">
-            <button
-              className="tnav-notif-btn"
-            >
-              🔔
-            </button>
-            <span
-              className="tnav-notif-pip"
-            />
+            <button className="tnav-notif-btn">🔔</button>
+            <span className="tnav-notif-pip" />
           </div>
-          <div
-            className="tnav-avatar"
-          >
-            {isPartner ? "P" : "A"}
-          </div>
+          <div className="tnav-avatar">{isPartner ? "P" : "A"}</div>
+          <div className="nav-divider" />
+          <button className="tnav-logout-btn" onClick={onLogout} type="button">
+            ⏻ Sign out
+          </button>
         </div>
       </div>
     </header>

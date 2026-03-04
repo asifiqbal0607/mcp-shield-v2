@@ -87,7 +87,7 @@ function ApkPieCard({ title, data, onSliceClick }) {
           </Pie>
           <Tooltip
             formatter={(v) => `${v}%`}
-            contentStyle={{ fontSize: 11, borderRadius: 8 }}
+            contentStyle={CHART_TOOLTIP}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -128,6 +128,7 @@ function buildTop20() {
     }));
 }
 
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 export default function PageAPKs() {
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(null);

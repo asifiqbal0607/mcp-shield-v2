@@ -63,7 +63,7 @@ function StatPieCard({ title, data, onSliceClick }) {
               <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
             ))}
           </Pie>
-          <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+          <Tooltip contentStyle={CHART_TOOLTIP} />
         </PieChart>
       </ResponsiveContainer>
       <div
@@ -75,6 +75,7 @@ function StatPieCard({ title, data, onSliceClick }) {
   );
 }
 
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 export default function PageDevice() {
   const [modal, setModal] = useState(null);
   const open = (title) => setModal(title);

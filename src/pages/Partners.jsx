@@ -106,6 +106,12 @@ function PartnerModal({ partner, onClose }) {
 }
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
+
+// ── Recharts config constants ──────────────────────────────────────────────
+const CHART_TICK_P   = { fontSize: 10, fill: "#94a3b8" };
+const CHART_DOT_P    = { r: 4, fill: BLUE };
+
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 export default function PagePartners() {
   const [search, setSearch]   = useState("");
   const [filter, setFilter]   = useState("All");
@@ -149,10 +155,10 @@ export default function PagePartners() {
           <SectionTitle>Partner Growth</SectionTitle>
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={TREND_DATA}>
-              <XAxis dataKey="d" tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
-              <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} domain={[6, 14]} />
-              <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
-              <Line dataKey="partners" name="Partners" stroke={BLUE} strokeWidth={2.5} dot={{ r: 4, fill: BLUE }} />
+              <XAxis dataKey="d" tick={CHART_TICK_P} axisLine={false} tickLine={false} />
+              <YAxis tick={CHART_TICK_P} axisLine={false} tickLine={false} domain={[6, 14]} />
+              <Tooltip contentStyle={CHART_TOOLTIP} />
+              <Line dataKey="partners" name="Partners" stroke={BLUE} strokeWidth={2.5} dot={CHART_DOT_P} />
             </LineChart>
           </ResponsiveContainer>
         </Card>

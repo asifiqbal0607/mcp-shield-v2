@@ -8,7 +8,7 @@ import {
   PolarRadiusAxis,
   Tooltip,
 } from "recharts";
-import { SLATE } from "../../constants/colors";
+import { SLATE } from "../constants/colors";
 import { blockReasons, blockLegend } from "../../data/charts";
 
 // ─── Dark tooltip ─────────────────────────────────────────────────────────────
@@ -27,7 +27,7 @@ function RadarTooltip({ active, payload, label }) {
       <div
         style={{
           fontSize: 11,
-          fontWeight: 600,
+          fontWeight: 800,
           color: "#fff",
           marginBottom: 8,
           borderBottom: "1px solid rgba(255,255,255,.1)",
@@ -161,7 +161,7 @@ export default function BlockRadarChart({
         }}
       >
         <div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: "#1a1a2e" }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#1a1a2e" }}>
             Weekly Block Pattern
           </div>
           <div style={{ fontSize: 11, color: SLATE, marginTop: 2 }}>
@@ -186,8 +186,8 @@ export default function BlockRadarChart({
       </div>
 
       {/* ── Radar — no wrapper click, button below triggers modal ── */}
-      <div style={{ borderRadius: 8, overflow: "hidden" }}>
-        <ResponsiveContainer width="100%" height={height}>
+      <div className="ov-radar-chart-wrap">
+        <ResponsiveContainer width="100%" height="100%">
           <RadarChart
             data={blockReasons}
             margin={{ top: 16, right: 50, bottom: 16, left: 50 }}

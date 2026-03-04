@@ -210,7 +210,7 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                         </div>
                       </div>
                       <div className="tdd-header-left">
-                        <span style={{ fontSize: 10, color: SLATE, fontFamily: 'var(--font-mono)' }}>{evt.time}</span>
+                        <span className="tdd-event-time">{evt.time}</span>
                         <span className={`tdd-event-arrow ${isOpen ? 'open' : ''}`}>▾</span>
                       </div>
                     </div>

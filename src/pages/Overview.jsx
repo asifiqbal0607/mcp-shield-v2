@@ -234,7 +234,7 @@ export default function PageOverview() {
             {/* Radar chart */}
             <div className="ov-radar-expand">
               <BlockRadarChart
-                height={380}
+                height={300}
                 showBadge={false}
                 onDayClick={(day) =>
                   open(`${day} Block Pattern — Transactions`)
@@ -280,7 +280,10 @@ export default function PageOverview() {
                     <div className="ov-metric-link">View Transactions ↗</div>
                   </div>
                 </div>
-                <TinyDonut pct={c.pct} color={c.color} />
+                <TinyDonut
+                  pct={Math.round((c.clicks / c.visits) * 100)}
+                  color={c.color}
+                />
               </div>
             </Card>
           ))}

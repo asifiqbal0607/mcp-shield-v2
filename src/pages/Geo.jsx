@@ -147,6 +147,13 @@ function GeoMap({ data, onCountryClick }) {
   );
 }
 
+
+// ── Recharts config constants ──────────────────────────────────────────────
+const CHART_TICK_SM  = { fontSize: 9,  fill: "#cbd5e1" };
+const CHART_TICK_MD  = { fontSize: 10, fill: "#64748b" };
+const CHART_MARGIN_R = { top: 0, right: 20, left: 10, bottom: 0 };
+
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 export default function PageGeo() {
   const sortedData = [...geoSpreadData].sort((a, b) => b.visits - a.visits);
   const [modal, setModal] = useState(null);
@@ -247,11 +254,11 @@ export default function PageGeo() {
             <BarChart
               data={sortedData}
               layout="vertical"
-              margin={{ top: 0, right: 20, left: 10, bottom: 0 }}
+              margin={CHART_MARGIN_R}
             >
               <XAxis
                 type="number"
-                tick={{ fontSize: 9, fill: "#cbd5e1" }}
+                tick={CHART_TICK_SM}
                 axisLine={false}
                 tickLine={false}
               />
@@ -259,11 +266,11 @@ export default function PageGeo() {
                 type="category"
                 dataKey="country"
                 width={90}
-                tick={{ fontSize: 10, fill: "#64748b" }}
+                tick={CHART_TICK_MD}
                 axisLine={false}
                 tickLine={false}
               />
-              <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
+              <Tooltip contentStyle={CHART_TOOLTIP} />
               <Bar
                 dataKey="visits"
                 name="Visits"

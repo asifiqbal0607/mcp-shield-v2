@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 /*
  ╔═══════════════════════════════════════════════════════════╗
@@ -9,7 +9,7 @@
  ╚═══════════════════════════════════════════════════════════╝
 */
 :root {
-  --font: 'Poppins', sans-serif;
+  --font: 'Nunito', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
   --navy: #0a1628;
   --navy2: #0f2040;
@@ -337,7 +337,7 @@ table tbody td {
 
 /* ── KPI stat numbers — scale down on smaller screens ───────────────────── */
 .kpi-stat {
-  font-family: var(--font-display, 'Poppins', sans-serif);
+  font-family: var(--font-display, 'Nunito', sans-serif);
   font-weight: 700;
   font-size: 36px;
   line-height: 1.1;
@@ -357,7 +357,7 @@ table tbody td {
 
 /* Smaller variant for 3+ col KPI rows */
 .kpi-stat-sm {
-  font-family: var(--font-display, 'Poppins', sans-serif);
+  font-family: var(--font-display, 'Nunito', sans-serif);
   font-weight: 700;
   font-size: 28px;
   line-height: 1.1;
@@ -791,7 +791,7 @@ table tbody td {
 .ov-side-stats {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
   min-width: 130px;
 }
 
@@ -803,7 +803,7 @@ table tbody td {
 /* Overall (blue) stat block */
 .ov-overall {
   border-radius: 8px;
-  padding: 7px 10px;
+  padding: 5px 10px;
   color: #fff;
   cursor: pointer;
   transition: opacity .15s;
@@ -816,23 +816,23 @@ table tbody td {
 .ov-overall-label {
   font-size: 9px;
   font-weight: 700;
-  margin-bottom: 1px;
+  margin-bottom: 0;
   opacity: .85;
   text-transform: uppercase;
   letter-spacing: .5px;
 }
 
 .ov-overall-num {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
-  font-family: 'Poppins', serif;
-  line-height: 1.1;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.05;
 }
 
 .ov-overall-link {
   font-size: 8px;
   color: rgba(255, 255, 255, .6);
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* Sub-stat items (Apps / Browsing / In-App) */
@@ -855,28 +855,31 @@ table tbody td {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .4px;
-  margin-bottom: 1px;
+  margin-bottom: 0;
 }
 
 .ov-stat-num {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 800;
   color: #1a1a2e;
-  font-family: 'Poppins', serif;
-  line-height: 1.1;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.05;
 }
 
 .ov-stat-link {
   font-size: 8px;
   color: #94a3b8;
-  margin-top: 1px;
+  margin-top: 0;
 }
 
 /* 2×2 channel cards grid */
 .ov-channel-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+  align-self: stretch;
+  height: 100%;
 }
 
 @media (max-width: 639px) {
@@ -887,10 +890,14 @@ table tbody td {
 
 /* Individual channel card */
 .ov-channel-card {
-  padding: 10px 12px;
+  padding: 8px 10px !important;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 6px;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
 }
 
 /* Channel card title row */
@@ -898,8 +905,8 @@ table tbody td {
   font-size: 11px;
   font-weight: 600;
   color: #1a1a2e;
-  padding-bottom: 4px;
-  margin-bottom: 6px;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -928,11 +935,11 @@ table tbody td {
 
 /* Each clickable metric (Clicks / Visits) */
 .ov-metric-item {
-  padding: 3px 5px;
+  padding: 1px 4px;
   border-radius: 6px;
   cursor: pointer;
   transition: background .15s;
-  margin-bottom: 2px;
+  margin-bottom: 0;
 }
 
 .ov-metric-item:last-child {
@@ -946,27 +953,29 @@ table tbody td {
 .ov-metric-label {
   font-size: 10px;
   color: var(--color-slate, #64748b);
-  margin-bottom: 1px;
+  margin-bottom: 0;
 }
 
 .ov-metric-num-clicks {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: #f97316;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.2;
 }
 
 .ov-metric-num-visits {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: #0d9488;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.2;
 }
 
 .ov-metric-link {
-  font-size: 9px;
+  font-size: 8px;
   color: #94a3b8;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -2132,14 +2141,14 @@ table tbody td {
   font-size: 22px;
   font-weight: 700;
   color: var(--c, #1d4ed8);
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .stat-num-lg {
   font-size: 28px;
   font-weight: 700;
   color: var(--c, #1d4ed8);
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
   letter-spacing: -1px;
 }
 
@@ -2156,7 +2165,7 @@ table tbody td {
 .stat-bg {
   background: var(--c, #1d4ed8);
   border-radius: 8px;
-  padding: 7px 10px;
+  padding: 5px 10px;
   color: #fff;
   cursor: pointer;
   transition: opacity .15s;
@@ -2220,7 +2229,7 @@ table tbody td {
 /* Usage: <div className="bl-stat" style={{ '--c': col }}> */
 .bl-stat {
   border-left: 3px solid var(--c, #1d4ed8);
-  padding: 6px 8px 6px 9px;
+  padding: 4px 8px 4px 9px;
   border-radius: 0 6px 6px 0;
   background: #fff;
   cursor: pointer;
@@ -2263,7 +2272,7 @@ table tbody td {
   color: #1a1a2e;
   letter-spacing: -1px;
   line-height: 1;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-sub-item {
@@ -2281,7 +2290,7 @@ table tbody td {
 .ov-sub-num {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-clean-num {
@@ -2290,7 +2299,7 @@ table tbody td {
   color: #fff;
   letter-spacing: -2px;
   line-height: 1;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-clean-lbl {
@@ -2612,7 +2621,7 @@ table tbody td {
   font-size: 22px;
   font-weight: 700;
   color: var(--c);
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .stat-num-dyn-lg {
@@ -3762,7 +3771,7 @@ table tbody td {
   color: #1a1a2e;
   letter-spacing: -1px;
   line-height: 1;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-kpi-sub-section {
@@ -3787,7 +3796,7 @@ table tbody td {
 .ov-kpi-sub-num {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-clean-card {
@@ -3815,7 +3824,7 @@ table tbody td {
   color: #fff;
   letter-spacing: -2px;
   line-height: 1;
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 .ov-clean-lbl {
@@ -4333,7 +4342,7 @@ table tbody td {
   font-size: 22px;
   font-weight: 700;
   color: var(--c);
-  font-family: 'Poppins', serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 
@@ -6106,8 +6115,8 @@ table tbody td {
 .tnav-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-right: 24px;
+  gap: 10px;
+  margin-right: 4px;
   flex-shrink: 0;
 }
 
@@ -6126,7 +6135,7 @@ table tbody td {
   font-size: 15px;
   font-weight: 700;
   color: #fff;
-  font-family: 'Poppins Condensed', sans-serif;
+  font-family: 'Nunito', sans-serif;
   letter-spacing: 2px;
 }
 
@@ -6542,4 +6551,708 @@ table tbody td {
 /* onb-input dynamic border (focus state via CSS custom prop) */
 .onb-input {
   border-color: var(--bdr, #e2e8f0);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   APPLAYOUT  ·  TOPNAV  ·  TRANSACTION DASHBOARD MODAL  — extracted classes
+══════════════════════════════════════════════════════════════════════════ */
+
+/* ── AppLayout root shell ────────────────────────────────────────────────── */
+.app-root-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+  font-family: var(--font);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── Sidebar backdrop ────────────────────────────────────────────────────── */
+.app-sidebar-bd {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(2px);
+  top: var(--topnav-h);
+}
+
+/* ── Slide-in sidebar drawer (static styles; dynamic transform via --tx) ─── */
+.app-drawer {
+  position: fixed;
+  top: var(--topnav-h);
+  left: 0;
+  height: calc(100vh - var(--topnav-h));
+  width: 220px;
+  z-index: 400;
+  transform: var(--drawer-tx, translateX(-260px));
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--drawer-shadow, none);
+  overflow: hidden;
+}
+
+/* ── Drawer close button ─────────────────────────────────────────────────── */
+.app-drawer-close {
+  position: fixed;
+  top: calc(var(--topnav-h) + 12px);
+  left: 220px;
+  z-index: 401;
+  width: 28px;
+  height: 28px;
+  border-radius: 0 8px 8px 0;
+  border: 1px solid var(--border);
+  border-left: none;
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-4);
+  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-drawer-close:hover {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* ── Breadcrumb row ──────────────────────────────────────────────────────── */
+.app-breadcrumb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--section-gap);
+}
+
+/* ── Filter toggle button (dynamic active state via --bdr/--bg/--clr) ────── */
+.app-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  border: var(--fb-bdr, 1px solid var(--border));
+  background: var(--fb-bg, var(--bg-card));
+  color: var(--fb-clr, var(--text-3));
+  font-size: var(--text-sm);
+  font-weight: 700;
+  font-family: var(--font);
+  transition: all 0.15s;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── TopNav <header> root ────────────────────────────────────────────────── */
+.tnav-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  border-bottom: 3px solid var(--gold);
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  box-shadow: 0 4px 20px rgba(10, 22, 40, .4);
+}
+
+/* ── TransactionDashboardModal chart config (Tooltip contentStyle) ────────── */
+/* Recharts contentStyle={{ fontSize:11, borderRadius:8 }} → use this class   */
+/* Note: Recharts contentStyle is a JS object prop — extract as a constant    */
+/* in the component; CSS class can't replace it. Constant defined in .jsx.    */
+.tdd-event-time {
+  font-size: 10px;
+  color: var(--color-slate, #64748b);
+  font-family: var(--font-mono);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOGIN PAGE  ·  ForgotPassword PAGE
+   All layout, form, branding, and animation styles live here.
+   Login.jsx and ForgotPassword.jsx reference ONLY these classes.
+══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root shell ──────────────────────────────────────────────────────────── */
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  font-family: var(--font);
+  background: var(--bg);
+}
+
+/* ── Left decorative panel ───────────────────────────────────────────────── */
+.login-left {
+  width: 440px;
+  flex-shrink: 0;
+  background: linear-gradient(155deg, var(--navy) 0%, var(--navy2) 55%, #0c2248 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 56px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-left::before {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232, 160, 32, .13) 0%, transparent 68%);
+  top: -140px;
+  left: -100px;
+  pointer-events: none;
+}
+
+.login-left::after {
+  content: '';
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(22, 82, 200, .16) 0%, transparent 68%);
+  bottom: -80px;
+  right: -80px;
+  pointer-events: none;
+}
+
+.login-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--gold) 0%, #f5c842 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 32px;
+  box-shadow: 0 8px 28px rgba(232, 160, 32, .38);
+  position: relative;
+  z-index: 1;
+}
+
+.login-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-hero-title {
+  font-size: 30px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-hero-sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .48);
+  line-height: 1.75;
+  margin-bottom: 44px;
+  max-width: 300px;
+  position: relative;
+  z-index: 1;
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.login-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, .055);
+  border: 1px solid rgba(255, 255, 255, .09);
+  border-radius: 12px;
+  padding: 13px 16px;
+  transition: background .15s;
+}
+
+.login-feature:hover {
+  background: rgba(255, 255, 255, .09);
+}
+
+.login-feature-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.login-feature-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .72);
+  line-height: 1.4;
+}
+
+.login-feature-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .38);
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+/* ── Right form panel ────────────────────────────────────────────────────── */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 40px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card-header {
+  margin-bottom: 32px;
+}
+
+.login-card-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.login-card-sub {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+
+/* ── Form fields ─────────────────────────────────────────────────────────── */
+.login-field {
+  margin-bottom: 18px;
+}
+
+.login-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-2);
+  margin-bottom: 7px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+}
+
+.login-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-card);
+  outline: none;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.login-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 82, 200, .1);
+}
+
+.login-input.error {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, .08);
+}
+
+.login-pw-wrap {
+  position: relative;
+}
+
+.login-pw-input {
+  padding-right: 46px;
+}
+
+.login-pw-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-4);
+  font-size: 15px;
+  padding: 2px;
+  line-height: 1;
+  transition: color .15s;
+}
+
+.login-pw-eye:hover {
+  color: var(--color-primary);
+}
+
+.login-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  cursor: pointer;
+  user-select: none;
+}
+
+.login-remember-check {
+  accent-color: var(--color-primary);
+}
+
+.login-forgot-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font);
+  transition: opacity .15s;
+}
+
+.login-forgot-link:hover {
+  opacity: .75;
+  text-decoration: underline;
+}
+
+/* ── Primary submit button ───────────────────────────────────────────────── */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #0d40aa 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  letter-spacing: .2px;
+  transition: opacity .18s, transform .12s, box-shadow .18s;
+  box-shadow: 0 4px 18px rgba(22, 82, 200, .32);
+}
+
+.login-btn:hover {
+  opacity: .92;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(22, 82, 200, .4);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.login-btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Error / success alert ───────────────────────────────────────────────── */
+.login-alert {
+  padding: 11px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-alert.err {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.login-alert.ok {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.login-footer {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-4);
+}
+
+/* ── Forgot-password back link ───────────────────────────────────────────── */
+.login-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font);
+  margin-bottom: 28px;
+  transition: color .15s;
+}
+
+.login-back-btn:hover {
+  color: var(--color-primary);
+}
+
+/* ── Success card (forgot password sent state) ───────────────────────────── */
+.login-success-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* ── Responsive: stack on small screens ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .login-left {
+    display: none;
+  }
+
+  .login-right {
+    padding: 32px 20px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   LOGOUT PAGE  (Authentication/Logout.jsx)
+══════════════════════════════════════════════════════════════════════════ */
+
+.logout-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  font-family: var(--font);
+}
+
+.logout-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, .08);
+  padding: 48px 44px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logout-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--gold) 0%, #f5c842 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 24px;
+  box-shadow: 0 6px 20px rgba(232, 160, 32, .3);
+}
+
+.logout-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.logout-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.logout-sub {
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 300px;
+}
+
+.logout-btn-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.logout-btn-cancel {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-3);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+
+.logout-btn-cancel:hover {
+  border-color: var(--border2);
+  color: var(--text);
+}
+
+.logout-btn-confirm {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  font-family: var(--font);
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, .28);
+  transition: opacity .15s, transform .1s;
+}
+
+.logout-btn-confirm:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+}
+
+.logout-btn-confirm:active {
+  transform: translateY(0);
+}
+
+.logout-btn-confirm:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.logout-session-info {
+  margin-top: 24px;
+  padding: 12px 16px;
+  background: var(--bg);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.logout-session-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.logout-session-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.logout-session-role {
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-top: 1px;
+}
+
+/* ── TopNav logout button ─────────────────────────────────────────────────── */
+.tnav-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(220, 38, 38, .12);
+  color: #fca5a5;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font);
+  cursor: pointer;
+  letter-spacing: .2px;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.tnav-logout-btn:hover {
+  background: rgba(220, 38, 38, .25);
+  color: #fff;
+  border-color: rgba(220, 38, 38, .4);
+}
+
+/* ── Radar chart height — edit here to resize the chart globally ──────────── */
+.ov-radar-chart-wrap {
+  height: 280px;
+  border-radius: 8px;
+  overflow: hidden;
 }

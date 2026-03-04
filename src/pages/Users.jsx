@@ -994,6 +994,16 @@ function ActiveInactiveTabs({ value, onChange, activeCount, inactiveCount }) {
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
+
+// ── Recharts config constants ──────────────────────────────────────────────
+const USR_TICK      = { fontSize: 9, fill: '#cbd5e1' };
+const USR_MARGIN    = { top: 4, right: 8, bottom: 0, left: -24 };
+const USR_PIE_CX    = 52;
+const USR_PIE_CY    = 52;
+const USR_PIE_IR    = 28;
+const USR_PIE_OR    = 50;
+const USR_PIE_PA    = 2;
+
 export default function PageUsers({ role = "admin", setPage }) {
   const [users, setUsers] = useState(initialUserRows);
   const [partnerAccounts, setPartnerAccounts] = useState(
@@ -1321,11 +1331,11 @@ export default function PageUsers({ role = "admin", setPage }) {
                 <Pie
                   data={TYPE_COUNTS}
                   dataKey="count"
-                  cx={52}
-                  cy={52}
-                  innerRadius={28}
-                  outerRadius={50}
-                  paddingAngle={2}
+                  cx={USR_PIE_CX}
+                  cy={USR_PIE_CY}
+                  innerRadius={USR_PIE_IR}
+                  outerRadius={USR_PIE_OR}
+                  paddingAngle={USR_PIE_PA}
                 >
                   {TYPE_COUNTS.map((t, i) => (
                     <Cell key={i} fill={t.color} />
