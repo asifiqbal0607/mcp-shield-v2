@@ -444,6 +444,15 @@ table tbody td {
 
 .table-wrap table {
   min-width: 560px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-wrap table th,
+.table-wrap table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ══════════════════════════════════════════════════════════════════════════
@@ -988,12 +997,14 @@ table tbody td {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
+  table-layout: fixed;
 }
 
 .dt-lg {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
+  table-layout: fixed;
 }
 
 .dt thead tr {
@@ -1013,6 +1024,9 @@ table tbody td {
   padding: 8px 10px;
   font-size: 10px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: .6px;
@@ -1036,6 +1050,8 @@ table tbody td {
 .dt-td {
   padding: 8px 10px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1045,18 +1061,27 @@ table tbody td {
   font-size: 11px;
   color: #64748b;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dt-td-num {
   padding: 8px 10px;
   font-weight: 700;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dt-td-muted {
   padding: 8px 10px;
   color: #94a3b8;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dt-empty {
@@ -2635,22 +2660,34 @@ table tbody td {
   padding: 7px 10px;
   font-family: monospace;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bl-td-color {
   padding: 7px 10px;
   font-weight: 700;
   color: var(--c);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bl-td-trend {
   padding: 7px 10px;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bl-td-wide {
   padding: 7px 10px;
   width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .bl-color-square {
@@ -2668,12 +2705,18 @@ table tbody td {
   font-weight: 700;
   color: #1d4ed8;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .geo-td-narrow {
   padding: 8px 10px;
   width: 80px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .geo-legend-row {
@@ -2712,6 +2755,9 @@ table tbody td {
 .apk-td-p10 {
   padding: 10px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .apk-td-mono {
@@ -2720,6 +2766,9 @@ table tbody td {
   font-family: monospace;
   font-size: 10px;
   vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .apk-status {
@@ -5077,8 +5126,8 @@ table tbody td {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(98vw, 1340px);
-  max-height: 92vh;
+  width: 98vw;
+  max-height: 96vh;
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 24px 80px rgba(0, 0, 0, .22);
@@ -5213,15 +5262,17 @@ table tbody td {
 }
 
 .txn-table {
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 12px;
-  table-layout: fixed;
-  min-width: 900px;
+  table-layout: auto;
+  white-space: nowrap;
 }
 
 .txn-col {
   width: var(--w);
+  min-width: 0;
 }
 
 .txn-thead {
@@ -5236,7 +5287,7 @@ table tbody td {
 }
 
 .txn-th {
-  padding: 10px 12px;
+  padding: 8px 14px;
   text-align: left;
   font-size: 10px;
   font-weight: 700;
@@ -5244,6 +5295,17 @@ table tbody td {
   text-transform: uppercase;
   letter-spacing: .6px;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.txn-td-sr {
+  padding: 0 10px;
+  height: 36px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 .txn-sort-arrow {
@@ -5261,33 +5323,53 @@ table tbody td {
 }
 
 .txn-td {
-  padding: 0 12px;
-  height: 46px;
+  padding: 0 14px;
+  height: 40px;
   vertical-align: middle;
+  white-space: nowrap;
+}
+
+.txn-td>span,
+.txn-td>div {
+  white-space: nowrap;
 }
 
 .txn-td-mono {
-  padding: 0 12px;
-  height: 46px;
+  padding: 0 14px;
+  height: 40px;
   vertical-align: middle;
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+.txn-td-mono>span {
+  white-space: nowrap;
 }
 
 .txn-reason-cell {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   flex-wrap: nowrap;
 }
 
 .txn-reason-badge {
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 5px;
   font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
+  flex-shrink: 0;
   background: var(--bg);
   color: var(--tx);
+}
+
+.txn-td-reason {
+  padding: 0 14px;
+  height: 40px;
+  vertical-align: middle;
+  position: relative;
+  white-space: nowrap;
 }
 
 .txn-reason-more {
@@ -5295,14 +5377,22 @@ table tbody td {
 }
 
 .txn-reason-more-btn {
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 5px;
   font-size: 10px;
-  font-weight: 700;
-  background: var(--bg, #e0e7ff);
-  color: var(--tx, #1e40af);
+  font-weight: 800;
+  background: #e0e7ff;
+  color: #1e40af;
   border: none;
   cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: background .15s, color .15s;
+}
+
+.txn-reason-more-btn.active {
+  background: #1e40af;
+  color: #fff;
 }
 
 .txn-reason-popover {
@@ -5333,15 +5423,7 @@ table tbody td {
   gap: 5px;
 }
 
-.txn-status-block {
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  background: var(--bg);
-  color: var(--tx);
-}
-
+/* txn-status-block replaced by .txn-status-badge + .status-block / .status-allow */
 .txn-status-red {
   padding: 3px 10px;
   border-radius: 6px;
@@ -5813,7 +5895,18 @@ table tbody td {
   height: 16px;
   border-radius: 2px;
   display: inline-block;
-  background: var(--c);
+}
+
+.tdd-bar-blue {
+  background: #1d4ed8;
+}
+
+.tdd-bar-violet {
+  background: #7c3aed;
+}
+
+.tdd-bar-green {
+  background: #22c55e;
 }
 
 .tdd-table-wrap {
@@ -5943,6 +6036,11 @@ table tbody td {
   padding: 4px;
 }
 
+.tdd-tab-btn.active {
+  background: #fff;
+  color: #1a1a2e;
+}
+
 .tdd-tab-btn {
   flex: 1;
   padding: 7px 0;
@@ -5951,8 +6049,8 @@ table tbody td {
   cursor: pointer;
   font-size: 11px;
   font-weight: 700;
-  background: var(--bg);
-  color: var(--tx);
+  background: transparent;
+  color: #64748b;
 }
 
 .tdd-detail-grid {
@@ -5977,10 +6075,14 @@ table tbody td {
 }
 
 .tdd-event-card {
-  border: 1px solid var(--bdr, #f1f5f9);
+  border: 1px solid #e8ecf3;
   border-radius: 12px;
   overflow: hidden;
   transition: border-color .2s;
+}
+
+.tdd-event-card.open {
+  border-color: #bbf7d0;
 }
 
 .tdd-event-header {
@@ -5999,103 +6101,36 @@ table tbody td {
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  background: var(--bg);
-}
-
-.tdd-event-icon-open {
-  background: #22c55e;
-}
-
-.tdd-event-icon-closed {
   background: #e2e8f0;
-}
-
-.tdd-event-title {
-  font-size: 12px;
-  font-weight: 800;
-  color: #1a1a2e;
-}
-
-.tdd-event-meta {
-  font-size: 10px;
   color: #64748b;
-  margin-top: 1px;
-}
-
-.tdd-event-arrow {
-  font-size: 11px;
-  color: #64748b;
-  transition: transform .15s;
-  display: inline-block;
-}
-
-.tdd-event-arrow.open {
-  transform: rotate(180deg);
-}
-
-.tdd-event-sub {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 10px;
-  color: #64748b;
-  font-family: var(--font-mono);
-}
-
-.tdd-event-body {
-  padding: 10px 16px 12px;
-  background: #fff;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-
-.tdd-event-kv {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 12px;
-  background: #f0f9ff;
-  border-radius: 6px;
-}
-
-.tdd-event-kv-label {
-  font-size: 10px;
-  font-weight: 600;
-  color: #166534;
-}
-
-.tdd-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 12px 22px;
-  border-top: 1px solid #f1f5f9;
-  background: #fafafa;
-  flex-shrink: 0;
-}
-
-.tdd-footer-cancel {
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  background: #fff;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  color: #334155;
-}
-
-.tdd-footer-primary {
-  padding: 8px 20px;
-  border-radius: 8px;
-  border: none;
-  background: var(--color-primary);
-  cursor: pointer;
-  font-size: 12px;
   font-weight: 700;
+}
+
+.tdd-event-icon.open {
+  background: #22c55e;
   color: #fff;
 }
+
+/* legacy --bg fallback: background: var(--bg); }
+.tdd-event-icon-open  { background: #22c55e; }
+.tdd-event-icon-closed{ background: #e2e8f0; }
+.tdd-event-title      { font-size: 12px; font-weight: 800; color: #1a1a2e; }
+.tdd-event-meta       { font-size: 10px; color: #64748b; margin-top: 1px; }
+.tdd-event-arrow      { font-size: 11px; color: #64748b; transition: transform .15s; display: inline-block; }
+.tdd-event-arrow.open { transform: rotate(180deg); }
+.tdd-event-sub        { display: flex; align-items: center; gap: 12px; font-size: 10px; color: #64748b; font-family: var(--font-mono); }
+.tdd-event-body       { padding: 10px 16px 12px; background: #fff; display: grid;
+                        grid-template-columns: repeat(3,1fr); gap: 8px; }
+.tdd-event-kv         { display: flex; align-items: center; justify-content: space-between;
+                        padding: 7px 12px; background: #f0f9ff; border-radius: 6px; }
+.tdd-event-kv-label   { font-size: 10px; font-weight: 600; color: #166534; }
+.tdd-footer           { display: flex; justify-content: flex-end; gap: 8px; padding: 12px 22px;
+                        border-top: 1px solid #f1f5f9; background: #fafafa; flex-shrink: 0; }
+.tdd-footer-cancel    { padding: 8px 20px; border-radius: 8px; border: 1px solid #e2e8f0;
+                        background: #fff; cursor: pointer; font-size: 12px; font-weight: 600; color: #334155; }
+.tdd-footer-primary   { padding: 8px 20px; border-radius: 8px; border: none;
+                        background: var(--color-primary); cursor: pointer;
+                        font-size: 12px; font-weight: 700; color: #fff; }
 
 /* ── TopNav ──────────────────────────────────────────────────────────────── */
 .tnav-root {
@@ -7255,4 +7290,150 @@ table tbody td {
   height: 280px;
   border-radius: 8px;
   overflow: hidden;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TRANSACTIONS MODAL — dynamic classes (replaces all inline styles)
+══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Reason badge colours per code ──────────────────────────────────────── */
+.rsn-mcps2000 {
+  background: #7c3aed;
+  color: #fff;
+}
+
+.rsn-mcps1300 {
+  background: #2563eb;
+  color: #fff;
+}
+
+.rsn-amcps1310 {
+  background: #0891b2;
+  color: #fff;
+}
+
+.rsn-mcps1400 {
+  background: #d97706;
+  color: #fff;
+}
+
+.rsn-mcps1500 {
+  background: #dc2626;
+  color: #fff;
+}
+
+.rsn-amcps2000 {
+  background: #059669;
+  color: #fff;
+}
+
+.txn-reason-badge {
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: #64748b;
+  color: #fff;
+}
+
+/* ── Status badge ────────────────────────────────────────────────────────── */
+.txn-status-badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.status-block {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status-allow {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+/* ── Toolbar buttons ─────────────────────────────────────────────────────── */
+.txn-toolbar-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font);
+  color: #fff;
+  transition: opacity .15s;
+}
+
+.txn-toolbar-btn:hover {
+  opacity: .88;
+}
+
+.txn-btn-export {
+  background: #1d4ed8;
+}
+
+.txn-btn-dashboard {
+  background: #0f766e;
+}
+
+.txn-btn-excluded {
+  background: #7c3aed;
+}
+
+/* ── Sort arrow active state ─────────────────────────────────────────────── */
+.txn-sort-arrow {
+  margin-left: 3px;
+  font-size: 9px;
+  opacity: .3;
+}
+
+.txn-sort-arrow.active {
+  opacity: 1;
+}
+
+/* ── Pagination ──────────────────────────────────────────────────────────── */
+.txn-page-prev {
+  background: #fff;
+}
+
+.txn-page-prev.disabled {
+  background: #f8fafc;
+  pointer-events: none;
+  opacity: .5;
+}
+
+.txn-page-btn {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #334155;
+}
+
+.txn-page-btn.active {
+  border: none;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* ── TransactionDetailModal tag colour classes ───────────────────────────── */
+.tdd-tag-green {
+  background: #22c55e;
+  color: #fff;
+}
+
+.tdd-tag-cyan {
+  background: #0891b2;
+  color: #fff;
+}
+
+.tdd-tag-client {
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
 }

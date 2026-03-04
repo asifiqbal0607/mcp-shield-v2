@@ -58,20 +58,12 @@ function makeData(title) {
 
 function SectionHead({ color, children }) {
   return (
-    <div className="tdd-section-hd">
-      <span className="tdd-section-bar" style={{ '--c': color }} />
+    <div style={{ fontSize: 12, fontWeight: 800, color: '#1a1a2e', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ width: 4, height: 16, background: color, borderRadius: 2, display: 'inline-block' }} />
       {children}
     </div>
   );
 }
-
-
-// ── Recharts config constants ──────────────────────────────────────────────
-const TDM_TICK_SM    = { fontSize: 9, fill: '#cbd5e1' };
-const TDM_TICK_XS    = { fontSize: 8, fill: '#cbd5e1' };
-const TDM_MARGIN_LN  = { top: 5, right: 10, bottom: 0, left: -20 };
-const TDM_MARGIN_BAR = { top: 0, right: 8,  bottom: 0, left: -20 };
-const TDM_TOOLTIP    = { fontSize: 11, borderRadius: 8 };
 
 export default function TransactionDashboardModal({ title, mode = 'dashboard', onClose }) {
   const isExcluded = mode === 'excluded';
@@ -86,73 +78,104 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
   return (
     <>
       {/* Backdrop */}
-      <div onClick={onClose} className="tdm-backdrop" />
+      <div onClick={onClose} style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(15,23,42,.6)', backdropFilter: 'blur(4px)', zIndex: 1000,
+      }} />
 
       {/* Modal */}
-      <div className="tdm-modal">
+      <div style={{
+        position: 'fixed', top: '50%', left: '50%',
+        transform: 'translate(-50%,-50%)',
+        width: 'min(98vw, 1200px)', maxHeight: '92vh',
+        background: '#f0f4f8', borderRadius: 18,
+        boxShadow: '0 32px 80px rgba(0,0,0,.3)',
+        zIndex: 1001, display: 'flex', flexDirection: 'column', overflow: 'hidden',
+      }}>
 
         {/* Header */}
-        <div className="tdm-header">
-          <div className="tdm-header-left">
-            <div className="tdm-icon" style={{  '--bg': isExcluded ? 'rgba(252,165,165,.2)' : 'rgba(255,255,255,.12)'  }}>{isExcluded ? '🚫' : '📊'}</div>
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          padding: '14px 22px', flexShrink: 0,
+          background: isExcluded
+            ? 'linear-gradient(135deg,#7c1d1d,#991b1b)'
+            : 'linear-gradient(135deg,#0f172a,#1e3a5f)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: 10,
+              background: isExcluded ? 'rgba(252,165,165,.2)' : 'rgba(255,255,255,.12)',
+              border: `1px solid ${isExcluded ? 'rgba(252,165,165,.3)' : 'rgba(255,255,255,.2)'}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18,
+            }}>{isExcluded ? '🚫' : '📊'}</div>
             <div>
-              <div className="tdm-title">
+              <div style={{ fontSize: 14, fontWeight: 800, color: '#fff' }}>
                 {isExcluded ? 'Excluded Dashboard' : 'Transaction Dashboard'}
               </div>
-              <div className="tdm-subtitle">
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,.55)', marginTop: 1 }}>
                 {title} — filtered overview
               </div>
             </div>
           </div>
-          <button onClick={onClose} className="tdm-close-btn">×</button>
+          <button onClick={onClose} style={{
+            width: 32, height: 32, borderRadius: 8,
+            border: '1px solid rgba(255,255,255,.2)',
+            background: 'rgba(255,255,255,.08)',
+            cursor: 'pointer', color: '#fff', fontSize: 18,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>×</button>
         </div>
 
         {/* Scrollable body */}
-        <div className="tdm-body">
+        <div style={{ overflowY: 'auto', flex: 1, padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 18 }}>
 
           {/* ── KPI stats ── */}
-          <div className="tdm-stats-grid">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
             {data.stats.map((s) => (
-              <div key={s.label} className="tdm-stat-card" style={{ '--c': s.color }}>
-                <div className="tdm-stat-num" style={{ '--c': s.color }}>{s.value}</div>
-                <div className="tdm-stat-label">{s.label}</div>
+              <div key={s.label} style={{
+                background: '#fff', borderRadius: 12, padding: '16px 18px',
+                borderTop: `3px solid ${s.color}`,
+                boxShadow: '0 1px 6px rgba(0,0,0,.06)',
+              }}>
+                <div style={{ fontSize: 28, fontWeight: 900, color: s.color, fontFamily: 'Georgia,serif' }}>{s.value}</div>
+                <div style={{ fontSize: 11, color: SLATE, fontWeight: 600, marginTop: 4 }}>{s.label}</div>
               </div>
             ))}
           </div>
 
           {/* ── Trend line ── */}
-          <div className="tdm-chart-card">
+          <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', boxShadow: '0 1px 6px rgba(0,0,0,.06)' }}>
             <SectionHead color={BLUE}>Transaction Trend — Last 14 Days</SectionHead>
             <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={data.trend} margin={TDM_MARGIN_LN}>
+              <LineChart data={data.trend} margin={{ top: 5, right: 10, bottom: 0, left: -20 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis dataKey="d" tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
-                <YAxis tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={TDM_TOOLTIP} />
+                <XAxis dataKey="d" tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
+                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
                 <Line type="monotone" dataKey="visits" stroke={BLUE}  strokeWidth={2.5} dot={false} name="Visits" />
                 <Line type="monotone" dataKey="clicks" stroke={GREEN} strokeWidth={2}   dot={false} name="Clicks" />
                 <Line type="monotone" dataKey="blocks" stroke={ROSE}  strokeWidth={2}   dot={false} name="Blocks" strokeDasharray="4 2" />
               </LineChart>
             </ResponsiveContainer>
-            <div className="tdm-legend-row">
+            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
               {[['Visits', BLUE], ['Clicks', GREEN], ['Blocks', ROSE]].map(([l, c]) => (
-                <div key={l} className="tdm-legend-item">
-                  <div className="tdm-legend-dash" style={{ '--c': c }} />{l}
+                <div key={l} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: SLATE }}>
+                  <div style={{ width: 10, height: 3, background: c, borderRadius: 2 }} />{l}
                 </div>
               ))}
             </div>
           </div>
 
           {/* ── Hourly volume + by-network pie ── */}
-          <div className="tdm-grid-2">
-            <div className="tdm-chart-card">
+          <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr', gap: 14 }}>
+            <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', boxShadow: '0 1px 6px rgba(0,0,0,.06)' }}>
               <SectionHead color={AMBER}>Transactions by Hour</SectionHead>
               <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={data.byHour} margin={TDM_MARGIN_BAR}>
-                  <XAxis dataKey="h" tick={TDM_TICK_XS} axisLine={false} tickLine={false}
+                <BarChart data={data.byHour} margin={{ top: 0, right: 8, bottom: 0, left: -20 }}>
+                  <XAxis dataKey="h" tick={{ fontSize: 8, fill: '#cbd5e1' }} axisLine={false} tickLine={false}
                     interval={2} />
-                  <YAxis tick={TDM_TICK_SM} axisLine={false} tickLine={false} />
-                  <Tooltip contentStyle={TDM_TOOLTIP} />
+                  <YAxis tick={{ fontSize: 9, fill: '#cbd5e1' }} axisLine={false} tickLine={false} />
+                  <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8 }} />
                   <Bar dataKey="count" name="Transactions" radius={[3,3,0,0]}>
                     {data.byHour.map((_, i) => <Cell key={i} fill={i >= 6 && i <= 20 ? BLUE : VIOLET} fillOpacity={0.8} />)}
                   </Bar>
@@ -160,23 +183,23 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
               </ResponsiveContainer>
             </div>
 
-            <div className="tdm-chart-card">
+            <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', boxShadow: '0 1px 6px rgba(0,0,0,.06)' }}>
               <SectionHead color={CYAN}>By Network</SectionHead>
-              <div className="tdm-header-left">
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <PieChart width={120} height={120}>
                   <Pie data={data.byNetwork} dataKey="value" cx={55} cy={55}
                     innerRadius={30} outerRadius={52} paddingAngle={2}>
                     {data.byNetwork.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
                   </Pie>
                 </PieChart>
-                <div className="f-col-6">
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {data.byNetwork.map((n, i) => (
-                    <div key={n.name} className="tdm-breakdown-row">
-                      <div className="tdm-breakdown-left">
-                        <div className="tdm-breakdown-dot" style={{ '--c': PALETTE[i] }} />
-                        <span className="tdm-breakdown-name">{n.name}</span>
+                    <div key={n.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 8, height: 8, borderRadius: 2, background: PALETTE[i], flexShrink: 0 }} />
+                        <span style={{ fontSize: 10, color: '#334155', fontWeight: 600 }}>{n.name}</span>
                       </div>
-                      <span className="tdm-breakdown-val" style={{ '--c': PALETTE[i] }}>{n.value}%</span>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: PALETTE[i] }}>{n.value}%</span>
                     </div>
                   ))}
                 </div>
@@ -185,17 +208,24 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
           </div>
 
           {/* ── Block reasons bar ── */}
-          <div className="tdm-chart-card">
+          <div style={{ background: '#fff', borderRadius: 12, padding: '16px 18px', boxShadow: '0 1px 6px rgba(0,0,0,.06)' }}>
             <SectionHead color={ROSE}>Block Reason Distribution</SectionHead>
-            <div className="tdm-channel-grid">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
               {data.byReason.map((r, i) => (
-                <div key={r.name} className="tdm-channel-card" style={{ '--bg': `${PALETTE[i]}10`, '--bdr': `${PALETTE[i]}30`, '--c': PALETTE[i] }}>
-                  <div className="tdm-channel-num" style={{ '--c': PALETTE[i] }}>{r.value}%</div>
-                  <div className="tdm-channel-mt">
-                    <span className="tdm-channel-pill" style={{ '--c': PALETTE[i] }}>{r.name}</span>
+                <div key={r.name} style={{
+                  padding: '14px 16px', borderRadius: 10,
+                  background: `${PALETTE[i]}10`, border: `1px solid ${PALETTE[i]}30`,
+                  textAlign: 'center',
+                }}>
+                  <div style={{ fontSize: 26, fontWeight: 900, color: PALETTE[i], fontFamily: 'Georgia,serif' }}>{r.value}%</div>
+                  <div style={{ marginTop: 4 }}>
+                    <span style={{
+                      padding: '2px 10px', borderRadius: 20, fontSize: 11, fontWeight: 800,
+                      background: PALETTE[i], color: '#fff',
+                    }}>{r.name}</span>
                   </div>
-                  <div className="tdm-progress-track">
-                    <div className="tdm-progress-bar" style={{ '--w': `${r.value}%`, '--c': PALETTE[i] }} />
+                  <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, marginTop: 8 }}>
+                    <div style={{ height: '100%', width: `${r.value}%`, background: PALETTE[i], borderRadius: 2 }} />
                   </div>
                 </div>
               ))}
@@ -204,8 +234,15 @@ export default function TransactionDashboardModal({ title, mode = 'dashboard', o
         </div>
 
         {/* Footer */}
-        <div className="tdm-footer">
-          <button onClick={onClose} className="tdm-view-txn-btn">Close</button>
+        <div style={{
+          display: 'flex', justifyContent: 'flex-end',
+          padding: '12px 22px', borderTop: '1px solid #e2e8f0',
+          background: '#fff', flexShrink: 0,
+        }}>
+          <button onClick={onClose} style={{
+            padding: '8px 22px', borderRadius: 8, border: 'none', cursor: 'pointer',
+            background: BLUE, color: '#fff', fontSize: 12, fontWeight: 700,
+          }}>Close</button>
         </div>
       </div>
     </>
