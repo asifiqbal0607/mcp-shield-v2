@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 const GREEN = "#22c55e";
 const BLUE = "#1d4ed8";
-const SLATE = "#64748b";
 const ROSE = "#dc2626";
 
 function makeDetail(row) {
@@ -35,43 +34,154 @@ function makeDetail(row) {
   };
 }
 
-const EVENTS = [
+// ── Raw events — each test has status "pass" | "fail" ────────────────────────
+const RAW_EVENTS = [
+  // ── Click sequence 1 ──────────────────────────────────────────────────────
   {
     name: "Pointerdown",
     time: "2026-02-25 04:23:19.217 AM",
-    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
   },
   {
     name: "Touchstart",
     time: "2026-02-25 04:23:19.221 AM",
-    tests: ["Screen Test", "Client Test", "Touch Area Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+      { name: "Touch Area Test", status: "fail" }, // ← FAILED
+    ],
   },
   {
     name: "Pointerup",
     time: "2026-02-25 04:23:19.225 AM",
-    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
   },
   {
     name: "Touchend",
     time: "2026-02-25 04:23:19.257 AM",
-    tests: ["Screen Test", "Client Test", "Touch Area Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+      { name: "Touch Area Test", status: "pass" },
+    ],
   },
   {
     name: "Mousedown",
     time: "2026-02-25 04:23:19.428 AM",
-    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "fail" }, // ← FAILED
+      { name: "Client Test", status: "pass" },
+    ],
   },
   {
     name: "Mouseup",
     time: "2026-02-25 04:23:19.432 AM",
-    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
   },
   {
     name: "Click",
     time: "2026-02-25 04:23:19.457 AM",
-    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
+  },
+  // ── Click sequence 2 ──────────────────────────────────────────────────────
+  {
+    name: "Pointerdown",
+    time: "2026-02-25 04:23:21.100 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "fail" }, // ← FAILED
+    ],
+  },
+  {
+    name: "Touchstart",
+    time: "2026-02-25 04:23:21.104 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+      { name: "Touch Area Test", status: "pass" },
+    ],
+  },
+  {
+    name: "Pointerup",
+    time: "2026-02-25 04:23:21.108 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
+  },
+  {
+    name: "Touchend",
+    time: "2026-02-25 04:23:21.120 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+      { name: "Touch Area Test", status: "pass" },
+    ],
+  },
+  {
+    name: "Mousedown",
+    time: "2026-02-25 04:23:21.290 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
+  },
+  {
+    name: "Mouseup",
+    time: "2026-02-25 04:23:21.295 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
+  },
+  {
+    name: "Click",
+    time: "2026-02-25 04:23:21.310 AM",
+    tests: [
+      { name: "Screen Test", status: "pass" },
+      { name: "Event Layers Test", status: "pass" },
+      { name: "Client Test", status: "pass" },
+    ],
   },
 ];
+
+// Group flat event list into click sequences — each group ends at "Click"
+function groupIntoClickSequences(events) {
+  const groups = [];
+  let current = [];
+  events.forEach((evt) => {
+    current.push(evt);
+    if (evt.name === "Click") {
+      groups.push(current);
+      current = [];
+    }
+  });
+  if (current.length) groups.push(current);
+  return groups;
+}
+
+const CLICK_SEQUENCES = groupIntoClickSequences(RAW_EVENTS);
 
 const DEVICE_CHECKS = {
   "UI Rendering": [
@@ -94,10 +204,23 @@ const DEVICE_CHECKS = {
   ],
 };
 
-function PassedBadge() {
-  return <span className="passed-badge">Passed</span>;
+// ── Badges ────────────────────────────────────────────────────────────────────
+function TestBadge({ status }) {
+  return status === "fail" ? (
+    <span className="tdd-test-badge fail">Failed</span>
+  ) : (
+    <span className="tdd-test-badge pass">Passed</span>
+  );
 }
 
+function eventHasFail(evt) {
+  return evt.tests.some((t) => t.status === "fail");
+}
+function seqHasFail(seq) {
+  return seq.some(eventHasFail);
+}
+
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function TransactionDetailModal({ row, onClose, onUserIp }) {
   const [devTab, setDevTab] = useState("UI Rendering");
   const [expandedEvt, setExpandedEvt] = useState(null);
@@ -148,7 +271,6 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
               <span className="tdd-section-bar tdd-bar-blue" />
               Transaction Information
             </div>
-
             <div className="tdd-info-table">
               {[
                 [
@@ -238,8 +360,6 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                   <div className="tdd-info-value-last">{right[1]}</div>
                 </div>
               ))}
-
-              {/* User Agent — full width */}
               <div className="tdd-info-row-full">
                 <div className="tdd-info-label">User Agent</div>
                 <div className="tdd-info-value-ua">{d.userAgent}</div>
@@ -253,7 +373,6 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
               <span className="tdd-section-bar tdd-bar-violet" />
               Device Verification
             </div>
-
             <div className="tdd-tabs-wrap">
               {Object.keys(DEVICE_CHECKS).map((tab) => (
                 <button
@@ -265,12 +384,11 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                 </button>
               ))}
             </div>
-
             <div className="tdd-checks-grid">
               {DEVICE_CHECKS[devTab].map((check) => (
                 <div key={check} className="tdd-check-item">
                   <span className="tdd-check-label">{check}</span>
-                  <PassedBadge />
+                  <TestBadge status="pass" />
                 </div>
               ))}
             </div>
@@ -287,50 +405,124 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
             </div>
 
             <div className="tdd-events-list">
-              {EVENTS.map((evt, i) => {
-                const isOpen = expandedEvt === i;
+              {CLICK_SEQUENCES.map((seq, seqIdx) => {
+                const seqFailed = seqHasFail(seq);
+                const globalBase = CLICK_SEQUENCES.slice(0, seqIdx).reduce(
+                  (a, s) => a + s.length,
+                  0,
+                );
+                const failCount = seq.reduce(
+                  (a, e) =>
+                    a + e.tests.filter((t) => t.status === "fail").length,
+                  0,
+                );
+
                 return (
                   <div
-                    key={i}
-                    className={`tdd-event-card${isOpen ? " open" : ""}`}
+                    key={seqIdx}
+                    className={`tdd-click-group${seqFailed ? " has-fail" : ""}`}
                   >
+                    {/* ── Sequence separator header ── */}
                     <div
-                      onClick={() => setExpandedEvt(isOpen ? null : i)}
-                      className={`tdd-event-header${isOpen ? " open" : ""}`}
+                      className={`tdd-click-group-hd${seqFailed ? " fail" : ""}`}
                     >
-                      <div className="tdd-event-left">
-                        <div
-                          className={`tdd-event-icon${isOpen ? " open" : ""}`}
-                        >
-                          {i + 1}
-                        </div>
-                        <div>
-                          <div className="tdd-event-name">{evt.name}</div>
-                          <div className="tdd-event-meta">
-                            Event Information
-                          </div>
-                        </div>
-                      </div>
-                      <div className="tdd-event-right">
-                        <span className="tdd-event-time">{evt.time}</span>
+                      <div className="tdd-click-group-left">
                         <span
-                          className={`tdd-event-arrow${isOpen ? " open" : ""}`}
+                          className={`tdd-click-group-pill${seqFailed ? " fail" : ""}`}
                         >
-                          ▾
+                          Click {seqIdx + 1}
                         </span>
+                        {seqFailed && (
+                          <span className="tdd-click-fail-badge">
+                            ⚠ {failCount} test{failCount !== 1 ? "s" : ""}{" "}
+                            failed
+                          </span>
+                        )}
                       </div>
+                      <span className="tdd-click-group-time">
+                        {seq[0]?.time} → {seq[seq.length - 1]?.time}
+                      </span>
                     </div>
 
-                    {isOpen && (
-                      <div className="tdd-tests-grid">
-                        {evt.tests.map((test) => (
-                          <div key={test} className="tdd-test-item">
-                            <span className="tdd-test-label">{test}</span>
-                            <PassedBadge />
+                    {/* ── Events in this sequence ── */}
+                    {seq.map((evt, evtIdx) => {
+                      const globalIdx = globalBase + evtIdx;
+                      const isOpen = expandedEvt === globalIdx;
+                      const hasFail = eventHasFail(evt);
+                      const evtFailCount = evt.tests.filter(
+                        (t) => t.status === "fail",
+                      ).length;
+
+                      return (
+                        <div
+                          key={evtIdx}
+                          className={`tdd-event-card${isOpen ? " open" : ""}${hasFail ? " evt-has-fail" : ""}`}
+                        >
+                          <div
+                            onClick={() =>
+                              setExpandedEvt(isOpen ? null : globalIdx)
+                            }
+                            className={`tdd-event-header${isOpen ? " open" : ""}${hasFail ? " evt-fail-hd" : ""}`}
+                          >
+                            <div className="tdd-event-left">
+                              {/* Number badge */}
+                              <div
+                                className={`tdd-event-icon${hasFail ? " fail" : ""}${isOpen ? " open" : ""}`}
+                              >
+                                {evtIdx + 1}
+                              </div>
+                              <div>
+                                <div className="tdd-event-name-wrap">
+                                  <span
+                                    className={`tdd-event-name${hasFail ? " fail" : ""}`}
+                                  >
+                                    {evt.name}
+                                  </span>
+                                  {hasFail && (
+                                    <span className="tdd-evt-fail-pill">
+                                      {evtFailCount} failed
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="tdd-event-meta">
+                                  Event Information
+                                </div>
+                              </div>
+                            </div>
+                            <div className="tdd-event-right">
+                              {hasFail && <span className="tdd-evt-fail-dot" />}
+                              <span className="tdd-event-time">{evt.time}</span>
+                              <span
+                                className={`tdd-event-arrow${isOpen ? " open" : ""}`}
+                              >
+                                ▾
+                              </span>
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
+
+                          {isOpen && (
+                            <div className="tdd-tests-grid">
+                              {evt.tests.map((test) => (
+                                <div
+                                  key={test.name}
+                                  className={`tdd-test-item${test.status === "fail" ? " fail" : ""}`}
+                                >
+                                  <div className="tdd-test-left">
+                                    {test.status === "fail" && (
+                                      <span className="tdd-test-fail-bar" />
+                                    )}
+                                    <span className="tdd-test-label">
+                                      {test.name}
+                                    </span>
+                                  </div>
+                                  <TestBadge status={test.status} />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 );
               })}
