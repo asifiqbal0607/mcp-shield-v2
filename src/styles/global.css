@@ -8151,3 +8151,423 @@ table tbody td {
   border: 4px solid transparent;
   border-top-color: #0f172a;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOP 10 SERVICES CHART
+══════════════════════════════════════════════════════════════════════════ */
+.svc-chart-card {
+  overflow: visible;
+}
+
+/* ── Header ── */
+.svc-chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.svc-chart-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.svc-chart-period-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  white-space: nowrap;
+}
+
+.svc-chart-active-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 999px;
+  padding: 3px 10px 3px 8px;
+  animation: dropIn .15s ease;
+}
+
+.svc-chart-filter-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.svc-chart-filter-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.svc-chart-filter-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  color: #b45309;
+  padding: 0 2px;
+  transition: color .12s;
+}
+
+.svc-chart-filter-clear:hover {
+  color: #92400e;
+}
+
+.svc-chart-header-right {
+  padding-top: 2px;
+}
+
+.svc-chart-hint {
+  font-size: 10.5px;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* ── Chart wrapper — horizontally scrollable so bars never wrap ── */
+.svc-chart-scroll-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -4px;
+  padding-bottom: 4px;
+}
+
+.svc-chart-scroll-wrap::-webkit-scrollbar {
+  height: 4px;
+}
+
+.svc-chart-scroll-wrap::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
+
+/* ── Custom tooltip ── */
+.svc-chart-tooltip {
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+  min-width: 180px;
+}
+
+.svc-chart-tooltip-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 4px;
+}
+
+.svc-chart-tooltip-val {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.svc-chart-tooltip-val span {
+  font-size: 11px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-left: 4px;
+}
+
+.svc-chart-tooltip-hint {
+  font-size: 9.5px;
+  color: #64748b;
+  margin-top: 5px;
+  font-style: italic;
+}
+
+/* ── Legend — single scrollable row, never wraps ── */
+.svc-chart-legend-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+  -webkit-overflow-scrolling: touch;
+}
+
+.svc-chart-legend-scroll::-webkit-scrollbar {
+  height: 3px;
+}
+
+.svc-chart-legend-scroll::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
+
+.svc-chart-legend {
+  display: flex;
+  flex-wrap: nowrap;
+  /* ← never wrap to next row */
+  gap: 6px;
+  width: max-content;
+  /* ← expands to fit all items */
+}
+
+.svc-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  color: #64748b;
+  font-family: var(--font);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background .12s, border-color .12s, color .12s, opacity .15s;
+}
+
+.svc-chart-legend-item:hover {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #334155;
+}
+
+.svc-chart-legend-item.active {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.svc-chart-legend-item.dimmed {
+  opacity: 0.3;
+}
+
+.svc-chart-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.svc-chart-legend-name {
+  white-space: nowrap;
+}
+
+/* ── Pie card service filter styles ─────────────────────────────────────────── */
+.pie-card-filtered {
+  border: 1.5px solid #bfdbfe !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08) !important;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.pie-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pie-filter-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  animation: dropIn .15s ease;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TOP 20 SERVICES — COMPARISON TOOLTIP
+══════════════════════════════════════════════════════════════════════════ */
+.svc-tt {
+  background: #0f172a;
+  border-radius: 12px;
+  padding: 0;
+  min-width: 240px;
+  max-width: 280px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, .32);
+  overflow: hidden;
+  font-family: var(--font);
+  animation: dropIn .12s ease;
+}
+
+/* ── Service name header ── */
+.svc-tt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px 8px;
+  border-left: 4px solid #1d4ed8;
+  background: rgba(255, 255, 255, .05);
+}
+
+.svc-tt-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Period section label ── */
+.svc-tt-period-label {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #22c55e;
+  padding: 8px 14px 3px;
+}
+
+.svc-tt-period-label.prev {
+  color: #64748b;
+  padding-top: 4px;
+}
+
+/* ── Data rows ── */
+.svc-tt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 14px;
+  gap: 8px;
+}
+
+.svc-tt-key {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.svc-tt-val {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.svc-tt-val-total {
+  color: #fff;
+  font-size: 15px;
+}
+
+.svc-tt-val-block {
+  color: #f87171;
+}
+
+.svc-tt-val-clean {
+  color: #4ade80;
+}
+
+.svc-tt-pct {
+  font-size: 10px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+/* ── Colour dots ── */
+.svc-tt-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.svc-tt-dot-block {
+  background: #f87171;
+}
+
+.svc-tt-dot-clean {
+  background: #4ade80;
+}
+
+/* ── Delta badge ── */
+.svc-tt-delta {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.svc-tt-delta.up {
+  background: rgba(34, 197, 94, .15);
+  color: #4ade80;
+}
+
+.svc-tt-delta.down {
+  background: rgba(248, 113, 113, .15);
+  color: #f87171;
+}
+
+.svc-tt-delta.neutral {
+  background: rgba(148, 163, 184, .1);
+  color: #94a3b8;
+}
+
+/* ── Block vs Clean mini bar ── */
+.svc-tt-bar-wrap {
+  display: flex;
+  height: 5px;
+  margin: 6px 14px 4px;
+  border-radius: 99px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .06);
+}
+
+.svc-tt-bar-fill {
+  height: 100%;
+  transition: width .3s ease;
+}
+
+.svc-tt-bar-block {
+  background: #f87171;
+}
+
+.svc-tt-bar-clean {
+  background: #4ade80;
+}
+
+/* ── Divider ── */
+.svc-tt-divider {
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  margin: 8px 0 0;
+}
+
+/* ── Footer hint ── */
+.svc-tt-footer {
+  font-size: 9.5px;
+  color: #475569;
+  text-align: center;
+  padding: 6px 14px 8px;
+  font-style: italic;
+}

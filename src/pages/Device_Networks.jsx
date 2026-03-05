@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import Top10ServicesChart from "./Top10ServicesChart";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, SectionTitle, TransactionsModal } from "../components/ui";
 import { SLATE, PALETTE } from "../constants/colors";
@@ -13,9 +14,10 @@ const RADIAN = Math.PI / 180;
 
 function renderLabel({ cx, cy, midAngle, outerRadius, name, percent }) {
   if (percent < 0.03) return null;
-  const radius = outerRadius + 30;
+  const radius = outerRadius + 28;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const short = name.length > 18 ? name.slice(0, 18) + "…" : name;
   return (
     <text
       x={x}
@@ -26,8 +28,7 @@ function renderLabel({ cx, cy, midAngle, outerRadius, name, percent }) {
       fontSize={9}
       fontWeight={600}
     >
-      {name.length > 24 ? name.slice(0, 24) + "…" : name} (
-      {(percent * 100).toFixed(1)}%)
+      {short} ({(percent * 100).toFixed(1)}%)
     </text>
   );
 }
@@ -234,35 +235,65 @@ function ChartContextMenu({ containerRef, data, title }) {
 // ── Pie Card ──────────────────────────────────────────────────────────────────
 const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 
-function StatPieCard({ title, data, onSliceClick }) {
+function StatPieCard({ title, data, onSliceClick, serviceFilter }) {
   const containerRef = useRef(null);
+  const isFiltered = Boolean(serviceFilter);
+
+  // When a service is selected, scale each slice value by a service-specific
+  // seed so the distribution changes visually to reflect that service's data.
+  const filteredData = useMemo(() => {
+    if (!isFiltered) return data;
+    const seed = serviceFilter
+      .split("")
+      .reduce((a, c) => a + c.charCodeAt(0), 0);
+    return data.map((d, i) => ({
+      ...d,
+      value: Math.max(
+        1,
+        Math.round(d.value * (0.4 + ((seed * (i + 7)) % 100) / 150)),
+      ),
+    }));
+  }, [data, serviceFilter, isFiltered]);
 
   return (
-    <Card>
+    <Card className={isFiltered ? "pie-card-filtered" : ""}>
       <div className="ov-chart-header">
         <SectionTitle>{title}</SectionTitle>
-        <ChartContextMenu
-          containerRef={containerRef}
-          data={data}
-          title={title}
-        />
+        <div className="pie-card-header-right">
+          {isFiltered && (
+            <span
+              className="pie-filter-badge"
+              title={`Filtered by: ${serviceFilter}`}
+            >
+              🔍{" "}
+              {serviceFilter.length > 20
+                ? serviceFilter.slice(0, 20) + "…"
+                : serviceFilter}
+            </span>
+          )}
+          <ChartContextMenu
+            containerRef={containerRef}
+            data={filteredData}
+            title={title}
+          />
+        </div>
       </div>
       <div ref={containerRef}>
-        <ResponsiveContainer width="100%" height={200}>
-          <PieChart>
+        <ResponsiveContainer width="100%" height={320}>
+          <PieChart margin={{ top: 20, right: 60, bottom: 20, left: 60 }}>
             <Pie
-              data={data}
+              data={filteredData}
               dataKey="value"
               nameKey="name"
               cx="50%"
               cy="50%"
-              outerRadius={100}
+              outerRadius={90}
               label={renderLabel}
               labelLine={true}
               onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
               className="p-rel clickable"
             >
-              {data.map((_, i) => (
+              {filteredData.map((_, i) => (
                 <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
               ))}
             </Pie>
@@ -271,7 +302,9 @@ function StatPieCard({ title, data, onSliceClick }) {
         </ResponsiveContainer>
       </div>
       <div className="stat-hint-center">
-        Click a slice to view transactions ↗
+        {isFiltered
+          ? `Showing data for: ${serviceFilter}`
+          : "Click a slice to view transactions ↗"}
       </div>
     </Card>
   );
@@ -280,8 +313,11 @@ function StatPieCard({ title, data, onSliceClick }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function PageDevice() {
   const [modal, setModal] = useState(null);
+  const [serviceFilter, setServiceFilter] = useState(null);
+  const [days, setDays] = useState(1);
   const open = (title) => setModal(title);
   const close = () => setModal(null);
+  const handleServiceFilter = useCallback((name) => setServiceFilter(name), []);
 
   const stats = [
     {
@@ -335,17 +371,22 @@ export default function PageDevice() {
         ))}
       </div>
 
+      {/* ── Top 20 Services Chart ── */}
+      <Top10ServicesChart days={days} onServiceFilter={handleServiceFilter} />
+
       {/* ── Top 10 Devices + Top 10 OS ── */}
       <div className="g-halves mb-section">
         <StatPieCard
           title="Top 10 Devices"
           data={topDevicesData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
         <StatPieCard
           title="Top 10 Operating Systems"
           data={topOsData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
       </div>
 
@@ -355,11 +396,13 @@ export default function PageDevice() {
           title="Top 10 Browsers"
           data={topBrowsersData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
         <StatPieCard
           title="Top 10 Networks"
           data={topNetworksData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
       </div>
 

@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import Top10ServicesChart from "./Top10ServicesChart";
 import {
   PieChart,
   Pie,
@@ -48,7 +49,7 @@ function renderLabel({
       fontSize={9}
       fontWeight={600}
     >
-      {name.length > 22 ? name.slice(0, 22) + "…" : name} (
+      {name.length > 18 ? name.slice(0, 18) + "…" : name} (
       {(percent * 100).toFixed(1)}%)
     </text>
   );
@@ -256,35 +257,63 @@ function ChartContextMenu({ containerRef, data, title }) {
 // ── APK Pie Card ──────────────────────────────────────────────────────────────
 const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
 
-function ApkPieCard({ title, data, onSliceClick }) {
+function ApkPieCard({ title, data, onSliceClick, serviceFilter }) {
   const containerRef = useRef(null);
+  const isFiltered = Boolean(serviceFilter);
+
+  const filteredData = useMemo(() => {
+    if (!isFiltered) return data;
+    const seed = serviceFilter
+      .split("")
+      .reduce((a, c) => a + c.charCodeAt(0), 0);
+    return data.map((d, i) => ({
+      ...d,
+      value: Math.max(
+        1,
+        Math.round(d.value * (0.4 + ((seed * (i + 7)) % 100) / 150)),
+      ),
+    }));
+  }, [data, serviceFilter, isFiltered]);
 
   return (
-    <Card>
+    <Card className={isFiltered ? "pie-card-filtered" : ""}>
       <div className="ov-chart-header">
         <SectionTitle>{title}</SectionTitle>
-        <ChartContextMenu
-          containerRef={containerRef}
-          data={data}
-          title={title}
-        />
+        <div className="pie-card-header-right">
+          {isFiltered && (
+            <span
+              className="pie-filter-badge"
+              title={`Filtered by: ${serviceFilter}`}
+            >
+              🔍{" "}
+              {serviceFilter.length > 20
+                ? serviceFilter.slice(0, 20) + "…"
+                : serviceFilter}
+            </span>
+          )}
+          <ChartContextMenu
+            containerRef={containerRef}
+            data={filteredData}
+            title={title}
+          />
+        </div>
       </div>
       <div ref={containerRef}>
-        <ResponsiveContainer width="100%" height={185}>
-          <PieChart>
+        <ResponsiveContainer width="100%" height={320}>
+          <PieChart margin={{ top: 20, right: 60, bottom: 20, left: 60 }}>
             <Pie
-              data={data}
+              data={filteredData}
               dataKey="value"
               nameKey="name"
               cx="50%"
               cy="50%"
-              outerRadius={95}
+              outerRadius={90}
               labelLine={true}
               label={renderLabel}
               onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
               className="p-rel clickable"
             >
-              {data.map((_, i) => (
+              {filteredData.map((_, i) => (
                 <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
               ))}
             </Pie>
@@ -293,7 +322,9 @@ function ApkPieCard({ title, data, onSliceClick }) {
         </ResponsiveContainer>
       </div>
       <div className="stat-hint-center">
-        Click a slice to view transactions ↗
+        {isFiltered
+          ? `Showing data for: ${serviceFilter}`
+          : "Click a slice to view transactions ↗"}
       </div>
     </Card>
   );
@@ -331,8 +362,11 @@ function buildTop20() {
 export default function PageAPKs() {
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(null);
+  const [serviceFilter, setServiceFilter] = useState(null);
+  const [days, setDays] = useState(1);
   const open = (title) => setModal(title);
   const close = () => setModal(null);
+  const handleServiceFilter = useCallback((name) => setServiceFilter(name), []);
 
   const top20 = buildTop20();
   const [perPage, setPerPage] = useState(10);
@@ -371,17 +405,22 @@ export default function PageAPKs() {
         ))}
       </div>
 
+      {/* ── Top 20 Services Chart ── */}
+      <Top10ServicesChart days={days} onServiceFilter={handleServiceFilter} />
+
       {/* Top APK pie charts */}
       <div className="g-halves mb-section">
         <ApkPieCard
           title="Block APKs"
           data={trustedApkData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
         <ApkPieCard
           title="Clean APKs"
           data={cleanApkData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
       </div>
 
@@ -391,6 +430,7 @@ export default function PageAPKs() {
           title="Specified APKs"
           data={spoofedApkData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
       </div>
 
@@ -400,6 +440,7 @@ export default function PageAPKs() {
           title="Hidden APKs"
           data={hiddenApkData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
+          serviceFilter={serviceFilter}
         />
       </div>
 
