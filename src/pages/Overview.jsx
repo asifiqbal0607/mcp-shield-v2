@@ -234,7 +234,7 @@ export default function PageOverview() {
             {/* Radar chart */}
             <div className="ov-radar-expand">
               <BlockRadarChart
-                height={300}
+                height={420}
                 showBadge={false}
                 onDayClick={(day) =>
                   open(`${day} Block Pattern — Transactions`)

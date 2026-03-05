@@ -124,6 +124,8 @@ export default function PagePartners() {
     const matchFilter = filter === "All" || p.status === filter.toLowerCase();
     return matchSearch && matchFilter;
   });
+  const [perPagePtn, setPerPagePtn] = useState(10);
+  const visiblePartners = filtered.slice(0, perPagePtn);
 
   const stats = {
     total:   PARTNER_ROWS.length,
@@ -188,6 +190,14 @@ export default function PagePartners() {
         <div className="partner-toolbar">
           <SectionTitle className="m-0">All Partners</SectionTitle>
           <div className="f-wrap-10">
+            {/* Entries selector */}
+            <div className="dt-entries-bar">
+              <span className="dt-entries-lbl">Show</span>
+              <select className="dt-entries-sel" value={perPagePtn} onChange={e => setPerPagePtn(Number(e.target.value))}>
+                {[10,25,50,100].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+              <span className="dt-entries-lbl">entries</span>
+            </div>
             {/* Status filter pills */}
             <div className="f-gap-6">
               {["All", "Active", "Warning", "Blocked"].map(f => (
@@ -220,7 +230,7 @@ export default function PagePartners() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((p, i) => (
+              {visiblePartners.map((p, i) => (
                 <tr key={p.id}
                   className="dt-tr"
                   onClick={() => setSelected(p)}
@@ -264,9 +274,11 @@ export default function PagePartners() {
           </table>
         </div>
 
+        {/* Show more */}
+
         {/* Footer count */}
         <div className="partner-footer-txt">
-          Showing {filtered.length} of {PARTNER_ROWS.length} partners
+          Showing {visiblePartners.length} of {PARTNER_ROWS.length} partners
         </div>
       </Card>
 

@@ -1050,6 +1050,8 @@ export default function PageUsers({ role = "admin", setPage }) {
       u.email.toLowerCase().includes(query.toLowerCase());
     return matchStatus && matchType && matchQuery;
   });
+  const [perPageUsr, setPerPageUsr] = useState(10);
+  const visibleUsers = filtered.slice(0, perPageUsr);
 
   const activeUsersCount = users.filter(isActiveStatus).length;
   const inactiveUsersCount = users.filter(isInactiveStatus).length;
@@ -1070,6 +1072,8 @@ export default function PageUsers({ role = "admin", setPage }) {
   const filteredPartnerAccounts = partnerAccounts.filter((u) =>
     partnerTab === "active" ? u.status === true : u.status === false,
   );
+  const [perPagePtnAcc, setPerPagePtnAcc] = useState(10);
+  const visiblePartnerAccounts = filteredPartnerAccounts.slice(0, perPagePtnAcc);
   const activePartnerCount = partnerAccounts.filter(
     (u) => u.status === true,
   ).length;
@@ -1111,6 +1115,7 @@ export default function PageUsers({ role = "admin", setPage }) {
         </div>
 
         <div className="f-col-12">
+
           {filteredPartnerAccounts.length === 0 && (
             <div
               className="usr-empty"
@@ -1118,7 +1123,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               No {partnerTab} accounts found.
             </div>
           )}
-          {filteredPartnerAccounts.map((u) => {
+          {visiblePartnerAccounts.map((u) => {
             const isExpanded = !!expandedAccounts[u.id];
             const preview = u.services.slice(0, SERVICES_PREVIEW);
             const rest = u.services.slice(SERVICES_PREVIEW);
@@ -1382,6 +1387,13 @@ export default function PageUsers({ role = "admin", setPage }) {
         >
           <SectionTitle>User Directory</SectionTitle>
           <div className="f-gap-8">
+            <div className="dt-entries-bar">
+              <span className="dt-entries-lbl">Show</span>
+              <select className="dt-entries-sel" value={perPageUsr} onChange={e => setPerPageUsr(Number(e.target.value))}>
+                {[10,25,50,100].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+              <span className="dt-entries-lbl">entries</span>
+            </div>
             <input
               placeholder="Search..."
               value={query}
@@ -1450,7 +1462,7 @@ export default function PageUsers({ role = "admin", setPage }) {
             </tr>
           </thead>
           <tbody>
-            {filtered.map((u, i) => (
+            {visibleUsers.map((u, i) => (
               <tr
                 key={i}
                 className="dt-tr-plain"
@@ -1513,6 +1525,7 @@ export default function PageUsers({ role = "admin", setPage }) {
             )}
           </tbody>
         </table></div>
+
       </Card>
     </div>
   );

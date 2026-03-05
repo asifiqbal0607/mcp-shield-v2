@@ -34,10 +34,18 @@ const SUMMARY_STATS = [
   // { label: "Auto-Resolved", value: "8,24,110", color: GREEN },
 ];
 
+
+// ── Recharts config constants ──────────────────────────────────────────────
+const CHART_TICK_X   = { fontSize: 9, fill: "#cbd5e1" };
+const CHART_TICK_Y   = { fontSize: 9, fill: "#64748b" };
+const CHART_MARGIN_0 = { top: 0, right: 10, left: 10, bottom: 0 };
+
 export default function PageBlocking() {
   const [modal, setModal] = useState(null);
   const open = (title) => setModal(title);
   const close = () => setModal(null);
+  const [perPageBlk, setPerPageBlk] = useState(10);
+  const blkVisible = blkRows.slice(0, perPageBlk);
 
   return (
     <div>
@@ -84,18 +92,18 @@ export default function PageBlocking() {
             <BarChart
               data={blkRows}
               layout="vertical"
-              margin={{ top: 0, right: 10, left: 10, bottom: 0 }}
+              margin={CHART_MARGIN_0}
             >
               <XAxis
                 type="number"
-                tick={{ fontSize: 9, fill: "#cbd5e1" }}
+                tick={CHART_TICK_X}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 type="category"
                 dataKey="reason"
-                tick={{ fontSize: 9, fill: "#64748b" }}
+                tick={CHART_TICK_Y}
                 axisLine={false}
                 tickLine={false}
                 width={130}
@@ -123,6 +131,13 @@ export default function PageBlocking() {
       {/* Full Breakdown Block Reason */}
       <Card>
         <SectionTitle>Full Breakdown Block Reasons</SectionTitle>
+        <div className="dt-entries-bar">
+          <span className="dt-entries-lbl">Show</span>
+          <select className="dt-entries-sel" value={perPageBlk} onChange={e => setPerPageBlk(Number(e.target.value))}>
+            {[10,25,50,100].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+          <span className="dt-entries-lbl">entries</span>
+        </div>
         <div className="table-wrap"><table
           className="dt"
         >
@@ -146,7 +161,7 @@ export default function PageBlocking() {
             </tr>
           </thead>
           <tbody>
-            {blkRows.map((r, i) => (
+            {blkVisible.map((r, i) => (
               <tr
                 key={i}
                 className="dt-tr"
@@ -201,6 +216,7 @@ export default function PageBlocking() {
             ))}
           </tbody>
         </table></div>
+
       </Card>
       {/* Transactions modal */}
       {modal && <TransactionsModal title={modal} onClose={close} />}

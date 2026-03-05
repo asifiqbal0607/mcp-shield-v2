@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   PieChart,
   Pie,
@@ -18,7 +18,7 @@ import { BLUE, GREEN, AMBER, ROSE, SLATE, PALETTE } from "../constants/colors";
 import {
   trustedApkData,
   cleanApkData,
-  specifiedApkData,
+  spoofedApkData,
   hiddenApkData,
 } from "../data/tables";
 
@@ -54,53 +54,252 @@ function renderLabel({
   );
 }
 
+// ── Chart Context Menu ────────────────────────────────────────────────────────
+function ChartContextMenu({ containerRef, data, title }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const getSvgEl = () => containerRef.current?.querySelector("svg");
+
+  const getSvgAsCanvas = () =>
+    new Promise((resolve) => {
+      const svg = getSvgEl();
+      if (!svg) return resolve(null);
+      const svgStr = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = svg.clientWidth || 500;
+        canvas.height = svg.clientHeight || 300;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas);
+      };
+      img.src = url;
+    });
+
+  const viewFullScreen = () => {
+    const el = containerRef.current;
+    if (el?.requestFullscreen) el.requestFullscreen();
+    setOpen(false);
+  };
+
+  const printChart = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const win = window.open("", "_blank");
+    win.document.write(
+      `<html><head><title>${title || "chart"}</title></head><body style="margin:0">` +
+        `<img src="${canvas.toDataURL("image/png")}" style="width:100%" onload="window.print();window.close()" /></body></html>`,
+    );
+    win.document.close();
+    setOpen(false);
+  };
+
+  const downloadPNG = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `${title || "chart"}.png`;
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadJPEG = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `${title || "chart"}.jpg`;
+    a.href = canvas.toDataURL("image/jpeg", 0.92);
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadPDF = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const win = window.open("", "_blank");
+    win.document.write(
+      `<html><head><title>${title || "chart"}</title></head><body style="margin:0">` +
+        `<img src="${canvas.toDataURL("image/png")}" style="width:100%" onload="window.print();window.close()" /></body></html>`,
+    );
+    win.document.close();
+    setOpen(false);
+  };
+
+  const downloadSVG = () => {
+    const svg = getSvgEl();
+    if (!svg) return;
+    const svgStr = new XMLSerializer().serializeToString(svg);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([svgStr], { type: "image/svg+xml" }));
+    a.download = `${title || "chart"}.svg`;
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadCSV = () => {
+    if (!data?.length) return;
+    const csv = [
+      "name,value",
+      ...data.map((d) => `"${d.name}",${d.value}`),
+    ].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `${title || "chart"}.csv`;
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadXLS = () => {
+    if (!data?.length) return;
+    const tsv = [
+      "name\tvalue",
+      ...data.map((d) => `${d.name}\t${d.value}`),
+    ].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(
+      new Blob([tsv], { type: "application/vnd.ms-excel" }),
+    );
+    a.download = `${title || "chart"}.xls`;
+    a.click();
+    setOpen(false);
+  };
+
+  const MENU_ITEMS = [
+    { label: "View in full screen", action: viewFullScreen },
+    { label: "Print chart", action: printChart },
+    null,
+    { label: "Download PNG image", action: downloadPNG },
+    { label: "Download JPEG image", action: downloadJPEG },
+    { label: "Download PDF document", action: downloadPDF },
+    { label: "Download SVG vector image", action: downloadSVG },
+    null,
+    { label: "Download CSV", action: downloadCSV },
+    { label: "Download XLS", action: downloadXLS },
+  ];
+
+  return (
+    <div ref={menuRef} style={{ position: "relative" }}>
+      <button className="geo-collapse-btn" onClick={() => setOpen((p) => !p)}>
+        ≡
+      </button>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "calc(100% + 4px)",
+            zIndex: 200,
+            background: "#fff",
+            border: "1px solid #e2e8f0",
+            borderRadius: 8,
+            boxShadow: "0 8px 24px rgba(0,0,0,.12)",
+            minWidth: 210,
+            padding: "4px 0",
+          }}
+        >
+          {MENU_ITEMS.map((item, i) =>
+            item === null ? (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid #f1f5f9", margin: "4px 0" }}
+              />
+            ) : (
+              <button
+                key={i}
+                onClick={item.action}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "7px 16px",
+                  background: "none",
+                  border: "none",
+                  fontSize: 13,
+                  color: "#334155",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "#f1f5f9")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "none")
+                }
+              >
+                {item.label}
+              </button>
+            ),
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── APK Pie Card ──────────────────────────────────────────────────────────────
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
+
 function ApkPieCard({ title, data, onSliceClick }) {
+  const containerRef = useRef(null);
+
   return (
     <Card>
-      <div
-        className="ov-chart-header"
-      >
+      <div className="ov-chart-header">
         <SectionTitle>{title}</SectionTitle>
-        <button
-          className="geo-collapse-btn"
-        >
-          ≡
-        </button>
+        <ChartContextMenu
+          containerRef={containerRef}
+          data={data}
+          title={title}
+        />
       </div>
-      <ResponsiveContainer width="100%" height={185}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={95}
-            labelLine={true}
-            label={renderLabel}
-            onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
-            className="p-rel clickable"
-          >
-            {data.map((_, i) => (
-              <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-            ))}
-          </Pie>
-          <Tooltip
-            formatter={(v) => `${v}%`}
-            contentStyle={CHART_TOOLTIP}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-      <div
-        className="stat-hint-center"
-      >
+      <div ref={containerRef}>
+        <ResponsiveContainer width="100%" height={185}>
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={95}
+              labelLine={true}
+              label={renderLabel}
+              onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
+              className="p-rel clickable"
+            >
+              {data.map((_, i) => (
+                <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+              ))}
+            </Pie>
+            <Tooltip formatter={(v) => `${v}%`} contentStyle={CHART_TOOLTIP} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="stat-hint-center">
         Click a slice to view transactions ↗
       </div>
     </Card>
   );
 }
 
-// Build top 20 from all pie chart data sorted by value desc
+// ── Build Top 20 ──────────────────────────────────────────────────────────────
 const TYPE_META = {
   "Blocked Apps": { risk: "Low", status: "active" },
   Clean: { risk: "Low", status: "active" },
@@ -112,7 +311,7 @@ function buildTop20() {
   const all = [
     ...trustedApkData.map((d) => ({ ...d, type: "Blocked Apps" })),
     ...cleanApkData.map((d) => ({ ...d, type: "Clean" })),
-    ...specifiedApkData.map((d) => ({ ...d, type: "Specified" })),
+    ...spoofedApkData.map((d) => ({ ...d, type: "Specified" })),
     ...hiddenApkData.map((d) => ({ ...d, type: "Hidden" })),
   ];
   return all
@@ -128,7 +327,7 @@ function buildTop20() {
     }));
 }
 
-const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function PageAPKs() {
   const [query, setQuery] = useState("");
   const [modal, setModal] = useState(null);
@@ -156,25 +355,18 @@ export default function PageAPKs() {
           <Card
             key={s.label}
             onClick={() => open(`${s.label} — Transactions`)}
-            className="stat-card-click" style={{ '--c': s.color }}
+            className="stat-card-click"
+            style={{ "--c": s.color }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,.1)")
             }
             onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
           >
-            <div className="kpi-stat"
-              className="dyn-color" style={{ '--c': s.color }}
-            >
+            <div className="dyn-color" style={{ "--c": s.color }}>
               {s.value}
             </div>
-            <div
-              className="stat-lbl-12"
-            >
-              {s.label}
-            </div>
-            <div className="stat-hint">
-              View Transactions ↗
-            </div>
+            <div className="stat-lbl-12">{s.label}</div>
+            <div className="stat-hint">View Transactions ↗</div>
           </Card>
         ))}
       </div>
@@ -197,7 +389,7 @@ export default function PageAPKs() {
       <div className="mb-18">
         <ApkPieCard
           title="Specified APKs"
-          data={specifiedApkData}
+          data={spoofedApkData}
           onSliceClick={(name) => open(`${name} — Transactions`)}
         />
       </div>
@@ -213,21 +405,17 @@ export default function PageAPKs() {
 
       {/* Top 20 Apps table */}
       <Card>
-        <div
-          className="toolbar"
-        >
+        <div className="toolbar">
           <div className="f-gap-8">
             <SectionTitle className="m-0">Top 20 Apps</SectionTitle>
           </div>
           <div className="f-gap-12">
-            <div
-              className="apk-filter-row"
-            >
+            <div className="dt-entries-bar">
               <span>Show</span>
               <select
                 value={perPage}
                 onChange={(e) => setPerPage(Number(e.target.value))}
-                className="apk-select"
+                className="dt-entries-sel"
               >
                 <option value={10}>10</option>
                 <option value={20}>20</option>
@@ -237,85 +425,149 @@ export default function PageAPKs() {
             <input
               placeholder="Search…"
               value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setApkPage(0);
-              }}
+              onChange={(e) => setQuery(e.target.value)}
               className="apk-search"
             />
           </div>
         </div>
-        <div className="table-wrap"><table
-          className="dt"
-        >
-          <thead>
-            <tr className="dt-head-row">
-              {["#", "Package Name", "Type", "Share %", "Risk", "Status"].map(
-                (h) => (
-                  <th
-                    key={h}
-                    className="dt-th"
-                  >
-                    {h}
-                  </th>
-                ),
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r, i) => (
-              <tr
-                key={i}
-                className="dt-tr"
-                onClick={() => open(`${r.name} — Transactions`)}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#f8fafc")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "transparent")
-                }
-              >
-                <td className="td-p-10s">
-                  {r.rank}
-                </td>
-                <td
-                  className="apk-td-mono"
+        <div className="table-wrap">
+          <table className="dt" style={{ tableLayout: "fixed", width: "100%" }}>
+            <colgroup>
+              <col style={{ width: "48px" }} />
+              <col style={{ width: "35%" }} />
+              <col style={{ width: "130px" }} />
+              <col style={{ width: "110px" }} />
+              <col style={{ width: "100px" }} />
+              <col style={{ width: "120px" }} />
+            </colgroup>
+            <thead>
+              <tr className="dt-head-row">
+                <th className="dt-th" style={{ textAlign: "center" }}>
+                  #
+                </th>
+                <th className="dt-th" style={{ textAlign: "left" }}>
+                  Package Name
+                </th>
+                <th className="dt-th" style={{ textAlign: "center" }}>
+                  Type
+                </th>
+                <th
+                  className="dt-th"
+                  style={{ textAlign: "right", paddingRight: 24 }}
                 >
-                  {r.name}
-                </td>
-                <td className="apk-td-p10">
-                  <Badge
-                    color={
-                      r.type === "Blocked Apps"
-                        ? GREEN
-                        : r.type === "Clean"
-                          ? BLUE
-                          : r.type === "Specified"
-                            ? AMBER
-                            : ROSE
-                    }
-                  >
-                    {r.type}
-                  </Badge>
-                </td>
-                <td className="td-p-blue">
-                  {r.share}%
-                </td>
-                <td className="apk-td-p10">
-                  <Badge color={RISK_COLORS[r.risk]}>{r.risk}</Badge>
-                </td>
-                <td className="apk-td-p10">
-                  <StatusDot status={r.status} />
-                  <span
-                    className="apk-status" style={{ '--c': r.status === "active" ? GREEN : r.status === "warning" ? AMBER : ROSE }}
-                  >
-                    {r.status}
-                  </span>
-                </td>
+                  Share %
+                </th>
+                <th className="dt-th" style={{ textAlign: "center" }}>
+                  Risk
+                </th>
+                <th className="dt-th" style={{ textAlign: "center" }}>
+                  Status
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table></div>
+            </thead>
+            <tbody>
+              {rows.map((r, i) => (
+                <tr
+                  key={i}
+                  className="dt-tr"
+                  onClick={() => open(`${r.name} — Transactions`)}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "#f8fafc")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "transparent")
+                  }
+                >
+                  {/* # */}
+                  <td
+                    style={{
+                      textAlign: "center",
+                      padding: "10px 8px",
+                      color: "#94a3b8",
+                      fontSize: 13,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {r.rank}
+                  </td>
+                  {/* Package Name */}
+                  <td
+                    style={{
+                      padding: "10px 12px",
+                      fontFamily: "monospace",
+                      fontSize: 13,
+                      color: "#334155",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {r.name}
+                  </td>
+                  {/* Type */}
+                  <td style={{ textAlign: "center", padding: "10px 8px" }}>
+                    <Badge
+                      color={
+                        r.type === "Blocked Apps"
+                          ? GREEN
+                          : r.type === "Clean"
+                            ? BLUE
+                            : r.type === "Specified"
+                              ? AMBER
+                              : ROSE
+                      }
+                    >
+                      {r.type}
+                    </Badge>
+                  </td>
+                  {/* Share % */}
+                  <td
+                    style={{
+                      textAlign: "right",
+                      paddingRight: 24,
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "#1d4ed8",
+                    }}
+                  >
+                    {r.share}%
+                  </td>
+                  {/* Risk */}
+                  <td style={{ textAlign: "center", padding: "10px 8px" }}>
+                    <Badge color={RISK_COLORS[r.risk]}>{r.risk}</Badge>
+                  </td>
+                  {/* Status */}
+                  <td style={{ textAlign: "center", padding: "10px 8px" }}>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                      }}
+                    >
+                      <StatusDot status={r.status} />
+                      <span
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color:
+                            r.status === "active"
+                              ? GREEN
+                              : r.status === "warning"
+                                ? AMBER
+                                : ROSE,
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {r.status}
+                      </span>
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Card>
 
       {modal && <TransactionsModal title={modal} onClose={close} />}

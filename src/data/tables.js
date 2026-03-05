@@ -419,7 +419,7 @@ export const cleanApkPie = [
   },
 ];
 
-export const specifiedApkPie = [
+export const spoofedApkPie = [
   { name: "com.viber.voip (Viber)", value: 42.5, color: "#4e79a7" },
   { name: "com.google.android.dialer (Phone)", value: 12.2, color: "#f28e2b" },
   { name: "com.huawei.appmarket (AppGallery)", value: 9.1, color: "#e15759" },
@@ -683,7 +683,7 @@ export const cleanApkData = [
   { name: "com.google.android.googlequicksearchbox", value: 9.1 },
 ];
 
-export const specifiedApkData = [
+export const spoofedApkData = [
   { name: "com.adient.browser", value: 21.6 },
   { name: "com.yoo.android.phonehelper.lite.free", value: 12.5 },
   { name: "com.huawei.appmarket", value: 10.9 },

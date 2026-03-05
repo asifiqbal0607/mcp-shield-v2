@@ -159,6 +159,8 @@ export default function PageGeo() {
   const [modal, setModal] = useState(null);
   const open = (title) => setModal(title);
   const close = () => setModal(null);
+  const [perPageGeo, setPerPageGeo] = useState(10);
+  const geoVisible = sortedData.slice(0, perPageGeo);
 
   return (
     <div>
@@ -288,6 +290,13 @@ export default function PageGeo() {
 
         <Card>
           <SectionTitle>Country Breakdown</SectionTitle>
+          <div className="dt-entries-bar">
+            <span className="dt-entries-lbl">Show</span>
+            <select className="dt-entries-sel" value={perPageGeo} onChange={e => setPerPageGeo(Number(e.target.value))}>
+              {[10,25,50,100].map(n => <option key={n} value={n}>{n}</option>)}
+            </select>
+            <span className="dt-entries-lbl">entries</span>
+          </div>
           <div className="table-wrap"><table
           className="dt"
           >
@@ -304,7 +313,7 @@ export default function PageGeo() {
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((r, i) => (
+              {geoVisible.map((r, i) => (
                 <tr
                   key={i}
                   className="dt-tr"
@@ -350,6 +359,7 @@ export default function PageGeo() {
               ))}
             </tbody>
           </table></div>
+
         </Card>
       </div>
 

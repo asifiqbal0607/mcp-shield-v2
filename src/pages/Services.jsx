@@ -248,18 +248,14 @@ function ActionsDropdown() {
       </button>
       {open && (
         <>
-          <div
-            className="p-fixed-0"
-            onClick={() => setOpen(false)}
-          />
-          <div
-            className="svc-dropdown"
-          >
+          <div className="p-fixed-0" onClick={() => setOpen(false)} />
+          <div className="svc-dropdown">
             {ADMIN_ACTIONS.map((a, i) => (
               <button
                 key={a.label}
                 onClick={() => setOpen(false)}
-                className="svc-dropdown-item" style={{ '--c': a.color }}
+                className="svc-dropdown-item"
+                style={{ "--c": a.color }}
                 onMouseEnter={(e) =>
                   (e.currentTarget.style.background = "#f8fafc")
                 }
@@ -284,7 +280,11 @@ function PartnerActions() {
         <button
           key={a.label}
           title={a.title}
-          className="svc-action-badge" style={{ '--c': a.color, '--bg': a.label.length <= 2 ? a.color : "#fff" }}
+          className="svc-action-badge"
+          style={{
+            "--c": a.color,
+            "--bg": a.label.length <= 2 ? a.color : "#fff",
+          }}
         >
           {a.label}
         </button>
@@ -297,6 +297,7 @@ function PartnerActions() {
 
 export default function PageServices({ role = "admin", setPage }) {
   const [tab, setTab] = useState("active");
+  const [perPageSvc, setPerPageSvc] = useState(10);
 
   const isPartner = role === "partner";
   const isAdmin = role === "admin";
@@ -304,6 +305,7 @@ export default function PageServices({ role = "admin", setPage }) {
   const activeServices = svcRows.filter((r) => r.status === "active");
   const inactiveServices = svcRows.filter((r) => r.status !== "active");
   const displayed = tab === "active" ? activeServices : inactiveServices;
+  const visibleServices = displayed.slice(0, perPageSvc);
 
   const SUMMARY_STATS = [
     { label: "Total Services", value: svcRows.length, color: "#2563eb" },
@@ -364,23 +366,14 @@ export default function PageServices({ role = "admin", setPage }) {
       case "sr":
         return <span className="txt-muted">{idx + 1}</span>;
       case "name":
-        return (
-          <span className="txt-label-md">
-            {row.name}
-          </span>
-        );
+        return <span className="txt-label-md">{row.name}</span>;
       case "serviceId":
-        return (
-          <span
-            className="txt-mono"
-          >
-            {row.serviceId}
-          </span>
-        );
+        return <span className="txt-mono">{row.serviceId}</span>;
       case "status":
         return (
           <span
-            className="svc-status-badge" style={{ '--c': row.status === "active" ? "#16a34a" : "#f59e0b" }}
+            className="svc-status-badge"
+            style={{ "--c": row.status === "active" ? "#16a34a" : "#f59e0b" }}
           >
             {row.status.toUpperCase()}
           </span>
@@ -394,53 +387,25 @@ export default function PageServices({ role = "admin", setPage }) {
       case "mno":
         return <span className="txt-muted">{row.mno || "--"}</span>;
       case "carrierGradeNat":
-        return (
-          <span className="txt-muted">
-            {row.carrierGradeNat || "--"}
-          </span>
-        );
+        return <span className="txt-muted">{row.carrierGradeNat || "--"}</span>;
       case "shieldMode":
         return row.shieldMode && row.shieldMode !== "--" ? (
-          <span
-            className="svc-pill"
-          >
-            {row.shieldMode}
-          </span>
+          <span className="svc-pill">{row.shieldMode}</span>
         ) : (
           <span className="txt-muted">--</span>
         );
       case "headerEnrichedFlow":
         return (
-          <span className="txt-muted">
-            {row.headerEnrichedFlow || "--"}
-          </span>
+          <span className="txt-muted">{row.headerEnrichedFlow || "--"}</span>
         );
       case "hePaymentFlow":
-        return (
-          <span className="txt-muted">{row.hePaymentFlow || "--"}</span>
-        );
+        return <span className="txt-muted">{row.hePaymentFlow || "--"}</span>;
       case "wifiPaymentFlow":
-        return (
-          <span className="txt-muted">
-            {row.wifiPaymentFlow || "--"}
-          </span>
-        );
+        return <span className="txt-muted">{row.wifiPaymentFlow || "--"}</span>;
       case "serviceCreated":
-        return (
-          <span
-            className="svc-code"
-          >
-            {row.serviceCreated}
-          </span>
-        );
+        return <span className="svc-code">{row.serviceCreated}</span>;
       case "lastUpdate":
-        return (
-          <span
-            className="svc-code"
-          >
-            {row.lastUpdate}
-          </span>
-        );
+        return <span className="svc-code">{row.lastUpdate}</span>;
       case "actions":
         return isAdmin ? <ActionsDropdown /> : <PartnerActions />;
       default:
@@ -453,19 +418,15 @@ export default function PageServices({ role = "admin", setPage }) {
       {/* Summary stats */}
       <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map(({ label, value, color }) => (
-          <Card
-            key={label}
-            className="stat-top-4" style={{ '--c': color }}
-          >
+          <Card key={label} className="stat-top-4" style={{ "--c": color }}>
             <div
               className="kpi-stat"
-              className="dyn-color" style={{ '--c': color }}
+              className="dyn-color"
+              style={{ "--c": color }}
             >
               {value}
             </div>
-            <div className="stat-sublabel">
-              {label}
-            </div>
+            <div className="stat-sublabel">{label}</div>
           </Card>
         ))}
       </div>
@@ -479,7 +440,12 @@ export default function PageServices({ role = "admin", setPage }) {
               <XAxis dataKey="d" />
               <YAxis />
               <Tooltip />
-              <Line dataKey="visits" stroke="#22c55e" strokeWidth={2} />
+              <Line
+                dataKey="visits"
+                stroke="#22c55e"
+                strokeWidth={2}
+                dot={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </Card>
@@ -502,15 +468,31 @@ export default function PageServices({ role = "admin", setPage }) {
 
       {/* Service Registry */}
       <Card>
-        <div
-          className="toolbar"
-        >
+        <div className="toolbar">
           <div className="f-gap-14">
             <SectionTitle>Service Registration</SectionTitle>
+            <div className="dt-entries-bar">
+              <span className="dt-entries-lbl">Show</span>
+              <select
+                className="dt-entries-sel"
+                value={perPageSvc}
+                onChange={(e) => {
+                  setPerPageSvc(Number(e.target.value));
+                }}
+              >
+                {[10, 25, 50, 100].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
+              </select>
+              <span className="dt-entries-lbl">entries</span>
+            </div>
             {isPartner && (
               <button
                 onClick={() => setPage && setPage("onboarding")}
-                className="svc-add-btn" style={{ '--c': T }}
+                className="svc-add-btn"
+                style={{ "--c": T }}
                 onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
               >
@@ -533,15 +515,21 @@ export default function PageServices({ role = "admin", setPage }) {
               return (
                 <button
                   key={key}
-                  onClick={() => setTab(key)}
-                  className={`svc-tab-btn ${isOn ? "on" : "off"}`} style={{ '--c': `#${textHex}` }}
+                  onClick={() => {
+                    setPerPageSvc(10);
+                    setTab(key);
+                  }}
+                  className={`svc-tab-btn ${isOn ? "on" : "off"}`}
+                  style={{ "--c": `#${textHex}` }}
                 >
                   <span
-                    className={`svc-tab-dot ${isOn ? "on" : "off"}`} style={{ '--c': `#${dotHex}` }}
+                    className={`svc-tab-dot ${isOn ? "on" : "off"}`}
+                    style={{ "--c": `#${dotHex}` }}
                   />
                   {label}
                   <span
-                    className={`svc-tab-pill ${isOn ? "on" : "off"}`} style={{ '--bg': `#${bgHex}`, '--c': `#${textHex}` }}
+                    className={`svc-tab-pill ${isOn ? "on" : "off"}`}
+                    style={{ "--bg": `#${bgHex}`, "--c": `#${textHex}` }}
                   >
                     {count}
                   </span>
@@ -551,16 +539,12 @@ export default function PageServices({ role = "admin", setPage }) {
           </div>
         </div>
 
-        <div className="table-wrap"><table
-          className="dt dt-lg"
-          >
+        <div className="table-wrap">
+          <table className="dt dt-lg">
             <thead>
               <tr className="dt-head-row">
                 {visibleCols.map((col) => (
-                  <th
-                    key={col.key}
-                    className="dt-th"
-                  >
+                  <th key={col.key} className="dt-th">
                     {col.label}
                   </th>
                 ))}
@@ -569,15 +553,12 @@ export default function PageServices({ role = "admin", setPage }) {
             <tbody>
               {displayed.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={visibleCols.length}
-                    className="dt-empty"
-                  >
+                  <td colSpan={visibleCols.length} className="dt-empty">
                     No {tab} services found.
                   </td>
                 </tr>
               ) : (
-                displayed.map((row, idx) => (
+                visibleServices.map((row, idx) => (
                   <tr
                     key={idx}
                     className="dt-tr-plain"
@@ -589,10 +570,7 @@ export default function PageServices({ role = "admin", setPage }) {
                     }
                   >
                     {visibleCols.map((col) => (
-                      <td
-                        key={col.key}
-                        className="td-svc"
-                      >
+                      <td key={col.key} className="td-svc">
                         {renderCell(col, row, idx)}
                       </td>
                     ))}
@@ -600,7 +578,8 @@ export default function PageServices({ role = "admin", setPage }) {
                 ))
               )}
             </tbody>
-          </table></div>
+          </table>
+        </div>
       </Card>
     </div>
   );

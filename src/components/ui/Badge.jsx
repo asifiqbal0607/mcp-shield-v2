@@ -1,4 +1,4 @@
-import { BLUE } from '../../constants/colors';
+import { BLUE } from "../../constants/colors";
 
 /**
  * Badge — a small pill-shaped label.
@@ -13,7 +13,7 @@ export default function Badge({ children, color = BLUE }) {
         color,
         fontSize: 10,
         fontWeight: 700,
-        padding: '3px 8px',
+        padding: "3px 8px",
         borderRadius: 20,
         border: `1px solid ${color}30`,
       }}

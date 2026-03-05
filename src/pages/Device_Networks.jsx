@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, SectionTitle, TransactionsModal } from "../components/ui";
 import { SLATE, PALETTE } from "../constants/colors";
@@ -32,50 +32,252 @@ function renderLabel({ cx, cy, midAngle, outerRadius, name, percent }) {
   );
 }
 
+// ── Chart Context Menu ────────────────────────────────────────────────────────
+function ChartContextMenu({ containerRef, data, title }) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const getSvgEl = () => containerRef.current?.querySelector("svg");
+
+  const getSvgAsCanvas = () =>
+    new Promise((resolve) => {
+      const svg = getSvgEl();
+      if (!svg) return resolve(null);
+      const svgStr = new XMLSerializer().serializeToString(svg);
+      const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = svg.clientWidth || 500;
+        canvas.height = svg.clientHeight || 300;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(url);
+        resolve(canvas);
+      };
+      img.src = url;
+    });
+
+  const viewFullScreen = () => {
+    const el = containerRef.current;
+    if (el?.requestFullscreen) el.requestFullscreen();
+    setOpen(false);
+  };
+
+  const printChart = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const win = window.open("", "_blank");
+    win.document.write(
+      `<html><head><title>${title || "chart"}</title></head><body style="margin:0">` +
+        `<img src="${canvas.toDataURL("image/png")}" style="width:100%" onload="window.print();window.close()" /></body></html>`,
+    );
+    win.document.close();
+    setOpen(false);
+  };
+
+  const downloadPNG = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `${title || "chart"}.png`;
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadJPEG = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.download = `${title || "chart"}.jpg`;
+    a.href = canvas.toDataURL("image/jpeg", 0.92);
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadPDF = async () => {
+    const canvas = await getSvgAsCanvas();
+    if (!canvas) return;
+    const win = window.open("", "_blank");
+    win.document.write(
+      `<html><head><title>${title || "chart"}</title></head><body style="margin:0">` +
+        `<img src="${canvas.toDataURL("image/png")}" style="width:100%" onload="window.print();window.close()" /></body></html>`,
+    );
+    win.document.close();
+    setOpen(false);
+  };
+
+  const downloadSVG = () => {
+    const svg = getSvgEl();
+    if (!svg) return;
+    const svgStr = new XMLSerializer().serializeToString(svg);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([svgStr], { type: "image/svg+xml" }));
+    a.download = `${title || "chart"}.svg`;
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadCSV = () => {
+    if (!data?.length) return;
+    const csv = [
+      "name,value",
+      ...data.map((d) => `"${d.name}",${d.value}`),
+    ].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+    a.download = `${title || "chart"}.csv`;
+    a.click();
+    setOpen(false);
+  };
+
+  const downloadXLS = () => {
+    if (!data?.length) return;
+    const tsv = [
+      "name\tvalue",
+      ...data.map((d) => `${d.name}\t${d.value}`),
+    ].join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(
+      new Blob([tsv], { type: "application/vnd.ms-excel" }),
+    );
+    a.download = `${title || "chart"}.xls`;
+    a.click();
+    setOpen(false);
+  };
+
+  const MENU_ITEMS = [
+    { label: "View in full screen", action: viewFullScreen },
+    { label: "Print chart", action: printChart },
+    null,
+    { label: "Download PNG image", action: downloadPNG },
+    { label: "Download JPEG image", action: downloadJPEG },
+    { label: "Download PDF document", action: downloadPDF },
+    { label: "Download SVG vector image", action: downloadSVG },
+    null,
+    { label: "Download CSV", action: downloadCSV },
+    { label: "Download XLS", action: downloadXLS },
+  ];
+
+  return (
+    <div ref={menuRef} style={{ position: "relative" }}>
+      <button className="geo-collapse-btn" onClick={() => setOpen((p) => !p)}>
+        ≡
+      </button>
+      {open && (
+        <div
+          style={{
+            position: "absolute",
+            right: 0,
+            top: "calc(100% + 4px)",
+            zIndex: 200,
+            background: "#fff",
+            border: "1px solid #e2e8f0",
+            borderRadius: 8,
+            boxShadow: "0 8px 24px rgba(0,0,0,.12)",
+            minWidth: 210,
+            padding: "4px 0",
+          }}
+        >
+          {MENU_ITEMS.map((item, i) =>
+            item === null ? (
+              <div
+                key={i}
+                style={{ borderTop: "1px solid #f1f5f9", margin: "4px 0" }}
+              />
+            ) : (
+              <button
+                key={i}
+                onClick={item.action}
+                style={{
+                  display: "block",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "7px 16px",
+                  background: "none",
+                  border: "none",
+                  fontSize: 13,
+                  color: "#334155",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "#f1f5f9")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "none")
+                }
+              >
+                {item.label}
+              </button>
+            ),
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Pie Card ──────────────────────────────────────────────────────────────────
+const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
+
 function StatPieCard({ title, data, onSliceClick }) {
+  const containerRef = useRef(null);
+
   return (
     <Card>
-      <div
-        className="ov-chart-header"
-      >
+      <div className="ov-chart-header">
         <SectionTitle>{title}</SectionTitle>
-        <button
-          className="geo-collapse-btn"
-        >
-          ≡
-        </button>
+        <ChartContextMenu
+          containerRef={containerRef}
+          data={data}
+          title={title}
+        />
       </div>
-      <ResponsiveContainer width="100%" height={200}>
-        <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-            label={renderLabel}
-            labelLine={true}
-            onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
-            className="p-rel clickable"
-          >
-            {data.map((_, i) => (
-              <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-            ))}
-          </Pie>
-          <Tooltip contentStyle={CHART_TOOLTIP} />
-        </PieChart>
-      </ResponsiveContainer>
-      <div
-        className="stat-hint-center"
-      >
+      <div ref={containerRef}>
+        <ResponsiveContainer width="100%" height={200}>
+          <PieChart>
+            <Pie
+              data={data}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label={renderLabel}
+              labelLine={true}
+              onClick={(entry) => onSliceClick && onSliceClick(entry.name)}
+              className="p-rel clickable"
+            >
+              {data.map((_, i) => (
+                <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+              ))}
+            </Pie>
+            <Tooltip contentStyle={CHART_TOOLTIP} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="stat-hint-center">
         Click a slice to view transactions ↗
       </div>
     </Card>
   );
 }
 
-const CHART_TOOLTIP = { fontSize: 11, borderRadius: 8 };
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function PageDevice() {
   const [modal, setModal] = useState(null);
   const open = (title) => setModal(title);
@@ -88,12 +290,6 @@ export default function PageDevice() {
       color: "#1d4ed8",
       clickable: true,
     },
-    // {
-    //   label: "Mobile Share",
-    //   value: "91.4%",
-    //   color: "#22c55e",
-    //   clickable: false,
-    // },
     { label: "Top OS", value: "Android", color: "#f59e0b", clickable: true },
     {
       label: "Top Browser",
@@ -113,7 +309,8 @@ export default function PageDevice() {
             onClick={
               s.clickable ? () => open(`${s.label} — Transactions`) : undefined
             }
-            className={s.clickable ? "stat-card-click" : "stat-card-click-opt"} style={{ '--c': s.color }}
+            className={s.clickable ? "stat-card-click" : "stat-card-click-opt"}
+            style={{ "--c": s.color }}
             onMouseEnter={
               s.clickable
                 ? (e) =>
@@ -127,20 +324,12 @@ export default function PageDevice() {
                 : undefined
             }
           >
-            <div className="kpi-stat"
-              className="dyn-color" style={{ '--c': s.color }}
-            >
+            <div className="dyn-color" style={{ "--c": s.color }}>
               {s.value}
             </div>
-            <div
-              className="stat-lbl-12"
-            >
-              {s.label}
-            </div>
+            <div className="stat-lbl-12">{s.label}</div>
             {s.clickable && (
-              <div className="stat-hint">
-                View Transactions ↗
-              </div>
+              <div className="stat-hint">View Transactions ↗</div>
             )}
           </Card>
         ))}
@@ -173,6 +362,7 @@ export default function PageDevice() {
           onSliceClick={(name) => open(`${name} — Transactions`)}
         />
       </div>
+
       {modal && <TransactionsModal title={modal} onClose={close} />}
     </div>
   );

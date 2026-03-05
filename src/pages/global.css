@@ -1008,10 +1008,9 @@ table tbody td {
 
 .dt-lg {
   width: 100%;
-  min-width: 900px;
   border-collapse: collapse;
   font-size: 13px;
-  table-layout: auto;
+  table-layout: fixed;
 }
 
 .dt thead tr {
@@ -7373,76 +7372,13 @@ table tbody td {
 .onb-mb-16 {
   margin-bottom: 16px;
 }
-
 /* ══════════════════════════════════════════════════════════════════════════
    GRID TOP-10 — Show more / Show less footer
 ══════════════════════════════════════════════════════════════════════════ */
-.grid-show-more {
-  display: flex;
-  justify-content: center;
-  padding: 10px 0 4px;
-  border-top: 1px solid #f1f5f9;
-  margin-top: 2px;
-}
-
-.show-more-btn {
-  padding: 5px 20px;
-  border-radius: 20px;
-  border: 1.5px solid #e2e8f0;
-  background: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  color: #475569;
-  cursor: pointer;
-  font-family: var(--font);
-  transition: background .15s, border-color .15s, color .15s;
-}
-
-.show-more-btn:hover {
-  background: #f0f7ff;
-  border-color: #93c5fd;
-  color: #1d4ed8;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════
-   GRID — Show [N] entries selector
-══════════════════════════════════════════════════════════════════════════ */
-.dt-entries-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 0 8px;
-}
-
-.dt-entries-lbl {
-  font-size: 13px;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.dt-entries-sel {
-  padding: 3px 8px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 6px;
-  font-size: 13px;
-  color: #1e293b;
-  background: #fff;
-  cursor: pointer;
-  outline: none;
-  font-family: var(--font);
-}
-
-.dt-entries-sel:focus {
-  border-color: var(--ac);
-}
-
-/* ── Reporting — actions column ─────────────────────────────────────────── */
-.td-actions-wide {
-  padding: 6px 10px;
-  white-space: nowrap;
-  min-width: 210px;
-}
-
-.td-actions-wide .f-gap-6 {
-  flex-wrap: nowrap;
-}
+.grid-show-more  { display: flex; justify-content: center; padding: 10px 0 4px;
+                   border-top: 1px solid #f1f5f9; margin-top: 2px; }
+.show-more-btn   { padding: 5px 20px; border-radius: 20px; border: 1.5px solid #e2e8f0;
+                   background: #fff; font-size: 11px; font-weight: 700;
+                   color: #475569; cursor: pointer; font-family: var(--font);
+                   transition: background .15s, border-color .15s, color .15s; }
+.show-more-btn:hover { background: #f0f7ff; border-color: #93c5fd; color: #1d4ed8; }

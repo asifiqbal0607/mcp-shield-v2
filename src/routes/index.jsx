@@ -8,8 +8,8 @@ import PageDevice from "../pages/Device_Networks";
 import PageGeo from "../pages/Geo";
 import PageOnboarding from "../pages/Onboarding";
 import PageUserOnboarding from "../pages/Onboarding_users.jsx";
-import PagePartners from "../pages/Partners";
 import PageStub from "../pages/Stub";
+import PagePartners from "../pages/Partners";
 
 const ALIASES = {
   "users-all": "users",
@@ -27,7 +27,6 @@ export default function PageRouter({ page, role = "admin", setPage }) {
   if (key === "onboarding") return <PageOnboarding setPage={setPage} />;
   if (key === "user-onboarding")
     return <PageUserOnboarding setPage={setPage} />;
-  if (key === "partners") return <PagePartners />;
 
   const ROUTES = {
     overview: <PageOverview />,
@@ -36,6 +35,7 @@ export default function PageRouter({ page, role = "admin", setPage }) {
     apks: <PageAPKs />,
     device: <PageDevice />,
     geo: <PageGeo />,
+    partners: <PagePartners />,
     audit: <PageStub title="Audit Log" icon="📋" />,
     docs: <PageStub title="Documentation" icon="📖" />,
     sandbox: <PageStub title="Sandbox Environment" icon="🧪" />,
