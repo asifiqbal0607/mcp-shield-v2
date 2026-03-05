@@ -226,48 +226,60 @@ const PARTNER_ACTIONS = [
 ];
 
 const ADMIN_ACTIONS = [
-  { label: "Solution", color: "#6c757d" },
-  { label: "Map Service", color: "#17a2b8" },
-  { label: "Dashboard", color: "#6c757d" },
-  { label: "Edit", color: "#0d6efd" },
-  { label: "IP", color: "#6c757d" },
-  { label: "Clone Service", color: "#0d9488" },
-  { label: "Custom Variables", color: "#0d9488" },
-  { label: "Update Summary", color: "#6c757d" },
+  { group: "Service" },
+  { label: "Solution", icon: "🔧", color: "#6c757d" },
+  { label: "Map Service", icon: "🗺️", color: "#17a2b8" },
+  { label: "Dashboard", icon: "📊", color: "#6c757d" },
+  { divider: true },
+  { group: "Management" },
+  { label: "Edit", icon: "✏️", color: "#0d6efd" },
+  { label: "IP", icon: "🌐", color: "#6c757d" },
+  { label: "Clone Service", icon: "📋", color: "#0d9488" },
+  { divider: true },
+  { group: "Data" },
+  { label: "Custom Variables", icon: "⚙️", color: "#0d9488" },
+  { label: "Update Summary", icon: "📝", color: "#6c757d" },
 ];
 
-function ActionsDropdown() {
-  const [open, setOpen] = useState(false);
+function ActionsDropdown({ rowId, openRow, setOpenRow }) {
+  const open = openRow === rowId;
+
   return (
     <div className="p-rel-ib">
       <button
-        onClick={() => setOpen((o) => !o)}
-        className={`svc-ver-btn ${open ? "open" : "closed"}`}
+        onClick={() => setOpenRow(open ? null : rowId)}
+        className="svc-ver-btn"
       >
         ···
       </button>
+
       {open && (
-        <>
-          <div className="p-fixed-0" onClick={() => setOpen(false)} />
-          <div className="svc-dropdown">
-            {ADMIN_ACTIONS.map((a, i) => (
+        <div className="svc-adm-dropdown">
+          {ADMIN_ACTIONS.map((a, i) => {
+            if (a.divider) return <div key={i} className="svc-adm-divider" />;
+            if (a.group)
+              return (
+                <div key={i} className="svc-adm-group">
+                  {a.group}
+                </div>
+              );
+
+            return (
               <button
                 key={a.label}
-                onClick={() => setOpen(false)}
-                className="svc-dropdown-item"
-                style={{ "--c": a.color }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#f8fafc")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "transparent")
-                }
+                onClick={() => setOpenRow(null)}
+                className="svc-adm-item"
               >
-                {a.label}
+                <span className="svc-adm-icon" style={{ "--c": a.color }}>
+                  {a.icon}
+                </span>
+                <span className="svc-adm-label" style={{ "--c": a.color }}>
+                  {a.label}
+                </span>
               </button>
-            ))}
-          </div>
-        </>
+            );
+          })}
+        </div>
       )}
     </div>
   );
@@ -298,6 +310,7 @@ function PartnerActions() {
 export default function PageServices({ role = "admin", setPage }) {
   const [tab, setTab] = useState("active");
   const [perPageSvc, setPerPageSvc] = useState(10);
+  const [openRow, setOpenRow] = useState(null);
 
   const isPartner = role === "partner";
   const isAdmin = role === "admin";
@@ -366,9 +379,9 @@ export default function PageServices({ role = "admin", setPage }) {
       case "sr":
         return <span className="txt-muted">{idx + 1}</span>;
       case "name":
-        return <span className="txt-label-md">{row.name}</span>;
+        return <div className="text-flow"><span className="txt-label-md">{row.name}</span></div>;
       case "serviceId":
-        return <span className="txt-mono">{row.serviceId}</span>;
+        return <div className="text-flow"><span className="txt-mono">{row.serviceId}</span></div>;
       case "status":
         return (
           <span
@@ -381,13 +394,13 @@ export default function PageServices({ role = "admin", setPage }) {
       case "client":
         return <span className="txt-body">{row.client || "--"}</span>;
       case "vsBrand":
-        return <span className="txt-muted">{row.vsBrand || "--"}</span>;
+        return <span className="svc-dash">{row.vsBrand || "--"}</span>;
       case "serviceType":
-        return <span className="txt-muted">{row.type || "--"}</span>;
+        return <span className="svc-dash">{row.type || "--"}</span>;
       case "mno":
-        return <span className="txt-muted">{row.mno || "--"}</span>;
+        return <span className="svc-dash">{row.mno || "--"}</span>;
       case "carrierGradeNat":
-        return <span className="txt-muted">{row.carrierGradeNat || "--"}</span>;
+        return <span className="svc-dash">{row.carrierGradeNat || "--"}</span>;
       case "shieldMode":
         return row.shieldMode && row.shieldMode !== "--" ? (
           <span className="svc-pill">{row.shieldMode}</span>
@@ -396,18 +409,27 @@ export default function PageServices({ role = "admin", setPage }) {
         );
       case "headerEnrichedFlow":
         return (
-          <span className="txt-muted">{row.headerEnrichedFlow || "--"}</span>
+          <span className="svc-dash">{row.headerEnrichedFlow || "--"}</span>
         );
       case "hePaymentFlow":
-        return <span className="txt-muted">{row.hePaymentFlow || "--"}</span>;
+        return <span className="svc-dash">{row.hePaymentFlow || "--"}</span>;
       case "wifiPaymentFlow":
-        return <span className="txt-muted">{row.wifiPaymentFlow || "--"}</span>;
+        return <span className="svc-dash">{row.wifiPaymentFlow || "--"}</span>;
       case "serviceCreated":
         return <span className="svc-code">{row.serviceCreated}</span>;
       case "lastUpdate":
         return <span className="svc-code">{row.lastUpdate}</span>;
       case "actions":
-        return isAdmin ? <ActionsDropdown /> : <PartnerActions />;
+      case "actions":
+        return isAdmin ? (
+          <ActionsDropdown
+            rowId={row.id}
+            openRow={openRow}
+            setOpenRow={setOpenRow}
+          />
+        ) : (
+          <PartnerActions />
+        );
       default:
         return "--";
     }
@@ -419,11 +441,7 @@ export default function PageServices({ role = "admin", setPage }) {
       <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map(({ label, value, color }) => (
           <Card key={label} className="stat-top-4" style={{ "--c": color }}>
-            <div
-              className="kpi-stat"
-              className="dyn-color"
-              style={{ "--c": color }}
-            >
+            <div className="kpi-stat dyn-color" style={{ "--c": color }}>
               {value}
             </div>
             <div className="stat-sublabel">{label}</div>
@@ -468,17 +486,15 @@ export default function PageServices({ role = "admin", setPage }) {
 
       {/* Service Registry */}
       <Card>
-        <div className="toolbar">
-          <div className="f-gap-14">
+        <div className="svc-toolbar">
+          <div className="svc-toolbar-left">
             <SectionTitle>Service Registration</SectionTitle>
             <div className="dt-entries-bar">
               <span className="dt-entries-lbl">Show</span>
               <select
                 className="dt-entries-sel"
                 value={perPageSvc}
-                onChange={(e) => {
-                  setPerPageSvc(Number(e.target.value));
-                }}
+                onChange={(e) => setPerPageSvc(Number(e.target.value))}
               >
                 {[10, 25, 50, 100].map((n) => (
                   <option key={n} value={n}>
@@ -501,11 +517,11 @@ export default function PageServices({ role = "admin", setPage }) {
             )}
           </div>
 
-          <div className="f-gap-0">
+          <div className="svc-toolbar-right">
             {[
-              ["active", GREEN, "22c55e", "dcfce7", "16a34a"],
-              ["inactive", AMBER, "f59e0b", "fef3c7", "d97706"],
-            ].map(([key, borderColor, dotHex, bgHex, textHex]) => {
+              ["active", "22c55e", "dcfce7", "16a34a"],
+              ["inactive", "f59e0b", "fef3c7", "d97706"],
+            ].map(([key, dotHex, bgHex, textHex]) => {
               const isOn = tab === key;
               const count =
                 key === "active"
@@ -539,10 +555,35 @@ export default function PageServices({ role = "admin", setPage }) {
           </div>
         </div>
 
-        <div className="table-wrap">
-          <table className="dt dt-lg">
+        <div className="svc-tbl-wrap">
+          <table className="svc-tbl">
+            <colgroup>
+              {visibleCols.map((col) => {
+                const colClassMap = {
+                  sr: "svc-col-sr",
+                  name: "svc-col-name",
+                  serviceId: "svc-col-id",
+                  status: "svc-col-status",
+                  client: "svc-col-client",
+                  vsBrand: "svc-col-vsbrand",
+                  serviceType: "svc-col-type",
+                  mno: "svc-col-mno",
+                  carrierGradeNat: "svc-col-cgnat",
+                  shieldMode: "svc-col-shield",
+                  headerEnrichedFlow: "svc-col-hef",
+                  hePaymentFlow: "svc-col-hepay",
+                  wifiPaymentFlow: "svc-col-wifipay",
+                  serviceCreated: "svc-col-created",
+                  lastUpdate: "svc-col-updated",
+                  actions: "svc-col-actions",
+                };
+                return (
+                  <col key={col.key} className={colClassMap[col.key] || ""} />
+                );
+              })}
+            </colgroup>
             <thead>
-              <tr className="dt-head-row">
+              <tr>
                 {visibleCols.map((col) => (
                   <th key={col.key} className="dt-th">
                     {col.label}
@@ -559,18 +600,12 @@ export default function PageServices({ role = "admin", setPage }) {
                 </tr>
               ) : (
                 visibleServices.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="dt-tr-plain"
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f8fafc")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
-                  >
+                  <tr key={idx}>
                     {visibleCols.map((col) => (
-                      <td key={col.key} className="td-svc">
+                      <td
+                        key={col.key}
+                        className={col.key === "sr" ? "svc-td-sr" : ""}
+                      >
                         {renderCell(col, row, idx)}
                       </td>
                     ))}

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { AddUserModal } from "./Onboarding_users";
 import {
   ResponsiveContainer,
   LineChart,
@@ -151,36 +152,21 @@ const MORE_ACTIONS = [
 function Modal({ title, subtitle, onClose, children, width = 520 }) {
   return (
     <>
+      <div onClick={onClose} className="usr-backdrop" />
       <div
-        onClick={onClose}
-        className="usr-backdrop"
-      />
-      <div
-        className="usr-modal-box" style={{ '--modal-w': `min(${width}px,95vw)` }}
+        className="usr-modal-box"
+        style={{ "--modal-w": `min(${width}px, 95vw)` }}
       >
-        <div
-          className="usr-modal-hdr"
-        >
+        <div className="usr-modal-hdr">
           <div>
-            <div className="modal-title">
-              {title}
-            </div>
-            {subtitle && (
-              <div className="modal-subtitle">
-                {subtitle}
-              </div>
-            )}
+            <div className="modal-title">{title}</div>
+            {subtitle && <div className="modal-subtitle">{subtitle}</div>}
           </div>
-          <button
-            onClick={onClose}
-            className="usr-modal-close"
-          >
+          <button onClick={onClose} className="usr-modal-close">
             ✕
           </button>
         </div>
-        <div className="modal-scroll">
-          {children}
-        </div>
+        <div className="modal-scroll">{children}</div>
       </div>
     </>
   );
@@ -189,14 +175,8 @@ function Modal({ title, subtitle, onClose, children, width = 520 }) {
 function Field({ label, value, mono }) {
   return (
     <div className="mb-14">
-      <div
-        className="txt-section-hd"
-      >
-        {label}
-      </div>
-      <div
-        className={mono ? "usr-field-val-mono" : "usr-field-val"}
-      >
+      <div className="txt-section-hd">{label}</div>
+      <div className={mono ? "usr-field-val-mono" : "usr-field-val"}>
         {value || "—"}
       </div>
     </div>
@@ -206,11 +186,7 @@ function Field({ label, value, mono }) {
 function FormInput({ label, defaultValue, type = "text" }) {
   return (
     <div className="mb-14">
-      <label
-        className="usr-field-label"
-      >
-        {label}
-      </label>
+      <label className="usr-field-label">{label}</label>
       <input
         type={type}
         defaultValue={defaultValue}
@@ -225,11 +201,7 @@ function FormInput({ label, defaultValue, type = "text" }) {
 function FormSelect({ label, defaultValue, options }) {
   return (
     <div className="mb-14">
-      <label
-        className="usr-field-label"
-      >
-        {label}
-      </label>
+      <label className="usr-field-label">{label}</label>
       <select
         defaultValue={defaultValue}
         className="usr-input-white"
@@ -248,10 +220,7 @@ function FormSelect({ label, defaultValue, options }) {
 
 function ActionBtn({ label, onClick }) {
   return (
-    <button
-      onClick={onClick}
-      className="usr-btn-save" style={{ '--c': T }}
-    >
+    <button onClick={onClick} className="usr-btn-save" style={{ "--c": T }}>
       {label}
     </button>
   );
@@ -259,10 +228,7 @@ function ActionBtn({ label, onClick }) {
 
 function CancelBtn({ onClick }) {
   return (
-    <button
-      onClick={onClick}
-      className="usr-btn-cancel"
-    >
+    <button onClick={onClick} className="usr-btn-cancel">
       Cancel
     </button>
   );
@@ -276,21 +242,30 @@ function ViewModal({ user, onClose }) {
       subtitle={`Viewing profile for ${user.name}`}
       onClose={onClose}
     >
-      <div
-        className="usr-preview-row"
-      >
+      <div className="usr-preview-row">
         <div
-          className="usr-avatar-lg" style={{ '--bg': TYPE_COLORS[user.role] ? `${TYPE_COLORS[user.role]}22` : "#e2e8f0", '--bdr': TYPE_COLORS[user.role] || "#cbd5e1", '--c': TYPE_COLORS[user.role] || "#334155" }}
+          className="usr-avatar-lg"
+          style={{
+            "--bg": TYPE_COLORS[user.role]
+              ? `${TYPE_COLORS[user.role]}22`
+              : "#e2e8f0",
+            "--bdr": TYPE_COLORS[user.role] || "#cbd5e1",
+            "--c": TYPE_COLORS[user.role] || "#334155",
+          }}
         >
           {user.name[0]}
         </div>
         <div>
-          <div className="modal-title">
-            {user.name}
-          </div>
+          <div className="modal-title">{user.name}</div>
           <div className="txt-body">{user.email}</div>
           <span
-            className="usr-role-badge" style={{ '--bg': TYPE_COLORS[user.role] ? `${TYPE_COLORS[user.role]}20` : "#f1f5f9", '--c': TYPE_COLORS[user.role] || "#64748b" }}
+            className="usr-role-badge"
+            style={{
+              "--bg": TYPE_COLORS[user.role]
+                ? `${TYPE_COLORS[user.role]}20`
+                : "#f1f5f9",
+              "--c": TYPE_COLORS[user.role] || "#64748b",
+            }}
           >
             {user.role}
           </span>
@@ -302,9 +277,7 @@ function ViewModal({ user, onClose }) {
         <Field label="Last Login" value={user.lastLogin} />
         <Field label="Status" value={user.status} />
       </div>
-      <div
-        className="mt-8-end"
-      >
+      <div className="mt-8-end">
         <CancelBtn onClick={onClose} />
       </div>
     </Modal>
@@ -319,9 +292,7 @@ function EditModal({ user, onSave, onClose }) {
       subtitle={`Editing ${user.name}`}
       onClose={onClose}
     >
-      <div
-        className="usr-grid-2"
-      >
+      <div className="usr-grid-2">
         <FormInput label="Full Name" defaultValue={user.name} />
         <FormInput label="Email" defaultValue={user.email} type="email" />
         <FormSelect
@@ -336,9 +307,7 @@ function EditModal({ user, onSave, onClose }) {
           options={["active", "warning", "blocked"]}
         />
       </div>
-      <div
-        className="usr-action-row-end"
-      >
+      <div className="usr-action-row-end">
         <CancelBtn onClick={onClose} />
         <ActionBtn
           label="Save Changes"
@@ -360,30 +329,109 @@ function LoginAsModal({ user, onClose }) {
       title="Login As User"
       subtitle="Impersonate this user account"
       onClose={onClose}
-      width={440}
+      width={460}
     >
       {!confirmed ? (
         <>
+          {/* Warning banner */}
           <div
-            className="alert-warning"
+            style={{
+              background: "#fffbeb",
+              border: "1px solid #fde68a",
+              borderRadius: 8,
+              padding: "12px 14px",
+              marginBottom: 18,
+              width: "100%",
+              boxSizing: "border-box",
+              overflow: "hidden",
+            }}
           >
             <div
-              className="alert-title dyn-color" style={{ '--c': "#92400e" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                marginBottom: 5,
+              }}
             >
-              ⚠️ Admin Impersonation
+              <span style={{ fontSize: 14 }}>⚠️</span>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "#92400e" }}>
+                Admin Impersonation
+              </span>
             </div>
-            <div className="alert-body">
+            <div
+              style={{
+                fontSize: 13,
+                color: "#78350f",
+                lineHeight: 1.55,
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+                whiteSpace: "normal",
+              }}
+            >
               You are about to log in as <strong>{user.name}</strong>. All
               actions performed will be under their account. This session will
               be logged for auditing purposes.
             </div>
           </div>
-          <Field label="User" value={user.name} />
-          <Field label="Email" value={user.email} />
-          <Field label="Role" value={user.role} />
-          <div
-            className="usr-action-row-end"
-          >
+
+          {/* Fields */}
+          <div style={{ marginBottom: 12 }}>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#94a3b8",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                marginBottom: 3,
+              }}
+            >
+              User
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#1e293b" }}>
+              {user.name || "—"}
+            </div>
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#94a3b8",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                marginBottom: 3,
+              }}
+            >
+              Email
+            </div>
+            <div
+              style={{ fontSize: 14, color: "#334155", wordBreak: "break-all" }}
+            >
+              {user.email || "—"}
+            </div>
+          </div>
+          <div style={{ marginBottom: 20 }}>
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 700,
+                color: "#94a3b8",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                marginBottom: 3,
+              }}
+            >
+              Role
+            </div>
+            <div style={{ fontSize: 14, color: "#334155" }}>
+              {user.role || "—"}
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
             <CancelBtn onClick={onClose} />
             <ActionBtn
               label="Confirm & Login As"
@@ -392,14 +440,26 @@ function LoginAsModal({ user, onClose }) {
           </div>
         </>
       ) : (
-        <div className="txt-center-20">
-          <div className="txt-img-icon">🔑</div>
+        <div style={{ textAlign: "center", padding: "20px 0" }}>
+          <div style={{ fontSize: 36, marginBottom: 10 }}>🔑</div>
           <div
-            className="usr-modal-title"
+            style={{
+              fontSize: 15,
+              fontWeight: 700,
+              color: "#0f172a",
+              marginBottom: 8,
+            }}
           >
             Session Started
           </div>
-          <div className="txt-body-mb">
+          <div
+            style={{
+              fontSize: 13,
+              color: "#64748b",
+              lineHeight: 1.6,
+              marginBottom: 20,
+            }}
+          >
             You are now logged in as <strong>{user.name}</strong>. Session has
             been logged.
           </div>
@@ -421,23 +481,27 @@ function UpdatePlansModal({ user, onClose }) {
       onClose={onClose}
       width={440}
     >
-      <div
-        className="usr-col-gap8"
-      >
+      <div className="usr-col-gap8">
         {plans.map((p) => (
           <label
             key={p}
-            className="usr-plan-opt" style={{ '--bdr': selected === p ? T : "#e2e8f0", '--bg': selected === p ? "#f0fdfa" : "#f8fafc" }}
+            className="usr-plan-opt"
+            style={{
+              "--bdr": selected === p ? T : "#e2e8f0",
+              "--bg": selected === p ? "#f0fdfa" : "#f8fafc",
+            }}
           >
             <input
               type="radio"
               name="plan"
               checked={selected === p}
               onChange={() => setSelected(p)}
-              className="perm-check usr-radio-accent" style={{ '--ac': T }}
+              className="perm-check usr-radio-accent"
+              style={{ "--ac": T }}
             />
             <span
-              className="usr-plan-lbl" style={{ '--c': selected === p ? T : "#334155" }}
+              className="usr-plan-lbl"
+              style={{ "--c": selected === p ? T : "#334155" }}
             >
               {p}
             </span>
@@ -485,28 +549,29 @@ function MakeStatusModal({ user, onSave, onClose }) {
       onClose={onClose}
       width={440}
     >
-      <div
-        className="usr-col-gap8"
-      >
+      <div className="usr-col-gap8">
         {statuses.map((s) => (
           <label
             key={s.value}
-            className="usr-perm-opt" style={{ '--bdr': selected === s.value ? s.color : "#e2e8f0", '--bg': selected === s.value ? s.bg : "#f8fafc" }}
+            className="usr-perm-opt"
+            style={{
+              "--bdr": selected === s.value ? s.color : "#e2e8f0",
+              "--bg": selected === s.value ? s.bg : "#f8fafc",
+            }}
           >
             <input
               type="radio"
               name="status"
               checked={selected === s.value}
               onChange={() => setSelected(s.value)}
-              className="perm-check usr-radio-accent" style={{ '--ac': s.color }}
+              className="perm-check usr-radio-accent"
+              style={{ "--ac": s.color }}
             />
             <div>
-              <div className="stat-num-val" style={{ '--c': s.color }}>
+              <div className="stat-num-val" style={{ "--c": s.color }}>
                 {s.label}
               </div>
-              <div className="txt-body-mt">
-                {s.desc}
-              </div>
+              <div className="txt-body-mt">{s.desc}</div>
             </div>
           </label>
         ))}
@@ -537,12 +602,8 @@ function ClearHistoryModal({ user, onClose }) {
     >
       {!done ? (
         <>
-          <div
-            className="alert-danger"
-          >
-            <div
-              className="alert-title dyn-color" style={{ '--c': "#dc2626" }}
-            >
+          <div className="alert-danger">
+            <div className="alert-title dyn-color" style={{ "--c": "#dc2626" }}>
               ⚠️ This action cannot be undone
             </div>
             <div className="alert-body">
@@ -552,10 +613,7 @@ function ClearHistoryModal({ user, onClose }) {
           </div>
           <div className="toolbar-end">
             <CancelBtn onClick={onClose} />
-            <button
-              onClick={() => setDone(true)}
-              className="usr-btn-danger"
-            >
+            <button onClick={() => setDone(true)} className="usr-btn-danger">
               Yes, Clear History
             </button>
           </div>
@@ -563,11 +621,7 @@ function ClearHistoryModal({ user, onClose }) {
       ) : (
         <div className="txt-center-20">
           <div className="txt-img-icon">✅</div>
-          <div
-            className="usr-modal-title"
-          >
-            History Cleared
-          </div>
+          <div className="usr-modal-title">History Cleared</div>
           <div className="txt-body-mb">
             All history for <strong>{user.name}</strong> has been removed.
           </div>
@@ -621,28 +675,15 @@ function UpdateHistoryModal({ user, onClose }) {
     >
       <div className="f-col-8">
         {history.map((h, i) => (
-          <div
-            key={i}
-            className="usr-history-row"
-          >
-            <div
-              className="txt-mono"
-            >
-              {h.date}
-            </div>
-            <div className="txt-label-md">
-              {h.action}
-            </div>
+          <div key={i} className="usr-history-row">
+            <div className="txt-mono">{h.date}</div>
+            <div className="txt-label-md">{h.action}</div>
             <div className="txt-body-3">{h.detail}</div>
-            <div className="txt-muted-r">
-              {h.by}
-            </div>
+            <div className="txt-muted-r">{h.by}</div>
           </div>
         ))}
       </div>
-      <div
-        className="mt-16-end"
-      >
+      <div className="mt-16-end">
         <CancelBtn onClick={onClose} />
       </div>
     </Modal>
@@ -658,12 +699,8 @@ function DeleteModal({ user, onDelete, onClose }) {
       onClose={onClose}
       width={400}
     >
-      <div
-        className="alert-danger"
-      >
-        <div
-          className="alert-title dyn-color" style={{ '--c': "#dc2626" }}
-        >
+      <div className="alert-danger">
+        <div className="alert-title dyn-color" style={{ "--c": "#dc2626" }}>
           ⚠️ Cannot be undone
         </div>
         <div className="alert-body">
@@ -697,31 +734,23 @@ function NinjaUserModal({ user, onClose }) {
       onClose={onClose}
       width={420}
     >
-      <div
-        className="onb-dark-card"
-      >
+      <div className="onb-dark-card">
         <div className="txt-hero-icon">🥷</div>
-        <div
-          className="txt-hero-title"
-        >
-          Ninja Mode for {user.name}
-        </div>
+        <div className="txt-hero-title">Ninja Mode for {user.name}</div>
         <div className="txt-body-2">
           Access this account invisibly. User will not be notified.
         </div>
       </div>
-      <div
-        className="action-row mb-10"
-      >
-        <span className="txt-name">
-          Enable Ninja Mode
-        </span>
+      <div className="action-row mb-10">
+        <span className="txt-name">Enable Ninja Mode</span>
         <div
           onClick={() => setActive((a) => !a)}
-          className="usr-toggle" style={{ '--c': active ? "#0d9488" : "#cbd5e1" }}
+          className="usr-toggle"
+          style={{ "--c": active ? "#0d9488" : "#cbd5e1" }}
         >
           <div
-            className="usr-toggle-thumb" style={{ '--left': active ? '23px' : '3px' }}
+            className="usr-toggle-thumb"
+            style={{ "--left": active ? "23px" : "3px" }}
           />
         </div>
       </div>
@@ -736,47 +765,7 @@ function NinjaUserModal({ user, onClose }) {
   );
 }
 
-// ─── Add User Modal ───────────────────────────────────────────────────────────
-function AddUserModal({ onAdd, onClose }) {
-  return (
-    <Modal
-      title="Add New User"
-      subtitle="Create a new user account"
-      onClose={onClose}
-      width={560}
-    >
-      <div
-        className="usr-grid-2"
-      >
-        <FormInput label="Full Name" placeholder="e.g. John Doe" />
-        <FormInput label="Email" placeholder="email@example.com" type="email" />
-        <FormSelect
-          label="Role"
-          defaultValue="Clients"
-          options={USER_TYPES.filter((t) => t !== "All")}
-        />
-        <FormInput label="Region" placeholder="e.g. US, EU, APAC" />
-        <FormSelect
-          label="Status"
-          defaultValue="active"
-          options={["active", "warning", "blocked"]}
-        />
-      </div>
-      <div
-        className="usr-action-row-end"
-      >
-        <CancelBtn onClick={onClose} />
-        <ActionBtn
-          label="Create User"
-          onClick={() => {
-            onAdd();
-            onClose();
-          }}
-        />
-      </div>
-    </Modal>
-  );
-}
+// AddUserModal is imported from ./Onboarding_users
 
 // ─── UserActions component ────────────────────────────────────────────────────
 function UserActions({ user, onBlock, onDelete, onStatusChange }) {
@@ -840,13 +829,14 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
         />
       )}
 
-      <div ref={ref} className="f-gap-4">
+      <div ref={ref} className="usr-row-actions">
         {PRIMARY_ACTIONS.map((a) => (
           <button
             key={a.key}
             title={a.title}
             onClick={() => openModal(a.key)}
-            className="usr-action-icon" style={{ '--bg': `${a.color}15`, '--c': a.color }}
+            className="usr-action-icon"
+            style={{ "--bg": `${a.color}15`, "--c": a.color }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.background = `${a.color}30`)
             }
@@ -874,50 +864,28 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
           >
             ⋯
           </button>
-
           {open && (
-            <div
-              className="usr-action-menu"
-            >
-              <div
-                className="usr-action-hdr"
-              >
-                <div
-                  className="txt-label"
-                >
-                  {user.name}
-                </div>
-                <div className="txt-slate">
-                  {user.email}
-                </div>
+            <div className="usr-action-menu">
+              <div className="usr-action-hdr">
+                <div className="txt-strong">{user.name}</div>
+                <div className="txt-muted-sm">{user.email}</div>
               </div>
               {MORE_ACTIONS.map((a) => (
                 <button
                   key={a.key}
                   onClick={() => openModal(a.key)}
                   className="usr-action-item"
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = "#f8fafc")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.background = "transparent")
-                  }
                 >
                   <span
-                    className="usr-action-icon" style={{ '--bg': `${a.color}15`, '--c': a.color }}
+                    className="usr-action-icon"
+                    style={{ "--bg": `${a.color}15`, "--c": a.color }}
                   >
                     {a.icon}
                   </span>
-                  <span
-                    className="txt-name"
-                  >
-                    {a.label}
-                  </span>
+                  <span className="txt-name">{a.label}</span>
                 </button>
               ))}
-              <div
-                className="detail-sep"
-              />
+              <div className="detail-sep" />
               <button
                 onClick={() => openModal("delete")}
                 className="usr-action-item"
@@ -928,16 +896,8 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
                   (e.currentTarget.style.background = "transparent")
                 }
               >
-                <span
-                  className="usr-action-icon-del"
-                >
-                  🗑
-                </span>
-                <span
-                  className="txt-danger"
-                >
-                  Delete User
-                </span>
+                <span className="usr-action-icon-del">🗑</span>
+                <span className="txt-danger">Delete User</span>
               </button>
             </div>
           )}
@@ -975,14 +935,17 @@ function ActiveInactiveTabs({ value, onChange, activeCount, inactiveCount }) {
           <button
             key={key}
             onClick={() => onChange(key)}
-            className={`svc-tab-btn ${on ? "on" : "off"}`} style={{ '--c': color }}
+            className={`svc-tab-btn ${on ? "on" : "off"}`}
+            style={{ "--c": color }}
           >
             <span
-              className={`svc-tab-dot ${on ? "on" : "off"}`} style={{ '--c': dot }}
+              className={`svc-tab-dot ${on ? "on" : "off"}`}
+              style={{ "--c": dot }}
             />
             {label}
             <span
-              className={`svc-tab-pill ${on ? "on" : "off"}`} style={{ '--bg': bg, '--c': color }}
+              className={`svc-tab-pill ${on ? "on" : "off"}`}
+              style={{ "--bg": bg, "--c": color }}
             >
               {count}
             </span>
@@ -996,13 +959,13 @@ function ActiveInactiveTabs({ value, onChange, activeCount, inactiveCount }) {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 // ── Recharts config constants ──────────────────────────────────────────────
-const USR_TICK      = { fontSize: 9, fill: '#cbd5e1' };
-const USR_MARGIN    = { top: 4, right: 8, bottom: 0, left: -24 };
-const USR_PIE_CX    = 52;
-const USR_PIE_CY    = 52;
-const USR_PIE_IR    = 28;
-const USR_PIE_OR    = 50;
-const USR_PIE_PA    = 2;
+const USR_TICK = { fontSize: 9, fill: "#cbd5e1" };
+const USR_MARGIN = { top: 4, right: 8, bottom: 0, left: -24 };
+const USR_PIE_CX = 52;
+const USR_PIE_CY = 52;
+const USR_PIE_IR = 28;
+const USR_PIE_OR = 50;
+const USR_PIE_PA = 2;
 
 export default function PageUsers({ role = "admin", setPage }) {
   const [users, setUsers] = useState(initialUserRows);
@@ -1034,6 +997,7 @@ export default function PageUsers({ role = "admin", setPage }) {
       ),
     );
   };
+  const [addModal, setAddModal] = useState(false);
   const handleAddUser = () => {
     // placeholder — in real app would collect form data
   };
@@ -1073,7 +1037,10 @@ export default function PageUsers({ role = "admin", setPage }) {
     partnerTab === "active" ? u.status === true : u.status === false,
   );
   const [perPagePtnAcc, setPerPagePtnAcc] = useState(10);
-  const visiblePartnerAccounts = filteredPartnerAccounts.slice(0, perPagePtnAcc);
+  const visiblePartnerAccounts = filteredPartnerAccounts.slice(
+    0,
+    perPagePtnAcc,
+  );
   const activePartnerCount = partnerAccounts.filter(
     (u) => u.status === true,
   ).length;
@@ -1084,25 +1051,17 @@ export default function PageUsers({ role = "admin", setPage }) {
   if (isPartner) {
     return (
       <div>
-        <div
-          className="usr-table-card"
-        >
-          <div
-            className="flex-between p-10-14"
-          >
+        <div className="usr-table-card">
+          <div className="flex-between p-10-14">
             <div>
-              <div className="txt-label-lg">
-                My Sub-Accounts
-              </div>
+              <div className="txt-label-lg">My Sub-Accounts</div>
               <div className="txt-slate-11">
                 {partnerAccounts.length} accounts ·{" "}
                 {partnerAccounts.reduce((s, u) => s + u.services.length, 0)}{" "}
                 total services
               </div>
             </div>
-            <button
-              className="usr-btn-save" style={{ '--c': T }}
-            >
+            <button className="usr-btn-save" style={{ "--c": T }}>
               ⊕ New Account
             </button>
           </div>
@@ -1115,13 +1074,8 @@ export default function PageUsers({ role = "admin", setPage }) {
         </div>
 
         <div className="f-col-12">
-
           {filteredPartnerAccounts.length === 0 && (
-            <div
-              className="usr-empty"
-            >
-              No {partnerTab} accounts found.
-            </div>
+            <div className="usr-empty">No {partnerTab} accounts found.</div>
           )}
           {visiblePartnerAccounts.map((u) => {
             const isExpanded = !!expandedAccounts[u.id];
@@ -1130,79 +1084,63 @@ export default function PageUsers({ role = "admin", setPage }) {
             return (
               <div
                 key={u.id}
-                className="usr-partner-card" style={{ '--bdr': u.status ? "#e8ecf3" : "#fee2e2" }}
+                className="usr-partner-card"
+                style={{ "--bdr": u.status ? "#e8ecf3" : "#fee2e2" }}
               >
                 <div
-                  className="usr-partner-row" style={{ '--bb': isExpanded ? '1px solid #f1f5f9' : 'none', '--bg': u.status ? '#fff' : '#fff9f9' }}
+                  className="usr-partner-row"
+                  style={{
+                    "--bb": isExpanded ? "1px solid #f1f5f9" : "none",
+                    "--bg": u.status ? "#fff" : "#fff9f9",
+                  }}
                 >
-                  <div
-                    className="usr-table-cell"
-                  >
+                  <div className="usr-table-cell">
                     <div
-                      className="usr-partner-avatar" style={{ '--bg': u.status ? 'linear-gradient(135deg,#0d9488,#0891b2)' : '#f1f5f9', '--c': u.status ? '#fff' : '#94a3b8' }}
+                      className="usr-partner-avatar"
+                      style={{
+                        "--bg": u.status
+                          ? "linear-gradient(135deg,#0d9488,#0891b2)"
+                          : "#f1f5f9",
+                        "--c": u.status ? "#fff" : "#94a3b8",
+                      }}
                     >
                       {u.name.slice(0, 3)}
                     </div>
                     <div>
-                      <div
-                        className="txt-label"
-                      >
-                        {u.name}
-                      </div>
-                      <div className="txt-muted-xs">
-                        ID: {u.id}
-                      </div>
+                      <div className="txt-label">{u.name}</div>
+                      <div className="txt-muted-xs">ID: {u.id}</div>
                     </div>
                   </div>
                   <div className="p-card">
-                    <span
-                      className="usr-plan-badge"
-                    >
-                      {u.type}
-                    </span>
+                    <span className="usr-plan-badge">{u.type}</span>
                   </div>
                   <div className="p-card">
-                    <div
-                      className="txt-body-2"
-                    >
-                      Last Login
-                    </div>
-                    <div
-                      className="usr-login-val"
-                    >
-                      {u.lastLogin}
-                    </div>
+                    <div className="txt-body-2">Last Login</div>
+                    <div className="usr-login-val">{u.lastLogin}</div>
                   </div>
                   <div className="p-card">
-                    <div
-                      className="txt-body-2"
-                    >
-                      Last Accessed From
-                    </div>
-                    <div
-                      className="usr-txt-mono"
-                    >
-                      {u.lastAccessed}
-                    </div>
+                    <div className="txt-body-2">Last Accessed From</div>
+                    <div className="usr-txt-mono">{u.lastAccessed}</div>
                   </div>
                   {/* Clickable status toggle */}
                   <div className="p-card">
                     <div
                       onClick={() => handlePartnerToggle(u.id)}
-                      className="usr-toggle" style={{ '--c': u.status ? T : "#cbd5e1" }}
+                      className="usr-toggle"
+                      style={{ "--c": u.status ? T : "#cbd5e1" }}
                     >
                       <div
-                        className="usr-toggle-thumb" style={{ '--left': u.status ? '23px' : '3px' }}
+                        className="usr-toggle-thumb"
+                        style={{ "--left": u.status ? "23px" : "3px" }}
                       />
                     </div>
                   </div>
-                  <div
-                    className="usr-service-wrap"
-                  >
+                  <div className="usr-service-wrap">
                     {preview.map((svc) => (
                       <span
                         key={svc}
-                        className="usr-svc-tag" style={{ '--c': T }}
+                        className="usr-svc-tag"
+                        style={{ "--c": T }}
                       >
                         {svc}
                       </span>
@@ -1210,51 +1148,40 @@ export default function PageUsers({ role = "admin", setPage }) {
                     {rest.length > 0 && (
                       <button
                         onClick={() => toggleAccount(u.id)}
-                        className="usr-svc-add" style={{ '--c': T }}
+                        className="usr-svc-add"
+                        style={{ "--c": T }}
                       >
                         {isExpanded ? "▲ Less" : `+${rest.length} more`}
                       </button>
                     )}
                   </div>
-                  <div
-                    className="usr-tabs-wrap"
-                  >
-                    <button
-                      title="View"
-                      className="usr-icon-teal"
-                    >
+                  <div className="usr-tabs-wrap">
+                    <button title="View" className="usr-icon-teal">
                       👁
                     </button>
-                    <button
-                      title="Edit"
-                      className="usr-icon-blue"
-                    >
+                    <button title="Edit" className="usr-icon-blue">
                       ✏️
                     </button>
                   </div>
                 </div>
                 {isExpanded && (
-                  <div
-                    className="tab-body"
-                  >
-                    <div
-                      className="txt-section-hd mb-10"
-                    >
+                  <div className="tab-body">
+                    <div className="txt-section-hd mb-10">
                       All Services ({u.services.length})
                     </div>
-                    <div
-                      className="usr-permission-grid"
-                    >
+                    <div className="usr-permission-grid">
                       {u.services.map((svc) => {
                         const isTrue = svc.endsWith("True");
                         return (
                           <div
                             key={svc}
-                            className="usr-perm-item" style={{ '--bdr': isTrue ? "#99f6e4" : "#fecaca" }}
+                            className="usr-perm-item"
+                            style={{ "--bdr": isTrue ? "#99f6e4" : "#fecaca" }}
                           >
                             <span>{svc.replace(/ - (True|False)$/, "")}</span>
                             <span
-                              className="usr-perm-badge" style={{ '--c': isTrue ? T : "#dc2626" }}
+                              className="usr-perm-badge"
+                              style={{ "--c": isTrue ? T : "#dc2626" }}
                             >
                               {isTrue ? "True" : "False"}
                             </span>
@@ -1294,18 +1221,9 @@ export default function PageUsers({ role = "admin", setPage }) {
             color: ROSE,
           },
         ].map(({ label, value, color }) => (
-          <Card
-            key={label}
-            className="stat-top-4" style={{ '--c': color }}
-          >
-            <div
-              className="kpi-stat"
-            >
-              {value}
-            </div>
-            <div className="stat-sublabel">
-              {label}
-            </div>
+          <Card key={label} className="stat-top-4" style={{ "--c": color }}>
+            <div className="kpi-stat">{value}</div>
+            <div className="stat-sublabel">{label}</div>
           </Card>
         ))}
       </div>
@@ -1347,33 +1265,14 @@ export default function PageUsers({ role = "admin", setPage }) {
                   ))}
                 </Pie>
               </PieChart>
-              <div
-                className="usr-donut-label"
-              >
-                {TOTAL_USERS}
-              </div>
+              <div className="usr-donut-label">{TOTAL_USERS}</div>
             </div>
-            <div
-              className="usr-legend-item"
-            >
+            <div className="usr-legend-item">
               {TYPE_COUNTS.map((t) => (
-                <div
-                  key={t.label}
-                  className="f-gap-7"
-                >
-                  <div
-                    className="usr-legend-dot" style={{ '--c': t.color }}
-                  />
-                  <span
-                    className="usr-legend-count"
-                  >
-                    {t.count}
-                  </span>
-                  <span
-                    className="usr-legend-name"
-                  >
-                    {t.label}
-                  </span>
+                <div key={t.label} className="f-gap-7">
+                  <div className="usr-legend-dot" style={{ "--c": t.color }} />
+                  <span className="usr-legend-count">{t.count}</span>
+                  <span className="usr-legend-name">{t.label}</span>
                 </div>
               ))}
             </div>
@@ -1382,15 +1281,21 @@ export default function PageUsers({ role = "admin", setPage }) {
       </div>
 
       <Card>
-        <div
-          className="usr-filter-wrap"
-        >
+        <div className="usr-filter-wrap">
           <SectionTitle>User Directory</SectionTitle>
           <div className="f-gap-8">
             <div className="dt-entries-bar">
               <span className="dt-entries-lbl">Show</span>
-              <select className="dt-entries-sel" value={perPageUsr} onChange={e => setPerPageUsr(Number(e.target.value))}>
-                {[10,25,50,100].map(n => <option key={n} value={n}>{n}</option>)}
+              <select
+                className="dt-entries-sel"
+                value={perPageUsr}
+                onChange={(e) => setPerPageUsr(Number(e.target.value))}
+              >
+                {[10, 25, 50, 100].map((n) => (
+                  <option key={n} value={n}>
+                    {n}
+                  </option>
+                ))}
               </select>
               <span className="dt-entries-lbl">entries</span>
             </div>
@@ -1400,10 +1305,7 @@ export default function PageUsers({ role = "admin", setPage }) {
               onChange={(e) => setQuery(e.target.value)}
               className="usr-filter-select"
             />
-            <button
-              onClick={() => setPage && setPage("user-onboarding")}
-              className="btn-success"
-            >
+            <button onClick={() => setAddModal(true)} className="btn-success">
               + Add User
             </button>
           </div>
@@ -1419,9 +1321,7 @@ export default function PageUsers({ role = "admin", setPage }) {
           inactiveCount={inactiveUsersCount}
         />
 
-        <div
-          className="usr-perm-filter-bar"
-        >
+        <div className="usr-perm-filter-bar">
           {USER_TYPES.map((t) => {
             const isActive = activeType === t;
             const color = t === "All" ? BLUE : TYPE_COLORS[t];
@@ -1429,7 +1329,12 @@ export default function PageUsers({ role = "admin", setPage }) {
               <button
                 key={t}
                 onClick={() => setActiveType(t)}
-                className="usr-perm-filter-pill" style={{ '--bdr': color, '--bg': isActive ? color : "#fff", '--c': isActive ? "#fff" : "#64748b" }}
+                className="usr-perm-filter-pill"
+                style={{
+                  "--bdr": color,
+                  "--bg": isActive ? color : "#fff",
+                  "--c": isActive ? "#fff" : "#64748b",
+                }}
               >
                 {t}
               </button>
@@ -1437,96 +1342,101 @@ export default function PageUsers({ role = "admin", setPage }) {
           })}
         </div>
 
-        <div className="table-wrap"><table
-          className="dt dt-lg"
-        >
-          <thead>
-            <tr className="dt-head-row">
-              {[
-                "User",
-                "Email",
-                "Type",
-                "Region",
-                "Sessions",
-                "Last Login",
-                "Status",
-                "Actions",
-              ].map((h) => (
-                <th
-                  key={h}
-                  className="dt-th"
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {visibleUsers.map((u, i) => (
-              <tr
-                key={i}
-                className="dt-tr-plain"
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#f8fafc")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "transparent")
-                }
-              >
-                <td className="p-10">
-                  <div
-                    className="f-gap-10"
-                  >
-                    <div
-                      className="usr-avatar-sm" style={{ '--bg': TYPE_COLORS[u.role] ? `${TYPE_COLORS[u.role]}22` : "#e2e8f0", '--bdr': TYPE_COLORS[u.role] || "#cbd5e1", '--c': TYPE_COLORS[u.role] || "#334155" }}
-                    >
-                      {u.name[0]}
-                    </div>
-                    <span className="txt-strong-w">{u.name}</span>
-                  </div>
-                </td>
-                <td className="td-p-10s">{u.email}</td>
-                <td className="p-10">
-                  <Badge color={TYPE_COLORS[u.role] || BLUE}>{u.role}</Badge>
-                </td>
-                <td className="p-10">{u.region}</td>
-                <td className="p-10">{u.sessions}</td>
-                <td className="td-p-10s">{u.lastLogin}</td>
-                <td className="p-10">
-                  <span
-                    className="usr-status-dot" style={{ '--c': STATUS_COLOR(u.status) }}
-                  />
-                  <span
-                    className="txt-cap"
-                  >
-                    {u.status}
-                  </span>
-                </td>
-                <td className="td-p">
-                  <UserActions
-                    user={u}
-                    onBlock={handleBlock}
-                    onDelete={handleDelete}
-                    onStatusChange={handleStatusChange}
-                  />
-                </td>
-              </tr>
-            ))}
-            {filtered.length === 0 && (
+        <div className="usr-tbl-wrap">
+          <table className="usr-tbl">
+            <colgroup>
+              <col className="usr-col-user" />
+              <col className="usr-col-email" />
+              <col className="usr-col-type" />
+              <col className="usr-col-region" />
+              <col className="usr-col-sessions" />
+              <col className="usr-col-login" />
+              <col className="usr-col-status" />
+              <col className="usr-col-actions" />
+            </colgroup>
+            <thead>
               <tr>
-                <td
-                  colSpan={8}
-                  className="dt-empty"
-                >
-                  No {statusTab} users found
-                  {activeType !== "All" ? ` for ${activeType}` : ""}.
-                </td>
+                {[
+                  "User",
+                  "Email",
+                  "Type",
+                  "Region",
+                  "Sessions",
+                  "Last Login",
+                  "Status",
+                  "Actions",
+                ].map((h) => (
+                  <th key={h} className="dt-th">
+                    {h}
+                  </th>
+                ))}
               </tr>
-            )}
-          </tbody>
-        </table></div>
-
+            </thead>
+            <tbody>
+              {visibleUsers.map((u, i) => (
+                <tr key={i}>
+                  <td>
+                    <div className="usr-td-user">
+                      <div
+                        className="usr-avatar-sm"
+                        style={{
+                          "--bg": TYPE_COLORS[u.role]
+                            ? `${TYPE_COLORS[u.role]}22`
+                            : "#e2e8f0",
+                          "--bdr": TYPE_COLORS[u.role] || "#cbd5e1",
+                          "--c": TYPE_COLORS[u.role] || "#334155",
+                        }}
+                      >
+                        {u.name[0]}
+                      </div>
+                      <span className="usr-td-user-name">{u.name}</span>
+                    </div>
+                  </td>
+                  <td className="td-p-10s">{u.email}</td>
+                  <td>
+                    <Badge color={TYPE_COLORS[u.role] || BLUE}>{u.role}</Badge>
+                  </td>
+                  <td className="dt-td">{u.region}</td>
+                  <td className="dt-td-num">{u.sessions}</td>
+                  <td className="td-p-10s">{u.lastLogin}</td>
+                  <td>
+                    <div className="usr-td-status">
+                      <span
+                        className="usr-status-dot"
+                        style={{ "--c": STATUS_COLOR(u.status) }}
+                      />
+                      <span className="txt-cap">{u.status}</span>
+                    </div>
+                  </td>
+                  <td className="usr-td-actions">
+                    <UserActions
+                      user={u}
+                      onBlock={handleBlock}
+                      onDelete={handleDelete}
+                      onStatusChange={handleStatusChange}
+                    />
+                  </td>
+                </tr>
+              ))}
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={8} className="dt-empty">
+                    No {statusTab} users found
+                    {activeType !== "All" ? ` for ${activeType}` : ""}.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </Card>
+
+      {addModal && (
+        <AddUserModal
+          onAdd={() => handleAddUser()}
+          onClose={() => setAddModal(false)}
+        />
+      )}
     </div>
   );
 }
