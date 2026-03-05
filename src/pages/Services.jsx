@@ -245,7 +245,7 @@ function ActionsDropdown({ rowId, openRow, setOpenRow }) {
   const open = openRow === rowId;
 
   return (
-    <div className="p-rel-ib">
+    <div className="svc-actions-wrap">
       <button
         onClick={() => setOpenRow(open ? null : rowId)}
         className="svc-ver-btn"
@@ -379,9 +379,17 @@ export default function PageServices({ role = "admin", setPage }) {
       case "sr":
         return <span className="txt-muted">{idx + 1}</span>;
       case "name":
-        return <div className="text-flow"><span className="txt-label-md">{row.name}</span></div>;
+        return (
+          <div className="text-flow" title={row.name}>
+            <span className="txt-label-md">{row.name}</span>
+          </div>
+        );
       case "serviceId":
-        return <div className="text-flow"><span className="txt-mono">{row.serviceId}</span></div>;
+        return (
+          <div className="text-flow" title={row.serviceId}>
+            <span className="txt-mono">{row.serviceId}</span>
+          </div>
+        );
       case "status":
         return (
           <span
@@ -604,7 +612,13 @@ export default function PageServices({ role = "admin", setPage }) {
                     {visibleCols.map((col) => (
                       <td
                         key={col.key}
-                        className={col.key === "sr" ? "svc-td-sr" : ""}
+                        className={
+                          col.key === "sr"
+                            ? "svc-td-sr"
+                            : col.key === "actions"
+                              ? "svc-td-actions"
+                              : ""
+                        }
                       >
                         {renderCell(col, row, idx)}
                       </td>

@@ -7636,6 +7636,12 @@ table tbody td {
   color: #334155;
 }
 
+/* Actions column must never clip its dropdown */
+.svc-tbl td.svc-td-actions {
+  overflow: visible !important;
+  position: relative;
+}
+
 /* Column widths — fixed so nothing squishes */
 .svc-col-sr {
   width: 44px;
@@ -7871,8 +7877,21 @@ table tbody td {
 }
 
 /*****************************************/
-.text-flow{
-	overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.text-flow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
+
+/* ── Actions cell — allows dropdown to overflow table clipping ───────────── */
+.svc-td-actions {
+  overflow: visible !important;
+  position: relative;
+}
+
+/* ── Actions button wrapper — anchors the absolute dropdown ─────────────── */
+.svc-actions-wrap {
+  position: relative;
+  display: inline-block;
 }
