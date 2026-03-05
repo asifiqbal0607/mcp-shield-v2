@@ -7222,39 +7222,62 @@ table tbody td {
 /* ══════════════════════════════════════════════════════════════════════════
    FILTER SIDEBAR
 ══════════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════
+   FILTER SIDEBAR
+══════════════════════════════════════════════════════════════════════════ */
 .fsb-root {
   height: 100%;
   background: #fff;
   border-right: 1px solid var(--border);
-  padding: 0;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
   font-family: var(--font);
 }
 
-.fsb-section {
-  padding: 14px 18px 10px;
-  border-bottom: 1px solid var(--border);
-}
-
-.fsb-section-hd {
-  font-size: 11px;
+/* ── Header ── */
+.fsb-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 18px 14px;
+  border-bottom: 2px solid var(--border);
+  font-size: 13px;
   font-weight: 800;
-  color: var(--text-2);
+  color: var(--color-primary);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 14px 18px 8px;
+  letter-spacing: 1.2px;
 }
 
+.fsb-header-icon {
+  font-size: 14px;
+  opacity: .7;
+}
+
+/* ── Body wrapper — all content padded consistently ── */
+.fsb-body {
+  padding: 16px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+/* ── Field block ── */
+.fsb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Labels ── */
 .fsb-label {
   display: block;
   font-size: 10px;
   font-weight: 700;
   color: var(--text-3);
   text-transform: uppercase;
-  letter-spacing: .5px;
-  margin-bottom: 5px;
+  letter-spacing: .6px;
 }
 
 .fsb-label-lg {
@@ -7262,70 +7285,93 @@ table tbody td {
   font-size: 11px;
   font-weight: 700;
   color: var(--text-2);
-  margin-bottom: 6px;
 }
 
+/* ── GEO chip ── */
+.fsb-geo-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  background: var(--bg-subtle);
+}
+
+.fsb-geo-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* ── Inputs & selects ── */
 .fsb-input {
   width: 100%;
-  padding: 8px 10px;
+  padding: 8px 11px;
   border: 1px solid var(--border);
-  border-radius: 7px;
-  font-size: 11px;
-  color: #334155;
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--text);
   background: #fff;
   outline: none;
   font-family: var(--font);
-  transition: border-color .15s;
+  transition: border-color .15s, box-shadow .15s;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .fsb-input:focus {
-  border-color: #3b82f6;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(22, 82, 200, .1);
 }
 
-.fsb-select {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  font-size: 11px;
-  color: #334155;
-  background: #f8fafc;
-  font-weight: 600;
+/* Select gets a custom dropdown arrow */
+.fsb-select-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  cursor: pointer;
 }
 
+/* ── Buttons ── */
 .fsb-btn-row {
   display: flex;
   gap: 8px;
-  padding: 14px 18px;
+  padding-top: 4px;
   border-top: 1px solid var(--border);
+  padding-top: 14px;
 }
 
 .fsb-btn-clear {
   flex: 1;
-  padding: 8px;
-  border-radius: 7px;
-  border: 1px solid var(--border);
+  padding: 9px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
   background: #fff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--text-3);
   cursor: pointer;
   font-family: var(--font);
-  transition: background .15s;
+  transition: background .15s, border-color .15s;
 }
 
 .fsb-btn-clear:hover {
   background: var(--bg-subtle);
+  border-color: var(--border2);
 }
 
 .fsb-btn-apply {
-  flex: 1;
-  padding: 8px;
-  border-radius: 7px;
+  flex: 2;
+  padding: 9px 8px;
+  border-radius: 8px;
   border: none;
   background: var(--color-primary);
   color: #fff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   font-family: var(--font);
@@ -7334,6 +7380,18 @@ table tbody td {
 
 .fsb-btn-apply:hover {
   opacity: .88;
+}
+
+/* ── Options section heading ── */
+.fsb-options-hd {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-top: 2px;
 }
 
 /* ── Spacing utilities used in FilterSidebar / Onboarding ────────────────── */
@@ -8023,4 +8081,73 @@ table tbody td {
   color: #1e3a5f;
   font-weight: 500;
   word-break: break-all;
+}
+
+/* ── Click-to-copy cells (TransactionsModal) ─────────────────────────────── */
+.txn-copy-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  position: relative;
+  border-radius: 4px;
+  padding: 2px 4px;
+  transition: background .12s;
+  max-width: 100%;
+}
+
+.txn-copy-cell:hover {
+  background: #f1f5f9;
+}
+
+.txn-copy-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.txn-copy-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  color: #94a3b8;
+  opacity: 0;
+  transition: opacity .12s;
+}
+
+.txn-copy-cell:hover .txn-copy-icon {
+  opacity: 1;
+}
+
+.txn-copy-icon.copied {
+  opacity: 1;
+  color: #22c55e;
+}
+
+.txn-copy-toast {
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: dropIn .12s ease;
+  z-index: 100;
+}
+
+.txn-copy-toast::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #0f172a;
 }
