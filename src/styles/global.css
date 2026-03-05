@@ -2899,16 +2899,61 @@ table tbody td {
   background: #f8fafc;
 }
 
+/* Icon-only square button (View, Edit) */
+.svc-action-icon-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--c);
+  background: transparent;
+  color: var(--c);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .12s;
+}
+
+.svc-action-icon-btn:hover {
+  background: var(--c);
+  color: #fff;
+}
+
+.svc-action-icon-btn:hover svg {
+  stroke: #fff;
+}
+
+/* Text+icon button (Custom Variables) */
 .svc-action-badge {
-  padding: 2px 8px;
-  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 600;
   border: 1px solid var(--c);
   cursor: pointer;
   white-space: nowrap;
-  background: var(--bg, #fff);
+  background: transparent;
   color: var(--c);
+  transition: background .12s;
+}
+
+.svc-action-badge:hover {
+  background: var(--c);
+  color: #fff;
+}
+
+.svc-action-badge:hover svg {
+  stroke: #fff;
+}
+
+.svc-action-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 .svc-status-badge {
@@ -7724,29 +7769,16 @@ table tbody td {
 /* ── Services table wrapper — overrides .table-wrap rules ───────────────── */
 .svc-tbl-wrap {
   overflow-x: auto;
-  overflow-y: visible;
-  position: relative;
+  overflow-y: unset;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
 }
 
 .svc-tbl-wrap table {
   width: 100%;
 }
 
-.svc-adm-dropdown {
-  position: absolute;
-  right: 0;
-  top: 36px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  min-width: 200px;
-  padding: 6px 0;
-
-  z-index: 9999;
-  /* IMPORTANT */
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-}
+/* duplicate .svc-adm-dropdown removed — see definition below */
 
 /* ── Users table wrapper — overrides .table-wrap rules ─────────────────── */
 .usr-tbl-wrap {
@@ -7781,6 +7813,13 @@ table tbody td {
   box-shadow: 0 8px 28px rgba(0, 0, 0, .13);
   padding: 4px 0;
   overflow: hidden;
+}
+
+/* Fixed variant — escapes overflow-x scroll container, anchored by JS coords */
+.svc-adm-dropdown--fixed {
+  position: fixed !important;
+  top: auto;
+  right: auto;
 }
 
 .svc-adm-group {
@@ -7894,4 +7933,94 @@ table tbody td {
 .svc-actions-wrap {
   position: relative;
   display: inline-block;
+}
+
+/* ── Service View Modal (Partner) ───────────────────────────────────────── */
+.svc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 22, 40, 0.45);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dropIn .15s ease;
+}
+
+.svc-modal-box {
+  background: #fff;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 60px rgba(10, 22, 40, 0.2);
+  overflow: hidden;
+}
+
+.svc-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.svc-modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.svc-modal-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  color: #64748b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .1s;
+}
+
+.svc-modal-close:hover {
+  background: #f1f5f9;
+}
+
+.svc-modal-body {
+  padding: 8px 0;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.svc-modal-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #f8fafc;
+}
+
+.svc-modal-row:last-child {
+  border-bottom: none;
+}
+
+.svc-modal-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #94a3b8;
+  width: 160px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.svc-modal-value {
+  font-size: 13px;
+  color: #1e3a5f;
+  font-weight: 500;
+  word-break: break-all;
 }

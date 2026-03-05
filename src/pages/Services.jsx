@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -220,9 +220,14 @@ const svcRows = [
 ];
 
 const PARTNER_ACTIONS = [
-  { label: "👁", color: "#17a2b8", title: "View" },
-  { label: "✎", color: "#17a2b8", title: "Edit" },
-  { label: "Custom Variables", color: "#0d9488", title: "Custom Variables" },
+  { icon: "view", label: "View", color: "#17a2b8", iconOnly: true },
+  { icon: "edit", label: "Edit", color: "#17a2b8", iconOnly: true },
+  {
+    icon: "settings",
+    label: "Custom Variables",
+    color: "#0d9488",
+    iconOnly: false,
+  },
 ];
 
 const ADMIN_ACTIONS = [
@@ -243,18 +248,45 @@ const ADMIN_ACTIONS = [
 
 function ActionsDropdown({ rowId, openRow, setOpenRow }) {
   const open = openRow === rowId;
+  const btnRef = useRef(null);
+  const [coords, setCoords] = useState({ top: 0, right: 0 });
+
+  function handleToggle() {
+    if (!open && btnRef.current) {
+      const rect = btnRef.current.getBoundingClientRect();
+      setCoords({
+        top: rect.bottom + window.scrollY + 4,
+        right: window.innerWidth - rect.right,
+      });
+    }
+    setOpenRow(open ? null : rowId);
+  }
+
+  useEffect(() => {
+    if (!open) return;
+    function onClickOutside(e) {
+      if (
+        btnRef.current &&
+        !btnRef.current.closest(".svc-actions-wrap").contains(e.target)
+      ) {
+        setOpenRow(null);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, [open, setOpenRow]);
 
   return (
     <div className="svc-actions-wrap">
-      <button
-        onClick={() => setOpenRow(open ? null : rowId)}
-        className="svc-ver-btn"
-      >
+      <button ref={btnRef} onClick={handleToggle} className="svc-ver-btn">
         ···
       </button>
 
       {open && (
-        <div className="svc-adm-dropdown">
+        <div
+          className="svc-adm-dropdown svc-adm-dropdown--fixed"
+          style={{ top: coords.top, right: coords.right }}
+        >
           {ADMIN_ACTIONS.map((a, i) => {
             if (a.divider) return <div key={i} className="svc-adm-divider" />;
             if (a.group)
@@ -285,20 +317,120 @@ function ActionsDropdown({ rowId, openRow, setOpenRow }) {
   );
 }
 
-function PartnerActions() {
+const PARTNER_ICONS = {
+  view: (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  ),
+  edit: (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
+  ),
+  settings: (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+    </svg>
+  ),
+};
+
+function ServiceViewModal({ row, onClose }) {
+  if (!row) return null;
+  return (
+    <div className="svc-modal-overlay" onClick={onClose}>
+      <div className="svc-modal-box" onClick={(e) => e.stopPropagation()}>
+        <div className="svc-modal-header">
+          <span className="svc-modal-title">Service Details</span>
+          <button className="svc-modal-close" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+        <div className="svc-modal-body">
+          {[
+            ["Name", row.name],
+            ["Service ID", row.serviceId],
+            ["Status", row.status],
+            ["Client", row.client],
+            ["Service Type", row.type || "--"],
+            ["Shield Mode", row.shieldMode || "--"],
+            ["Header Enriched Flow", row.headerEnrichedFlow || "--"],
+            ["Last Update", row.lastUpdate],
+            ["Service Created", row.serviceCreated],
+          ].map(([label, value]) => (
+            <div key={label} className="svc-modal-row">
+              <span className="svc-modal-label">{label}</span>
+              <span className="svc-modal-value">{value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PartnerActions({ row, setPage, setEditRow }) {
+  function handleAction(actionLabel) {
+    if (actionLabel === "View") {
+      setEditRow({ mode: "view", row });
+    } else if (actionLabel === "Edit") {
+      setEditRow({ mode: "edit", row });
+      if (setPage) setPage("onboarding");
+    } else if (actionLabel === "Custom Variables") {
+      setEditRow({ mode: "customVars", row });
+    }
+  }
+
   return (
     <div className="f-gap-4">
       {PARTNER_ACTIONS.map((a) => (
         <button
           key={a.label}
-          title={a.title}
-          className="svc-action-badge"
-          style={{
-            "--c": a.color,
-            "--bg": a.label.length <= 2 ? a.color : "#fff",
-          }}
+          title={a.label}
+          className={a.iconOnly ? "svc-action-icon-btn" : "svc-action-badge"}
+          style={{ "--c": a.color }}
+          onClick={() => handleAction(a.label)}
         >
-          {a.label}
+          {a.iconOnly ? (
+            PARTNER_ICONS[a.icon]
+          ) : (
+            <>
+              <span className="svc-action-btn-icon">
+                {PARTNER_ICONS[a.icon]}
+              </span>
+              {a.label}
+            </>
+          )}
         </button>
       ))}
     </div>
@@ -311,6 +443,7 @@ export default function PageServices({ role = "admin", setPage }) {
   const [tab, setTab] = useState("active");
   const [perPageSvc, setPerPageSvc] = useState(10);
   const [openRow, setOpenRow] = useState(null);
+  const [editRow, setEditRow] = useState(null);
 
   const isPartner = role === "partner";
   const isAdmin = role === "admin";
@@ -436,15 +569,22 @@ export default function PageServices({ role = "admin", setPage }) {
             setOpenRow={setOpenRow}
           />
         ) : (
-          <PartnerActions />
+          <PartnerActions row={row} setPage={setPage} setEditRow={setEditRow} />
         );
       default:
         return "--";
     }
   }
 
+  function handleModalClose() {
+    setEditRow(null);
+  }
+
   return (
     <div>
+      {editRow?.mode === "view" && (
+        <ServiceViewModal row={editRow.row} onClose={handleModalClose} />
+      )}
       {/* Summary stats */}
       <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map(({ label, value, color }) => (
