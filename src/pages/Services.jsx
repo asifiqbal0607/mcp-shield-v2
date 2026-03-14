@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import {
   ResponsiveContainer,
   LineChart,
@@ -217,6 +218,1502 @@ const svcRows = [
     serviceCreated: "2024-05-01",
     lastUpdate: "2024-07-01",
   },
+  {
+    id: 12,
+    name: "True Digital Group Co.,Ltd (4237) | Playit 4G - 4237501 - True",
+    serviceId: "-HojgaAp0UTzhMFYlJtg",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-13",
+    lastUpdate: "2024-02-16",
+  },
+  {
+    id: 13,
+    name: "True Digital Group Co.,Ltd (4239) | iPay Gold - 4239510 - True",
+    serviceId: "-udbpnuwsOUWVUbgcvu",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-14",
+    lastUpdate: "2024-03-17",
+  },
+  {
+    id: 14,
+    name: "True Digital Group Co.,Ltd (4238) | Lucky Star - 4238601 - True",
+    serviceId: "-RD7dwLUJB7MlHxwlV7",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-15",
+    lastUpdate: "2024-04-18",
+  },
+  {
+    id: 15,
+    name: "GVI Services | sub-acc-gold",
+    serviceId: "qa8vpn7mGbxDEYzXGiM",
+    status: "active",
+    client: "GVI",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-16",
+    lastUpdate: "2024-05-19",
+  },
+  {
+    id: 16,
+    name: "True Digital Group Co.,Ltd (4237) | Wan Dee5 - 4237530 - True",
+    serviceId: "-Hzq3gp48ycSwb6TXfpX",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-17",
+    lastUpdate: "2024-06-20",
+  },
+  {
+    id: 17,
+    name: "Teleinfotech | Duang Den 2 - 4218080 - True",
+    serviceId: "qBm3U5M_khmCilTedPF",
+    status: "active",
+    client: "Teleinfotech",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-18",
+    lastUpdate: "2024-07-21",
+  },
+  {
+    id: 18,
+    name: "True Digital Group Co.,Ltd (4239) | Health Care 3 - 4239480 - True",
+    serviceId: "-Hn6yV9LTo1L384N0dvP",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-19",
+    lastUpdate: "2024-08-22",
+  },
+  {
+    id: 19,
+    name: "True Digital Group Co.,Ltd (4238) | XR Plus - 4238090 - True",
+    serviceId: "-X42QmITQr5gQ1r65plZ",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-20",
+    lastUpdate: "2024-09-23",
+  },
+  {
+    id: 20,
+    name: "Zain Iraq | Click Guard - ZQ001",
+    serviceId: "KZmtyKXIKuGEo7nQBp_",
+    status: "active",
+    client: "Zain",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-21",
+    lastUpdate: "2024-10-24",
+  },
+  {
+    id: 21,
+    name: "Asiacell | Shield Pro - AC002",
+    serviceId: "-M1WdDi_gqrW96ZHDTSJ",
+    status: "active",
+    client: "Asiacell",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-10-22",
+    lastUpdate: "2024-11-25",
+  },
+  {
+    id: 22,
+    name: "True Digital Group Co.,Ltd (4237) | Horo Sap3 - 4237440 - True",
+    serviceId: "-XuIAX8WjUv4OgtSHICM",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-11-23",
+    lastUpdate: "2024-12-26",
+  },
+  {
+    id: 23,
+    name: "MTN Nigeria | Fraud Net - MT003",
+    serviceId: "-oU_WleySeIowS0N4Td",
+    status: "active",
+    client: "MTN",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-12-24",
+    lastUpdate: "2024-01-27",
+  },
+  {
+    id: 24,
+    name: "Safaricom Kenya | Geo Shield - SK004",
+    serviceId: "-HIqFuOL-5fM-D_pWSgE",
+    status: "active",
+    client: "Safaricom",
+    vsBrand: "--",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-25",
+    lastUpdate: "2024-02-28",
+  },
+  {
+    id: 25,
+    name: "True Digital Group Co.,Ltd (4239) | Hora Duange5 - 4239500 - True",
+    serviceId: "-MWbLCzM65Ba8V81GhQt",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-26",
+    lastUpdate: "2024-03-28",
+  },
+  {
+    id: 26,
+    name: "Airtel Nigeria | Click Tracker - AN005",
+    serviceId: "-MbZnXgU9CX_w365dpH3",
+    status: "active",
+    client: "Airtel",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-27",
+    lastUpdate: "2024-04-28",
+  },
+  {
+    id: 27,
+    name: "GVI Services | sub-acc-platinum",
+    serviceId: "qESZmZF6e4OCdE5QMCC",
+    status: "active",
+    client: "GVI",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-28",
+    lastUpdate: "2024-05-28",
+  },
+  {
+    id: 28,
+    name: "True Digital Group Co.,Ltd (4238) | Horo Lucky2 - 4238700 - True",
+    serviceId: "-5fG6GFVZXiCJeM1UGr",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-01",
+    lastUpdate: "2024-06-04",
+  },
+  {
+    id: 29,
+    name: "Vodacom Tanzania | Shield Basic - VT006",
+    serviceId: "q1e93RIVoBP00rJ3K27",
+    status: "active",
+    client: "Vodacom",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-02",
+    lastUpdate: "2024-07-05",
+  },
+  {
+    id: 30,
+    name: "True Digital Group Co.,Ltd (4237) | Wan Duang6 - 4237550 - True",
+    serviceId: "-sRpi2gDNtfM1DGOk2X",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-03",
+    lastUpdate: "2024-08-06",
+  },
+  {
+    id: 31,
+    name: "Teleinfotech | Duang Den 3 - 4218100 - True",
+    serviceId: "KwGFnfCtWEmUJjAoN9Y",
+    status: "active",
+    client: "Teleinfotech",
+    vsBrand: "--",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-04",
+    lastUpdate: "2024-09-07",
+  },
+  {
+    id: 32,
+    name: "True Digital Group Co.,Ltd (4239) | Horo Sap5 - 4239520 - True",
+    serviceId: "-USyZ5PSUvn7jV4KqvK",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-05",
+    lastUpdate: "2024-10-08",
+  },
+  {
+    id: 33,
+    name: "Zain Iraq | Bot Filter - ZQ007",
+    serviceId: "qM_F5Hpha-b7EAWrB_P",
+    status: "active",
+    client: "Zain",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-10-06",
+    lastUpdate: "2024-11-09",
+  },
+  {
+    id: 34,
+    name: "True Digital Group Co.,Ltd (4238) | Health Care 4 - 4238800 - True",
+    serviceId: "-X9F98qQP1Aa9KINbRgy",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-11-07",
+    lastUpdate: "2024-12-10",
+  },
+  {
+    id: 35,
+    name: "Asiacell | Redirect Flow - AC008",
+    serviceId: "-HUffVreDG708fXlP6Ct",
+    status: "active",
+    client: "Asiacell",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-12-08",
+    lastUpdate: "2024-01-11",
+  },
+  {
+    id: 36,
+    name: "True Digital Group Co.,Ltd (4237) | XR Academy2 - 4237560 - True",
+    serviceId: "-HLmsdIWGE-SNRe_IYTq",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-09",
+    lastUpdate: "2024-02-12",
+  },
+  {
+    id: 37,
+    name: "MTN Nigeria | Click Guard2 - MT009",
+    serviceId: "-M5_nsGpdQHhFO2gmla5",
+    status: "active",
+    client: "MTN",
+    vsBrand: "--",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-10",
+    lastUpdate: "2024-03-13",
+  },
+  {
+    id: 38,
+    name: "True Digital Group Co.,Ltd (4239) | Lucky Dee10 - 4239540 - True",
+    serviceId: "-X8G-FBobbU750WpFGGC",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-11",
+    lastUpdate: "2024-04-14",
+  },
+  {
+    id: 39,
+    name: "Safaricom Kenya | Fraud Net2 - SK010",
+    serviceId: "qoChudk_Cziq9f-vEqu",
+    status: "active",
+    client: "Safaricom",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-12",
+    lastUpdate: "2024-05-15",
+  },
+  {
+    id: 40,
+    name: "GVI Services | sub-acc-silver",
+    serviceId: "-H7ZKvGkg4WpyoQMwDEw",
+    status: "active",
+    client: "GVI",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-13",
+    lastUpdate: "2024-06-16",
+  },
+  {
+    id: 41,
+    name: "True Digital Group Co.,Ltd (4238) | Wan Dee7 - 4238900 - True",
+    serviceId: "-H-lw3aNHXTV_tlewB52",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-14",
+    lastUpdate: "2024-07-17",
+  },
+  {
+    id: 42,
+    name: "TPay | Gold Payment API",
+    serviceId: "-AqesEfJ7btbdTu2Gqi",
+    status: "inactive",
+    client: "TPay",
+    vsBrand: "--",
+    type: "MSISDN",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-15",
+    lastUpdate: "2024-08-18",
+  },
+  {
+    id: 43,
+    name: "Airtel Nigeria | OTP Gateway - AN011",
+    serviceId: "-HV4pTKbqK_lAvZuVMq5",
+    status: "inactive",
+    client: "Airtel",
+    vsBrand: "--",
+    type: "WAP",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-16",
+    lastUpdate: "2024-09-19",
+  },
+  {
+    id: 44,
+    name: "True Digital Group Co.,Ltd (4237) | Legacy Sap - 4237099 - True",
+    serviceId: "KJra92SY7dKi-KDExkd",
+    status: "inactive",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "OTP",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-17",
+    lastUpdate: "2024-10-20",
+  },
+  {
+    id: 45,
+    name: "Vodacom Tanzania | WAP Shield - VT012",
+    serviceId: "-M98dWWIR1_8r1HWhzX3",
+    status: "inactive",
+    client: "Vodacom",
+    vsBrand: "GVI-Brand",
+    type: "API",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-10-18",
+    lastUpdate: "2024-11-21",
+  },
+  {
+    id: 46,
+    name: "Zain Iraq | Old Click - ZQ013",
+    serviceId: "-HTsVyrMFraAr5xgd3aF",
+    status: "inactive",
+    client: "Zain",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-11-19",
+    lastUpdate: "2024-12-22",
+  },
+  {
+    id: 47,
+    name: "GVI Services | sub-acc-archived",
+    serviceId: "-Mrp-ojRvGH7jRbyGRBd",
+    status: "inactive",
+    client: "GVI",
+    vsBrand: "Shield",
+    type: "Redirect",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-12-20",
+    lastUpdate: "2024-01-23",
+  },
+  {
+    id: 48,
+    name: "Asiacell | Basic Flow - AC014",
+    serviceId: "-MRDKa7QKC3bT6WIXm7Z",
+    status: "inactive",
+    client: "Asiacell",
+    vsBrand: "--",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-21",
+    lastUpdate: "2024-02-24",
+  },
+  {
+    id: 49,
+    name: "MTN Nigeria | Old Fraud - MT015",
+    serviceId: "-MZpUTQV03h-GsiciJgH",
+    status: "inactive",
+    client: "MTN",
+    vsBrand: "--",
+    type: "DCB",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-22",
+    lastUpdate: "2024-03-25",
+  },
+  {
+    id: 50,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Lucky Star Premium - 4237601 - True",
+    serviceId: "KgyrZWLwVmXzOLudiG",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-11",
+    lastUpdate: "2024-03-13",
+  },
+  {
+    id: 51,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | Wan Dee Gold - 4239710 - True",
+    serviceId: "-iLCfo05pY1s6nMl-v",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-14",
+    lastUpdate: "2024-04-16",
+  },
+  {
+    id: 52,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Horo Pro Max - 4238800 - True",
+    serviceId: "-N7ZZ-Df95vplKCb5Q",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-17",
+    lastUpdate: "2024-05-19",
+  },
+  {
+    id: 53,
+    name: "GVI Services | sub-acc-platinum",
+    serviceId: "qxdMEADAGq2wLu5kyG",
+    status: "inactive",
+    client: "GVI",
+    vsBrand: "AIS-Brand",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-20",
+    lastUpdate: "2024-06-22",
+  },
+  {
+    id: 54,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Playit 5G - 4237700 - True",
+    serviceId: "qlVjFq7B2Ft8Uk68Fa",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "MTN-Brand",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-23",
+    lastUpdate: "2024-07-25",
+  },
+  {
+    id: 55,
+    name: "Teleinfotech | Duang Den 3",
+    serviceId: "-QJTay1-f4MCOajYP1",
+    status: "active",
+    client: "Teleinfotech",
+    vsBrand: "--",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-26",
+    lastUpdate: "2024-08-28",
+  },
+  {
+    id: 56,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | Health Care Plus - 4239600 - True",
+    serviceId: "-Q7LiAHNTXGOgLXbsI",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "API",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-01",
+    lastUpdate: "2024-09-03",
+  },
+  {
+    id: 57,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | XR Academy Pro - 4238200 - True",
+    serviceId: "q459yq_gaTGAs3h2wL",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Zain-SD",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-04",
+    lastUpdate: "2024-10-06",
+  },
+  {
+    id: 58,
+    name: "Zain Iraq | Shield Elite - ZQ010",
+    serviceId: "qNGIRYMxGm4241tM6Q",
+    status: "active",
+    client: "Zain",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Orange-SN",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-10-07",
+    lastUpdate: "2025-11-09",
+  },
+  {
+    id: 59,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Horo Sap5 - 4237800 - True",
+    serviceId: "KMqR3FrT8KTxsVf3-Q",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "Vodacom-TZ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-11-10",
+    lastUpdate: "2025-12-12",
+  },
+  {
+    id: 60,
+    name: "Asiacell | Click Guard Plus - AC020",
+    serviceId: "-PnjhKpwsUfTiw8KoI",
+    status: "active",
+    client: "Asiacell",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-12-13",
+    lastUpdate: "2025-01-15",
+  },
+  {
+    id: 61,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | iPay Platinum - 4239620 - True",
+    serviceId: "-HJvH_TkZ3IVLb5iX-",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-16",
+    lastUpdate: "2024-02-18",
+  },
+  {
+    id: 62,
+    name: "MTN Nigeria | Fraud Shield - MT010",
+    serviceId: "-E6UpTF8i7Pm93rF76",
+    status: "inactive",
+    client: "MTN",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-19",
+    lastUpdate: "2024-03-21",
+  },
+  {
+    id: 63,
+    name: "Safaricom Kenya | Geo Shield Pro - SK020",
+    serviceId: "-9-as4Uu4gEnhxpCzo",
+    status: "active",
+    client: "Safaricom",
+    vsBrand: "--",
+    type: "API",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-22",
+    lastUpdate: "2024-04-24",
+  },
+  {
+    id: 64,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Lucky Star Ultra - 4238900 - True",
+    serviceId: "qGCcfL32aRgjiWgWLk",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "AIS-Brand",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-25",
+    lastUpdate: "2024-05-27",
+  },
+  {
+    id: 65,
+    name: "GVI Services | premium-sub-acc",
+    serviceId: "KfXjsPqNmEFi4GqU6n",
+    status: "active",
+    client: "GVI",
+    vsBrand: "MTN-Brand",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-28",
+    lastUpdate: "2024-06-28",
+  },
+  {
+    id: 66,
+    name: "Teleinfotech | Duang Den 4",
+    serviceId: "-wSTvyxUaVwhRhrqEl",
+    status: "active",
+    client: "Teleinfotech",
+    vsBrand: "--",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-03",
+    lastUpdate: "2024-07-05",
+  },
+  {
+    id: 67,
+    name: "Airtel Nigeria | Click Net - AN001",
+    serviceId: "qGyis4nxMiur_WemeN",
+    status: "active",
+    client: "Airtel",
+    vsBrand: "--",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-06",
+    lastUpdate: "2024-08-08",
+  },
+  {
+    id: 68,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Wan Dee Pro - 4237900 - True",
+    serviceId: "-0GzpIATWoSUskrpI2",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-09",
+    lastUpdate: "2024-09-11",
+  },
+  {
+    id: 69,
+    name: "Orange Senegal | Shield Basic - OS001",
+    serviceId: "qp2wyJzqpjF8ijQUjB",
+    status: "active",
+    client: "Orange",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Zain-SD",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-12",
+    lastUpdate: "2024-10-14",
+  },
+  {
+    id: 70,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | Health Care 4 - 4239700 - True",
+    serviceId: "q9h-y37sCepxFvmZNQ",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "API",
+    mno: "Orange-SN",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-10-15",
+    lastUpdate: "2025-11-17",
+  },
+  {
+    id: 71,
+    name: "Vodacom Tanzania | Geo Track - VT001",
+    serviceId: "-HUYUdWxxlR_t0K1G6",
+    status: "inactive",
+    client: "Vodacom",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "Vodacom-TZ",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-11-18",
+    lastUpdate: "2025-12-20",
+  },
+  {
+    id: 72,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | XR Plus Pro - 4238300 - True",
+    serviceId: "-d7Y1XksA12iD7LNGW",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-12-21",
+    lastUpdate: "2025-01-23",
+  },
+  {
+    id: 73,
+    name: "Zain Iraq | Lucky Net - ZQ020",
+    serviceId: "KGuyG67-Z_gaY6UI1v",
+    status: "active",
+    client: "Zain",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-24",
+    lastUpdate: "2024-02-26",
+  },
+  {
+    id: 74,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Horo Sap6 - 4237950 - True",
+    serviceId: "Kka3AN_Tcx5cMy5Fk8",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-27",
+    lastUpdate: "2024-03-28",
+  },
+  {
+    id: 75,
+    name: "Ethio Telecom | Shield Pro - ET001",
+    serviceId: "-Vyg05TIezfTffReTW",
+    status: "active",
+    client: "Ethio Telecom",
+    vsBrand: "AIS-Brand",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-02",
+    lastUpdate: "2024-04-04",
+  },
+  {
+    id: 76,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | Wan Dee Ultra - 4239800 - True",
+    serviceId: "-IFl4UFK3BrjLEwbbp",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "MTN-Brand",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-05",
+    lastUpdate: "2024-05-07",
+  },
+  {
+    id: 77,
+    name: "Sudatel | Click Guard - SD001",
+    serviceId: "Kn856ZxiwlrnaoqzGR",
+    status: "active",
+    client: "Sudatel",
+    vsBrand: "--",
+    type: "API",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-08",
+    lastUpdate: "2024-06-10",
+  },
+  {
+    id: 78,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Health Monitor - 4238400 - True",
+    serviceId: "KtSvaxvTHVl7_ZD5Iq",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-11",
+    lastUpdate: "2024-07-13",
+  },
+  {
+    id: 79,
+    name: "GVI Services | sub-acc-enterprise",
+    serviceId: "-wVlsE4g4Gn9aT_3WO",
+    status: "active",
+    client: "GVI",
+    vsBrand: "--",
+    type: "--",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-14",
+    lastUpdate: "2024-08-16",
+  },
+  {
+    id: 80,
+    name: "Asiacell | Fraud Net Pro - AC030",
+    serviceId: "KsRydjr4h2oYFZ-pFW",
+    status: "inactive",
+    client: "Asiacell",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-17",
+    lastUpdate: "2024-09-19",
+  },
+  {
+    id: 81,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Playit 4K - 4237980 - True",
+    serviceId: "Kl_1p2CUxjTkc9LF3S",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "Zain-SD",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-20",
+    lastUpdate: "2024-10-22",
+  },
+  {
+    id: 82,
+    name: "Teleinfotech | Duang Den 5",
+    serviceId: "KetfgMTvWo4K2ETH_x",
+    status: "active",
+    client: "Teleinfotech",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "Orange-SN",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-10-23",
+    lastUpdate: "2025-11-25",
+  },
+  {
+    id: 83,
+    name: "MTN Nigeria | Geo Shield - MT020",
+    serviceId: "-p39Aec_3RQSjEFDxP",
+    status: "active",
+    client: "MTN",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "Vodacom-TZ",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-11-26",
+    lastUpdate: "2025-12-28",
+  },
+  {
+    id: 84,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | iPay Diamond - 4239900 - True",
+    serviceId: "KjXmSPxBrYz8DYhrwf",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "API",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-12-01",
+    lastUpdate: "2025-01-03",
+  },
+  {
+    id: 85,
+    name: "Safaricom Kenya | Click Shield - SK030",
+    serviceId: "KNSt4sTTXHU1mnRniT",
+    status: "active",
+    client: "Safaricom",
+    vsBrand: "--",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-04",
+    lastUpdate: "2024-02-06",
+  },
+  {
+    id: 86,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Lucky Star Max - 4238500 - True",
+    serviceId: "-zreBoJ4cSxk7srWEz",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "AIS-Brand",
+    type: "--",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-07",
+    lastUpdate: "2024-03-09",
+  },
+  {
+    id: 87,
+    name: "Airtel Nigeria | Shield Elite - AN010",
+    serviceId: "-a19jINudwJzS3Vi8N",
+    status: "active",
+    client: "Airtel",
+    vsBrand: "MTN-Brand",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-10",
+    lastUpdate: "2024-04-12",
+  },
+  {
+    id: 88,
+    name: "Zain Iraq | Health Net - ZQ030",
+    serviceId: "qVNl2HZd28q6252jZZ",
+    status: "active",
+    client: "Zain",
+    vsBrand: "--",
+    type: "--",
+    mno: "DTAC",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-04-13",
+    lastUpdate: "2024-05-15",
+  },
+  {
+    id: 89,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | Horo Sap7 - 4237990 - True",
+    serviceId: "-FrI_4OE43vwNSBe2v",
+    status: "inactive",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "AIS",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-05-16",
+    lastUpdate: "2024-06-18",
+  },
+  {
+    id: 90,
+    name: "Orange Senegal | Traffic Guard - OS010",
+    serviceId: "qtCt1SIB5kds1QCWdE",
+    status: "active",
+    client: "Orange",
+    vsBrand: "--",
+    type: "--",
+    mno: "Airtel-NG",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-06-19",
+    lastUpdate: "2024-07-21",
+  },
+  {
+    id: 91,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | XR Academy 2 - 4239950 - True",
+    serviceId: "Kck2O2CiK68YougtfW",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "API",
+    mno: "Safaricom-KE",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-07-22",
+    lastUpdate: "2024-08-24",
+  },
+  {
+    id: 92,
+    name: "Vodacom Tanzania | Fraud Shield - VT010",
+    serviceId: "q6XcLTfzvSz9aLMyJC",
+    status: "active",
+    client: "Vodacom",
+    vsBrand: "ZainBrand",
+    type: "--",
+    mno: "MTN-NG",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-08-25",
+    lastUpdate: "2024-09-27",
+  },
+  {
+    id: 93,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Wan Dee Gold - 4238600 - True",
+    serviceId: "qUjGbbFpcEEhd2-qXI",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "GVI-Brand",
+    type: "--",
+    mno: "Zain-SD",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-09-28",
+    lastUpdate: "2024-10-28",
+  },
+  {
+    id: 94,
+    name: "Ethio Telecom | Click Net Pro - ET010",
+    serviceId: "-xWHeHlUwE1oSObwMm",
+    status: "active",
+    client: "Ethio Telecom",
+    vsBrand: "Shield",
+    type: "--",
+    mno: "Orange-SN",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-10-03",
+    lastUpdate: "2025-11-05",
+  },
+  {
+    id: 95,
+    name: "True Digital Group Co.,Ltd (4237) (4237) | iPay Service 2 - 4237995 - True",
+    serviceId: "-W3DK1zrVc8oo3yqNW",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "TrueMove",
+    type: "--",
+    mno: "Vodacom-TZ",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-11-06",
+    lastUpdate: "2025-12-08",
+  },
+  {
+    id: 96,
+    name: "Sudatel | Geo Pro - SD010",
+    serviceId: "KtBb494j9pcy98_86T",
+    status: "active",
+    client: "Sudatel",
+    vsBrand: "--",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standard",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2025-12-09",
+    lastUpdate: "2025-01-11",
+  },
+  {
+    id: 97,
+    name: "True Digital Group Co.,Ltd (4239) (4239) | Horo Lucky 2 - 4239980 - True",
+    serviceId: "-kp75cnQpQ7sm-RSa-",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "AIS-Brand",
+    type: "--",
+    mno: "--",
+    carrierGradeNat: "--",
+    shieldMode: "Standout",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-01-12",
+    lastUpdate: "2024-02-14",
+  },
+  {
+    id: 98,
+    name: "GVI Services | sub-acc-global",
+    serviceId: "qfl5yNWu1NV3t3sICg",
+    status: "inactive",
+    client: "GVI",
+    vsBrand: "MTN-Brand",
+    type: "API",
+    mno: "Zain-IQ",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-02-15",
+    lastUpdate: "2024-03-17",
+  },
+  {
+    id: 99,
+    name: "True Digital Group Co.,Ltd (4238) (4238) | Shield Core - 4238700 - True",
+    serviceId: "KaiANM-AC5QhQV3OoE",
+    status: "active",
+    client: "True Digital",
+    vsBrand: "--",
+    type: "--",
+    mno: "TRUE",
+    carrierGradeNat: "--",
+    shieldMode: "--",
+    headerEnrichedFlow: "--",
+    hePaymentFlow: "--",
+    wifiPaymentFlow: "--",
+    serviceCreated: "2024-03-18",
+    lastUpdate: "2024-04-20",
+  },
 ];
 
 const PARTNER_ACTIONS = [
@@ -246,16 +1743,20 @@ const ADMIN_ACTIONS = [
   { label: "Update Summary", icon: "📝", color: "#6c757d" },
 ];
 
-function ActionsDropdown({ rowId, openRow, setOpenRow }) {
+function ActionsDropdown({ rowId, openRow, setOpenRow, onAction }) {
   const open = openRow === rowId;
   const btnRef = useRef(null);
-  const [coords, setCoords] = useState({ top: 0, right: 0 });
+  const dropRef = useRef(null);
+  const [coords, setCoords] = useState(null);
 
   function handleToggle() {
     if (!open && btnRef.current) {
       const rect = btnRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const flipUp = spaceBelow < 300;
       setCoords({
-        top: rect.bottom + window.scrollY + 4,
+        top: flipUp ? null : rect.bottom + 4,
+        bottom: flipUp ? window.innerHeight - rect.top + 4 : null,
         right: window.innerWidth - rect.right,
       });
     }
@@ -265,54 +1766,72 @@ function ActionsDropdown({ rowId, openRow, setOpenRow }) {
   useEffect(() => {
     if (!open) return;
     function onClickOutside(e) {
-      if (
-        btnRef.current &&
-        !btnRef.current.closest(".svc-actions-wrap").contains(e.target)
-      ) {
-        setOpenRow(null);
-      }
+      const inBtn = btnRef.current && btnRef.current.contains(e.target);
+      const inDrop = dropRef.current && dropRef.current.contains(e.target);
+      if (!inBtn && !inDrop) setOpenRow(null);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") setOpenRow(null);
     }
     document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClickOutside);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open, setOpenRow]);
+
+  const dropdown =
+    open &&
+    coords &&
+    createPortal(
+      <div
+        ref={dropRef}
+        className="svc-adm-dropdown"
+        style={{
+          position: "fixed",
+          top: coords.top ?? "auto",
+          bottom: coords.bottom ?? "auto",
+          right: coords.right,
+          zIndex: 99999,
+        }}
+      >
+        {ADMIN_ACTIONS.map((a, i) => {
+          if (a.divider) return <div key={i} className="svc-adm-divider" />;
+          if (a.group)
+            return (
+              <div key={i} className="svc-adm-group">
+                {a.group}
+              </div>
+            );
+          return (
+            <button
+              key={a.label}
+              onClick={() => {
+                setOpenRow(null);
+                onAction && onAction(a.key);
+              }}
+              className="svc-adm-item"
+            >
+              <span className="svc-adm-icon" style={{ "--c": a.color }}>
+                {a.icon}
+              </span>
+              <span className="svc-adm-label" style={{ "--c": a.color }}>
+                {a.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>,
+      document.body,
+    );
 
   return (
     <div className="svc-actions-wrap">
       <button ref={btnRef} onClick={handleToggle} className="svc-ver-btn">
         ···
       </button>
-
-      {open && (
-        <div
-          className="svc-adm-dropdown svc-adm-dropdown--fixed"
-          style={{ top: coords.top, right: coords.right }}
-        >
-          {ADMIN_ACTIONS.map((a, i) => {
-            if (a.divider) return <div key={i} className="svc-adm-divider" />;
-            if (a.group)
-              return (
-                <div key={i} className="svc-adm-group">
-                  {a.group}
-                </div>
-              );
-
-            return (
-              <button
-                key={a.label}
-                onClick={() => setOpenRow(null)}
-                className="svc-adm-item"
-              >
-                <span className="svc-adm-icon" style={{ "--c": a.color }}>
-                  {a.icon}
-                </span>
-                <span className="svc-adm-label" style={{ "--c": a.color }}>
-                  {a.label}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {dropdown}
     </div>
   );
 }
@@ -364,6 +1883,634 @@ const PARTNER_ICONS = {
     </svg>
   ),
 };
+
+// ─── Shared modal shell ───────────────────────────────────────────────────────
+function SvcModal({ title, subtitle, onClose, children, width = 560 }) {
+  return (
+    <div className="svc-modal-overlay" onClick={onClose}>
+      <div
+        className="svc-modal-box"
+        style={{ maxWidth: width, width: "95vw" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="svc-modal-header">
+          <div>
+            <div className="svc-modal-title">{title}</div>
+            {subtitle && <div className="svc-modal-subtitle">{subtitle}</div>}
+          </div>
+          <button className="svc-modal-close" onClick={onClose}>
+            ✕
+          </button>
+        </div>
+        <div className="svc-modal-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function SvcField({ label, value, mono }) {
+  return (
+    <div className="svc-modal-row">
+      <span className="svc-modal-label">{label}</span>
+      <span
+        className={mono ? "svc-modal-value svc-val-mono" : "svc-modal-value"}
+      >
+        {value || "—"}
+      </span>
+    </div>
+  );
+}
+
+function SvcInput({ label, value, onChange, disabled, type = "text" }) {
+  return (
+    <div className="svc-form-field">
+      <label className="svc-form-label">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        className={
+          "svc-form-input" + (disabled ? " svc-form-input--disabled" : "")
+        }
+      />
+    </div>
+  );
+}
+
+// ─── Map Service Modal ────────────────────────────────────────────────────────
+const VS_BRANDS_MOCK = [
+  {
+    group: "MCP VS",
+    items: [
+      "SMSTheSenseMA2 - 4242172",
+      "Clip Cute - 827147664",
+      "Asia Cute - 4584310",
+    ],
+  },
+  {
+    group: "TrueMove VS",
+    items: ["TrueMove Pro - 1234567", "TrueMove Lite - 9876543"],
+  },
+  { group: "GVI VS", items: ["GVI Standard - 3312001", "GVI Plus - 3312002"] },
+];
+const TIMEZONES_LIST = [
+  "Asia/Bangkok",
+  "Asia/Singapore",
+  "UTC",
+  "Europe/London",
+  "America/New_York",
+  "Asia/Tokyo",
+];
+const COUNTRIES_LIST = [
+  "Thailand (TH)",
+  "Singapore (SG)",
+  "United Kingdom (GB)",
+  "United States (US)",
+  "Japan (JP)",
+  "Germany (DE)",
+];
+
+function MapServiceModal({ row, onClose }) {
+  const [form, setForm] = useState({
+    name: row?.name || "",
+    companyName: row?.client || "",
+    clientName: row?.client || "",
+    timezone: "Asia/Bangkok",
+    country: "Thailand (TH)",
+    serviceUrl: `https://operator.shield.io/api/v1/gateway/${row?.id || ""}`,
+  });
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState([]);
+  const [approved, setApproved] = useState(null);
+
+  const filtered = VS_BRANDS_MOCK.map((g) => ({
+    ...g,
+    items: g.items.filter((i) =>
+      i.toLowerCase().includes(search.toLowerCase()),
+    ),
+  })).filter((g) => g.items.length > 0);
+
+  function toggleBrand(item) {
+    setSelected((prev) =>
+      prev.includes(item) ? prev.filter((x) => x !== item) : [...prev, item],
+    );
+  }
+
+  if (approved !== null) {
+    return (
+      <SvcModal title="Map Service" onClose={onClose} width={500}>
+        <div className="svc-confirm-result">
+          <div className="svc-confirm-icon">{approved ? "✅" : "❌"}</div>
+          <div className="svc-confirm-title">
+            {approved ? "Service Approved" : "Service Dis-Approved"}
+          </div>
+          <div className="svc-confirm-sub">
+            <strong>{row?.name}</strong> has been{" "}
+            {approved ? "approved and mapped" : "dis-approved"}.
+          </div>
+          <button className="svc-btn-primary" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </SvcModal>
+    );
+  }
+
+  return (
+    <SvcModal
+      title="Update Service"
+      subtitle="Map and configure service settings"
+      onClose={onClose}
+      width={920}
+    >
+      <div className="svc-map-grid">
+        <SvcInput
+          label="Name"
+          value={form.name}
+          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+        />
+        <SvcInput
+          label="Company Name"
+          value={form.companyName}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, companyName: e.target.value }))
+          }
+        />
+        <SvcInput
+          label="Client Name"
+          value={form.clientName}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, clientName: e.target.value }))
+          }
+        />
+        <div className="svc-form-field">
+          <label className="svc-form-label">Time Zone</label>
+          <select
+            className="svc-form-input svc-form-select"
+            value={form.timezone}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, timezone: e.target.value }))
+            }
+          >
+            {TIMEZONES_LIST.map((tz) => (
+              <option key={tz}>{tz}</option>
+            ))}
+          </select>
+        </div>
+        <div className="svc-form-field">
+          <label className="svc-form-label">Assigned Countries</label>
+          <select
+            className="svc-form-input svc-form-select"
+            value={form.country}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, country: e.target.value }))
+            }
+          >
+            {COUNTRIES_LIST.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+        <div className="svc-form-field">
+          <label className="svc-form-label">Service URL</label>
+          <div className="svc-url-row">
+            <input
+              value={form.serviceUrl}
+              readOnly
+              className="svc-form-input svc-form-input--disabled svc-url-input"
+            />
+            <button
+              className="svc-url-copy"
+              title="Copy URL"
+              onClick={() => navigator.clipboard?.writeText(form.serviceUrl)}
+            >
+              📋
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="svc-brands-section">
+        <label className="svc-form-label">Vs Brands List</label>
+        <div className="svc-brands-grid">
+          <div className="svc-brands-left">
+            <input
+              className="svc-brands-search"
+              placeholder="Search brands in list"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <div className="svc-brands-list">
+              {filtered.map((g) => (
+                <div key={g.group}>
+                  <div className="svc-brand-group">{g.group}</div>
+                  {g.items.map((item) => (
+                    <div
+                      key={item}
+                      className={
+                        "svc-brand-item" +
+                        (selected.includes(item) ? " selected" : "")
+                      }
+                      onClick={() => toggleBrand(item)}
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              ))}
+              {filtered.length === 0 && (
+                <div className="svc-brands-empty">No brands found</div>
+              )}
+            </div>
+          </div>
+          <div className="svc-brands-right">
+            {selected.length === 0 ? (
+              <div className="svc-brands-empty">No brands selected</div>
+            ) : (
+              selected.map((item) => (
+                <div key={item} className="svc-brand-selected">
+                  <span>{item}</span>
+                  <button
+                    className="svc-brand-remove"
+                    onClick={() => toggleBrand(item)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="svc-map-footer">
+        <button className="svc-btn-approve" onClick={() => setApproved(true)}>
+          Approve
+        </button>
+        <button
+          className="svc-btn-disapprove"
+          onClick={() => setApproved(false)}
+        >
+          Dis-Approve
+        </button>
+        <button className="svc-btn-reset" onClick={onClose}>
+          Reset Mapping
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── Solution Modal ───────────────────────────────────────────────────────────
+function SolutionModal({ row, onClose }) {
+  const solutions = [
+    "Shield Standard",
+    "Shield Premium",
+    "Fraud Detection",
+    "Geo Resolver",
+    "APK Vault",
+  ];
+  const [selected, setSelected] = useState(solutions[0]);
+  return (
+    <SvcModal
+      title="Service Solution"
+      subtitle={`Configure solution for ${row?.name}`}
+      onClose={onClose}
+      width={480}
+    >
+      <div className="svc-modal-row">
+        <span className="svc-modal-label">Service</span>
+        <span className="svc-modal-value">{row?.name}</span>
+      </div>
+      <div className="svc-modal-row">
+        <span className="svc-modal-label">Service ID</span>
+        <span className="svc-modal-value svc-val-mono">{row?.serviceId}</span>
+      </div>
+      <div className="svc-form-field" style={{ marginTop: 16 }}>
+        <label className="svc-form-label">Solution Type</label>
+        <select
+          className="svc-form-input svc-form-select"
+          value={selected}
+          onChange={(e) => setSelected(e.target.value)}
+        >
+          {solutions.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+      </div>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-primary" onClick={onClose}>
+          Apply Solution
+        </button>
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── Edit Modal ───────────────────────────────────────────────────────────────
+function EditServiceModal({ row, onClose }) {
+  const [form, setForm] = useState({
+    name: row?.name || "",
+    client: row?.client || "",
+    type: row?.type || "",
+    mno: row?.mno || "",
+    shieldMode: row?.shieldMode || "",
+  });
+  const u = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+  return (
+    <SvcModal
+      title="Edit Service"
+      subtitle="Update service configuration"
+      onClose={onClose}
+      width={640}
+    >
+      <div className="svc-map-grid">
+        <SvcInput label="Service Name" value={form.name} onChange={u("name")} />
+        <SvcInput label="Client" value={form.client} onChange={u("client")} />
+        <SvcInput label="Service Type" value={form.type} onChange={u("type")} />
+        <SvcInput label="MNO" value={form.mno} onChange={u("mno")} />
+        <div className="svc-form-field">
+          <label className="svc-form-label">Shield Mode</label>
+          <select
+            className="svc-form-input svc-form-select"
+            value={form.shieldMode}
+            onChange={u("shieldMode")}
+          >
+            {["--", "Standard", "Standout", "Premium"].map((v) => (
+              <option key={v}>{v}</option>
+            ))}
+          </select>
+        </div>
+        <SvcInput label="Service ID" value={row?.serviceId || ""} disabled />
+      </div>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-primary" onClick={onClose}>
+          Save Changes
+        </button>
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── IP Modal ─────────────────────────────────────────────────────────────────
+function IpModal({ row, onClose }) {
+  const [ips, setIps] = useState(["192.168.1.1", "10.0.0.1"]);
+  const [newIp, setNewIp] = useState("");
+  return (
+    <SvcModal
+      title="IP Whitelist"
+      subtitle={`Manage allowed IPs for ${row?.client}`}
+      onClose={onClose}
+      width={480}
+    >
+      <div className="svc-ip-list">
+        {ips.map((ip, i) => (
+          <div key={i} className="svc-ip-row">
+            <span className="svc-val-mono">{ip}</span>
+            <button
+              className="svc-ip-remove"
+              onClick={() =>
+                setIps((prev) => prev.filter((_, idx) => idx !== i))
+              }
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
+      <div className="svc-ip-add">
+        <input
+          className="svc-form-input"
+          placeholder="Enter IP address"
+          value={newIp}
+          onChange={(e) => setNewIp(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && newIp.trim()) {
+              setIps((p) => [...p, newIp.trim()]);
+              setNewIp("");
+            }
+          }}
+        />
+        <button
+          className="svc-btn-primary"
+          onClick={() => {
+            if (newIp.trim()) {
+              setIps((p) => [...p, newIp.trim()]);
+              setNewIp("");
+            }
+          }}
+        >
+          Add
+        </button>
+      </div>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-primary" onClick={onClose}>
+          Save
+        </button>
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── Clone Service Modal ──────────────────────────────────────────────────────
+function CloneServiceModal({ row, onClose }) {
+  const [cloneName, setCloneName] = useState(`${row?.name || ""} (Copy)`);
+  const [done, setDone] = useState(false);
+  if (done)
+    return (
+      <SvcModal title="Clone Service" onClose={onClose} width={440}>
+        <div className="svc-confirm-result">
+          <div className="svc-confirm-icon">✅</div>
+          <div className="svc-confirm-title">Service Cloned</div>
+          <div className="svc-confirm-sub">
+            A copy of <strong>{row?.name}</strong> has been created as{" "}
+            <strong>{cloneName}</strong>.
+          </div>
+          <button className="svc-btn-primary" onClick={onClose}>
+            Done
+          </button>
+        </div>
+      </SvcModal>
+    );
+  return (
+    <SvcModal
+      title="Clone Service"
+      subtitle="Create a duplicate of this service"
+      onClose={onClose}
+      width={480}
+    >
+      <SvcField label="Source Service" value={row?.name} />
+      <SvcField label="Service ID" value={row?.serviceId} mono />
+      <div className="svc-form-field" style={{ marginTop: 16 }}>
+        <SvcInput
+          label="New Service Name"
+          value={cloneName}
+          onChange={(e) => setCloneName(e.target.value)}
+        />
+      </div>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-primary" onClick={() => setDone(true)}>
+          Clone
+        </button>
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── Custom Variables Modal ───────────────────────────────────────────────────
+function CustomVarsModal({ row, onClose }) {
+  const [vars, setVars] = useState([
+    { key: "CALLBACK_URL", value: "https://example.com/callback" },
+    { key: "MAX_RETRY", value: "3" },
+  ]);
+  const [editIdx, setEditIdx] = useState(null);
+  return (
+    <SvcModal
+      title="Custom Variables"
+      subtitle={`Variables for ${row?.client}`}
+      onClose={onClose}
+      width={560}
+    >
+      <div className="svc-vars-list">
+        {vars.map((v, i) => (
+          <div key={i} className="svc-var-row">
+            {editIdx === i ? (
+              <>
+                <input
+                  className="svc-form-input svc-var-key"
+                  value={v.key}
+                  onChange={(e) =>
+                    setVars((p) =>
+                      p.map((x, j) =>
+                        j === i ? { ...x, key: e.target.value } : x,
+                      ),
+                    )
+                  }
+                />
+                <input
+                  className="svc-form-input svc-var-val"
+                  value={v.value}
+                  onChange={(e) =>
+                    setVars((p) =>
+                      p.map((x, j) =>
+                        j === i ? { ...x, value: e.target.value } : x,
+                      ),
+                    )
+                  }
+                />
+                <button
+                  className="svc-btn-primary svc-var-btn"
+                  onClick={() => setEditIdx(null)}
+                >
+                  ✓
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="svc-var-key-lbl">{v.key}</span>
+                <span className="svc-var-val-lbl">{v.value}</span>
+                <button className="svc-var-edit" onClick={() => setEditIdx(i)}>
+                  ✏️
+                </button>
+                <button
+                  className="svc-var-del"
+                  onClick={() => setVars((p) => p.filter((_, j) => j !== i))}
+                >
+                  🗑
+                </button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+      <button
+        className="svc-var-add"
+        onClick={() => {
+          setVars((p) => [...p, { key: "NEW_VAR", value: "" }]);
+          setEditIdx(vars.length);
+        }}
+      >
+        + Add Variable
+      </button>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-primary" onClick={onClose}>
+          Save
+        </button>
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
+
+// ─── Update Summary Modal ─────────────────────────────────────────────────────
+function UpdateSummaryModal({ row, onClose }) {
+  const HISTORY = [
+    {
+      date: "2024-06-25",
+      field: "Shield Mode",
+      from: "Standard",
+      to: "Premium",
+      by: "admin@shield.io",
+    },
+    {
+      date: "2024-05-10",
+      field: "MNO",
+      from: "--",
+      to: "TRUE",
+      by: "admin@shield.io",
+    },
+    {
+      date: "2024-03-01",
+      field: "Status",
+      from: "inactive",
+      to: "active",
+      by: "system",
+    },
+  ];
+  return (
+    <SvcModal
+      title="Update Summary"
+      subtitle={`Change history for ${row?.name}`}
+      onClose={onClose}
+      width={640}
+    >
+      <div className="svc-history-list">
+        {HISTORY.map((h, i) => (
+          <div key={i} className="svc-history-row">
+            <span className="svc-history-date">{h.date}</span>
+            <span className="svc-history-field">{h.field}</span>
+            <span className="svc-history-change">
+              <span className="svc-history-from">{h.from}</span>
+              <span className="svc-history-arrow">→</span>
+              <span className="svc-history-to">{h.to}</span>
+            </span>
+            <span className="svc-history-by">{h.by}</span>
+          </div>
+        ))}
+      </div>
+      <div className="svc-modal-actions">
+        <button className="svc-btn-cancel" onClick={onClose}>
+          Close
+        </button>
+      </div>
+    </SvcModal>
+  );
+}
 
 function ServiceViewModal({ row, onClose }) {
   if (!row) return null;
@@ -444,6 +2591,21 @@ export default function PageServices({ role = "admin", setPage }) {
   const [perPageSvc, setPerPageSvc] = useState(10);
   const [openRow, setOpenRow] = useState(null);
   const [editRow, setEditRow] = useState(null);
+  const [activeModal, setActiveModal] = useState(null);
+  const [activeRow, setActiveRow] = useState(null);
+
+  function openModal(key, row) {
+    if (key === "dashboard" || key === "edit") {
+      if (setPage) setPage("overview", row);
+      return;
+    }
+    setActiveModal(key);
+    setActiveRow(row);
+  }
+  function closeModal() {
+    setActiveModal(null);
+    setActiveRow(null);
+  }
 
   const isPartner = role === "partner";
   const isAdmin = role === "admin";
@@ -561,12 +2723,12 @@ export default function PageServices({ role = "admin", setPage }) {
       case "lastUpdate":
         return <span className="svc-code">{row.lastUpdate}</span>;
       case "actions":
-      case "actions":
         return isAdmin ? (
           <ActionsDropdown
             rowId={row.id}
             openRow={openRow}
             setOpenRow={setOpenRow}
+            onAction={(key) => openModal(key, row)}
           />
         ) : (
           <PartnerActions row={row} setPage={setPage} setEditRow={setEditRow} />
@@ -584,6 +2746,25 @@ export default function PageServices({ role = "admin", setPage }) {
     <div>
       {editRow?.mode === "view" && (
         <ServiceViewModal row={editRow.row} onClose={handleModalClose} />
+      )}
+      {activeModal === "mapService" && (
+        <MapServiceModal row={activeRow} onClose={closeModal} />
+      )}
+      {activeModal === "solution" && (
+        <SolutionModal row={activeRow} onClose={closeModal} />
+      )}
+      {activeModal === "edit" && (
+        <EditServiceModal row={activeRow} onClose={closeModal} />
+      )}
+      {activeModal === "ip" && <IpModal row={activeRow} onClose={closeModal} />}
+      {activeModal === "cloneService" && (
+        <CloneServiceModal row={activeRow} onClose={closeModal} />
+      )}
+      {activeModal === "customVars" && (
+        <CustomVarsModal row={activeRow} onClose={closeModal} />
+      )}
+      {activeModal === "updateSummary" && (
+        <UpdateSummaryModal row={activeRow} onClose={closeModal} />
       )}
       {/* Summary stats */}
       <div className="g-stats3 mb-section">
@@ -680,7 +2861,7 @@ export default function PageServices({ role = "admin", setPage }) {
                 <button
                   key={key}
                   onClick={() => {
-                    setPerPageSvc(10);
+                    setPerPageSvc(25);
                     setTab(key);
                   }}
                   className={`svc-tab-btn ${isOn ? "on" : "off"}`}

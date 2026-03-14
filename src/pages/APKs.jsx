@@ -471,7 +471,7 @@ export default function PageAPKs() {
             />
           </div>
         </div>
-        <div className="table-wrap">
+        <div className="apk-table-scroll-wrap">
           <table className="dt" style={{ tableLayout: "fixed", width: "100%" }}>
             <colgroup>
               <col style={{ width: "48px" }} />

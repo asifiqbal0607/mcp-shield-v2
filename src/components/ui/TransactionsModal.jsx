@@ -121,6 +121,7 @@ export default function TransactionsModal({
   const [search, setSearch] = useState(initialIp);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [statusFilter, setStatusFilter] = useState("All"); // "All" | "Clear" | "Block"
 
   useEffect(() => {
     const handler = (e) => {
@@ -130,13 +131,23 @@ export default function TransactionsModal({
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  const filtered = transactionRows.filter(
-    (r) =>
+  const filtered = transactionRows.filter((r) => {
+    const matchSearch =
       r.id.includes(search) ||
       r.network.toLowerCase().includes(search.toLowerCase()) ||
       r.apk.toLowerCase().includes(search.toLowerCase()) ||
-      r.userIp.includes(search),
-  );
+      r.userIp.includes(search);
+    const matchStatus =
+      statusFilter === "All" ||
+      (statusFilter === "Block" && r.status === "Block") ||
+      (statusFilter === "Clear" && r.status === "Clear");
+    return matchSearch && matchStatus;
+  });
+
+  // Counts for tab badges
+  const countAll = transactionRows.length;
+  const countBlock = transactionRows.filter((r) => r.status === "Block").length;
+  const countClear = transactionRows.filter((r) => r.status === "Clear").length;
 
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paged = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -206,6 +217,35 @@ export default function TransactionsModal({
             </button>
           </div>
         )}
+
+        {/* ── Status Filter Tabs ── */}
+        <div className="txn-status-tabs">
+          {[
+            {
+              key: "All",
+              label: "All Transactions",
+              count: countAll,
+              icon: "≡",
+            },
+            { key: "Clear", label: "Clear", count: countClear, icon: "✅" },
+            { key: "Block", label: "Blocked", count: countBlock, icon: "🚫" },
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => {
+                setStatusFilter(tab.key);
+                setPage(1);
+              }}
+              className={`txn-status-tab${statusFilter === tab.key ? " active" : ""} tab-${tab.key.toLowerCase()}`}
+            >
+              <span className="txn-status-tab-icon">{tab.icon}</span>
+              <span className="txn-status-tab-label">{tab.label}</span>
+              <span className="txn-status-tab-count">
+                {tab.count.toLocaleString()}
+              </span>
+            </button>
+          ))}
+        </div>
 
         {/* ── Controls ── */}
         <div className="txn-controls">
@@ -289,7 +329,7 @@ export default function TransactionsModal({
                     <span
                       className={`txn-status-badge ${r.status === "Block" ? "status-block" : "status-allow"}`}
                     >
-                      {r.status}
+                      {r.status === "Block" ? "Block" : "Clear"}
                     </span>
                   </td>
                   <td className="txn-td-reasons">

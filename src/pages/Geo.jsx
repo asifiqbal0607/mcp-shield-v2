@@ -163,7 +163,7 @@ export default function PageGeo() {
   const geoVisible = sortedData.slice(0, perPageGeo);
 
   return (
-    <div>
+    <div className="geo-page-wrap">
       {/* Summary stats */}
       <div className="g-stats4 mb-section">
         {[
@@ -297,7 +297,7 @@ export default function PageGeo() {
             </select>
             <span className="dt-entries-lbl">entries</span>
           </div>
-          <div className="table-wrap"><table
+          <div className="page-table-scroll"><table
           className="dt"
           >
             <thead>

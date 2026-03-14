@@ -41,7 +41,7 @@ export default function PageReporting() {
   const visibleRep = filteredRep.slice(0, perPageRep);
 
   return (
-    <div>
+    <div className="reporting-page-wrap">
       {/* Summary stats */}
       <div className="grid-2 mb-24">
         {SUMMARY_STATS.map(({ label, value, color }) => (
@@ -139,7 +139,7 @@ export default function PageReporting() {
             <button className="tab-pill">+ New Report</button>
           </div>
         </div>
-        <div className="table-wrap">
+        <div className="page-table-scroll">
           <table className="dt dt-lg">
             <thead>
               <tr className="dt-head-row">

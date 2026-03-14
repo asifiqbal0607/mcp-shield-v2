@@ -1,172 +1,99 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-const GREEN = "#22c55e";
-const BLUE = "#1d4ed8";
-const ROSE = "#dc2626";
+// ── Event template — all test names used per event type ──────────────────────
+const EVENT_TEMPLATES = [
+  {
+    name: "Pointerdown",
+    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+  },
+  {
+    name: "Touchstart",
+    tests: ["Screen Test", "Client Test", "Touch Area Test"],
+  },
+  {
+    name: "Pointerup",
+    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+  },
+  {
+    name: "Touchend",
+    tests: ["Screen Test", "Client Test", "Touch Area Test"],
+  },
+  {
+    name: "Mousedown",
+    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+  },
+  {
+    name: "Mouseup",
+    tests: ["Screen Test", "Event Layers Test", "Client Test"],
+  },
+  { name: "Click", tests: ["Screen Test", "Event Layers Test", "Client Test"] },
+];
 
-function makeDetail(row) {
+// For blocked transactions: which specific tests fail per event
+const BLOCKED_FAILURES = {
+  Touchstart: ["Touch Area Test"],
+  Mousedown: ["Event Layers Test"],
+  Pointerdown: ["Client Test"], // only in seq 2
+};
+
+// Build one click sequence worth of events
+// seqIdx 0 = first click, seqIdx 1 = second click etc.
+// isBlocked drives whether any tests fail
+function buildSequence(seqIdx, isBlocked, baseMs) {
+  const offsets = [0, 4, 8, 40, 211, 215, 240]; // ms offsets per event
+  const base = new Date(`2026-02-25T04:23:${19 + seqIdx * 2}.000`);
+
+  return EVENT_TEMPLATES.map((tmpl, i) => {
+    const t = new Date(base.getTime() + offsets[i] + baseMs);
+    const timeStr =
+      t.toISOString().replace("T", " ").replace("Z", "").slice(0, 23) + " AM";
+
+    // Clean = every test is always pass. Blocked = specific tests fail per sequence.
+    const tests = tmpl.tests.map((testName) => {
+      if (!isBlocked) return { name: testName, status: "pass" };
+      const failSet =
+        seqIdx === 0
+          ? {
+              Touchstart: ["Touch Area Test"],
+              Mousedown: ["Event Layers Test"],
+            }
+          : { Pointerdown: ["Client Test"], Mouseup: ["Event Layers Test"] };
+      return {
+        name: testName,
+        status: failSet[tmpl.name]?.includes(testName) ? "fail" : "pass",
+      };
+    });
+
+    return { name: tmpl.name, time: timeStr, tests };
+  });
+}
+
+// Build device-check results driven by status
+function buildDeviceChecks(isBlocked) {
+  const p = "pass";
+  const f = isBlocked ? "fail" : "pass"; // only fails when truly blocked
   return {
-    url: "http://aciq.playit.mobi/confirm-asiacell?uniquid=ask004b49312599e074c94c3951d698ad23",
-    referrer:
-      "http://aciq.playit.mobi/signup?parameter=60432life-15od-4cb2-837f-2e8e7f380f6b&trafficsource=OffyClick",
-    time: row?.time || "Feb 25, 04:23:08.438 AM",
-    timezone: "Asia/Baghdad",
-    transactionId: row?.id || "20260225042308_fd1f907042ef4af9bfe261415926f45",
-    client: "IQ Grand Technology",
-    service: "GC 2231 Playit",
-    queried: "Yes",
-    queriedTime: "2026-02-25 07:23:08.488 AM",
-    queriedLabel: "Asia/Baghdad",
-    userIp: row?.userIp || "89.46.206.31",
-    userAgent:
-      "Mozilla/5.0 (Linux; Android 13; SM-M127F Build/TP1A.220624.014) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.6778.135 Mobile Safari/537.36",
-    country: "Iraq",
-    continent: "Asia",
-    timezone2: "Asia/Baghdad",
-    device: "Samsung SM-M127F",
-    os: "Android",
-    browser: "Chrome Mobile",
-    network: row?.network || "Asiacell Communications Pjsc",
-    status: row?.status || "Clean",
-    score: 10,
-    apk: row?.apk || "",
-    reasons: row?.reasons || [],
+    "UI Rendering": [
+      { name: "Point 0 Test", status: f },
+      { name: "Background Rendering Test", status: p },
+      { name: "0x0 0x0 Pixel View W.R.T Device", status: f },
+      { name: "0x0 0x0 Pixel View W.R.T Browser", status: p },
+    ],
+    Spoofing: [
+      { name: "Canvas Fingerprint Test", status: p },
+      { name: "WebGL Renderer Test", status: f },
+      { name: "Audio Context Test", status: p },
+      { name: "Font Metrics Test", status: p },
+    ],
+    "JavaScript Challenge": [
+      { name: "Timing Attack Test", status: p },
+      { name: "Prototype Chain Test", status: f },
+      { name: "Eval Behavior Test", status: p },
+      { name: "Async Context Test", status: p },
+    ],
   };
 }
 
-// ── Raw events — each test has status "pass" | "fail" ────────────────────────
-const RAW_EVENTS = [
-  // ── Click sequence 1 ──────────────────────────────────────────────────────
-  {
-    name: "Pointerdown",
-    time: "2026-02-25 04:23:19.217 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Touchstart",
-    time: "2026-02-25 04:23:19.221 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-      { name: "Touch Area Test", status: "fail" }, // ← FAILED
-    ],
-  },
-  {
-    name: "Pointerup",
-    time: "2026-02-25 04:23:19.225 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Touchend",
-    time: "2026-02-25 04:23:19.257 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-      { name: "Touch Area Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Mousedown",
-    time: "2026-02-25 04:23:19.428 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "fail" }, // ← FAILED
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Mouseup",
-    time: "2026-02-25 04:23:19.432 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Click",
-    time: "2026-02-25 04:23:19.457 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  // ── Click sequence 2 ──────────────────────────────────────────────────────
-  {
-    name: "Pointerdown",
-    time: "2026-02-25 04:23:21.100 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "fail" }, // ← FAILED
-    ],
-  },
-  {
-    name: "Touchstart",
-    time: "2026-02-25 04:23:21.104 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-      { name: "Touch Area Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Pointerup",
-    time: "2026-02-25 04:23:21.108 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Touchend",
-    time: "2026-02-25 04:23:21.120 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-      { name: "Touch Area Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Mousedown",
-    time: "2026-02-25 04:23:21.290 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Mouseup",
-    time: "2026-02-25 04:23:21.295 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-  {
-    name: "Click",
-    time: "2026-02-25 04:23:21.310 AM",
-    tests: [
-      { name: "Screen Test", status: "pass" },
-      { name: "Event Layers Test", status: "pass" },
-      { name: "Client Test", status: "pass" },
-    ],
-  },
-];
-
-// Group flat event list into click sequences — each group ends at "Click"
 function groupIntoClickSequences(events) {
   const groups = [];
   let current = [];
@@ -181,30 +108,43 @@ function groupIntoClickSequences(events) {
   return groups;
 }
 
-const CLICK_SEQUENCES = groupIntoClickSequences(RAW_EVENTS);
+function makeDetail(row) {
+  const isBlocked = (row?.status || "").toLowerCase().includes("block");
+  return {
+    url: "http://aciq.playit.mobi/confirm-asiacell?uniquid=ask004b49312599e074c94c3951d698ad23",
+    referrer:
+      "http://aciq.playit.mobi/signup?parameter=60432life-15od-4cb2-837f-2e8e7f380f6b&trafficsource=OffyClick",
+    time: row?.time || "Feb 25, 04:23:08.438 AM",
+    timezone: "Asia/Baghdad",
+    transactionId: row?.id || "20260225042308_fd1f907042ef4af9bfe261415926f45",
+    client: "IQ Grand Technology",
+    service: "GC 2231 Playit",
+    queried: "Yes",
+    queriedTime: "2026-02-25 07:23:08.488 AM",
+    userIp: row?.userIp || "89.46.206.31",
+    userAgent:
+      "Mozilla/5.0 (Linux; Android 13; SM-M127F Build/TP1A.220624.014) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.6778.135 Mobile Safari/537.36",
+    country: "Iraq",
+    continent: "Asia",
+    timezone2: "Asia/Baghdad",
+    device: "Samsung SM-M127F",
+    os: "Android",
+    browser: "Chrome Mobile",
+    network: row?.network || "Asiacell Communications Pjsc",
+    status: row?.status || "Clean",
+    score: isBlocked ? 87 : 10,
+    isBlocked,
+    reasons: isBlocked
+      ? [
+          "Touch Area Test failed in sequence 1",
+          "Event Layers Test anomaly detected",
+          "Prototype Chain injection attempt",
+        ]
+      : [],
+  };
+}
 
-const DEVICE_CHECKS = {
-  "UI Rendering": [
-    "Point 0 Test",
-    "Background Rendering Test",
-    "0x0 0x0 Pixel View W.R.T Device",
-    "0x0 0x0 Pixel View W.R.T Browser",
-  ],
-  Spoofing: [
-    "Canvas Fingerprint Test",
-    "WebGL Renderer Test",
-    "Audio Context Test",
-    "Font Metrics Test",
-  ],
-  "JavaScript Challenge": [
-    "Timing Attack Test",
-    "Prototype Chain Test",
-    "Eval Behavior Test",
-    "Async Context Test",
-  ],
-};
-
-// ── Badges ────────────────────────────────────────────────────────────────────
+// ── Small components ──────────────────────────────────────────────────────────
 function TestBadge({ status }) {
   return status === "fail" ? (
     <span className="tdd-test-badge fail">Failed</span>
@@ -220,11 +160,30 @@ function seqHasFail(seq) {
   return seq.some(eventHasFail);
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Main component ────────────────────────────────────────────────────────────
 export default function TransactionDetailModal({ row, onClose, onUserIp }) {
   const [devTab, setDevTab] = useState("UI Rendering");
   const [expandedEvt, setExpandedEvt] = useState(null);
-  const d = makeDetail(row);
+
+  const d = useMemo(() => makeDetail(row), [row]);
+
+  // All events + device checks derived from transaction status
+  const rawEvents = useMemo(
+    () => [
+      ...buildSequence(0, d.isBlocked, 0),
+      ...buildSequence(1, d.isBlocked, 2000),
+    ],
+    [d.isBlocked],
+  );
+
+  const clickSequences = useMemo(
+    () => groupIntoClickSequences(rawEvents),
+    [rawEvents],
+  );
+  const deviceChecks = useMemo(
+    () => buildDeviceChecks(d.isBlocked),
+    [d.isBlocked],
+  );
 
   useEffect(() => {
     const h = (e) => {
@@ -234,21 +193,39 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
     return () => window.removeEventListener("keydown", h);
   }, [onClose]);
 
+  // Reset expanded event when transaction changes
+  useEffect(() => {
+    setExpandedEvt(null);
+  }, [row]);
+
+  const totalFails = rawEvents.reduce(
+    (a, e) => a + e.tests.filter((t) => t.status === "fail").length,
+    0,
+  );
+
   return (
     <>
       <div onClick={onClose} className="tdd-backdrop" />
-
       <div className="tdd-modal">
         {/* ── Header ── */}
-        <div className="tdd-header">
+        <div
+          className={`tdd-header${d.isBlocked ? " tdd-header-blocked" : ""}`}
+        >
           <div className="tdd-header-left">
-            <div className="tdd-header-icon">🔍</div>
+            <div className="tdd-header-icon">{d.isBlocked ? "🚫" : "✅"}</div>
             <div>
               <div className="tdd-header-title">Transaction Detail</div>
               <div className="tdd-header-txid">{d.transactionId}</div>
             </div>
           </div>
           <div className="tdd-header-actions">
+            {/* Status pill prominent in header */}
+            <span
+              className={`tdd-header-status-pill ${d.isBlocked ? "blocked" : "clean"}`}
+            >
+              {d.isBlocked ? "🚫 BLOCKED" : "✅ CLEAN"}
+              <span className="tdd-header-score">Score: {d.score}</span>
+            </span>
             <button
               onClick={() => onUserIp && onUserIp(d.userIp)}
               className="tdd-btn-useip"
@@ -262,6 +239,23 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
             </button>
           </div>
         </div>
+
+        {/* ── Blocked reasons banner ── */}
+        {d.isBlocked && d.reasons.length > 0 && (
+          <div className="tdd-block-banner">
+            <span className="tdd-block-banner-icon">⚠</span>
+            <div>
+              <div className="tdd-block-banner-title">Block Reasons</div>
+              <div className="tdd-block-banner-reasons">
+                {d.reasons.map((r, i) => (
+                  <span key={i} className="tdd-block-reason-chip">
+                    {r}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Scrollable body ── */}
         <div className="tdd-body">
@@ -342,9 +336,9 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                     "Status",
                     <>
                       <span
-                        className={`tdd-status-pill ${d.status === "Block" ? "tdd-status-block" : "tdd-status-clean"}`}
+                        className={`tdd-status-pill ${d.isBlocked ? "tdd-status-block" : "tdd-status-clean"}`}
                       >
-                        {d.status}
+                        {d.isBlocked ? "Block" : "Clear"}
                       </span>
                       <span className="tdd-score-label">
                         Score: <strong>{d.score}</strong>
@@ -372,23 +366,42 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
             <div className="tdd-section-hd">
               <span className="tdd-section-bar tdd-bar-violet" />
               Device Verification
+              {d.isBlocked && (
+                <span className="tdd-section-fail-count">
+                  {
+                    Object.values(deviceChecks)
+                      .flat()
+                      .filter((c) => c.status === "fail").length
+                  }{" "}
+                  checks failed
+                </span>
+              )}
             </div>
             <div className="tdd-tabs-wrap">
-              {Object.keys(DEVICE_CHECKS).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setDevTab(tab)}
-                  className={`tdd-tab-btn${devTab === tab ? " active" : ""}`}
-                >
-                  {tab}
-                </button>
-              ))}
+              {Object.keys(deviceChecks).map((tab) => {
+                const tabFails = deviceChecks[tab].some(
+                  (c) => c.status === "fail",
+                );
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setDevTab(tab)}
+                    className={`tdd-tab-btn${devTab === tab ? " active" : ""}${tabFails ? " has-fail" : ""}`}
+                  >
+                    {tab}
+                    {tabFails && <span className="tdd-tab-fail-dot" />}
+                  </button>
+                );
+              })}
             </div>
             <div className="tdd-checks-grid">
-              {DEVICE_CHECKS[devTab].map((check) => (
-                <div key={check} className="tdd-check-item">
-                  <span className="tdd-check-label">{check}</span>
-                  <TestBadge status="pass" />
+              {deviceChecks[devTab].map((check) => (
+                <div
+                  key={check.name}
+                  className={`tdd-check-item${check.status === "fail" ? " fail" : ""}`}
+                >
+                  <span className="tdd-check-label">{check.name}</span>
+                  <TestBadge status={check.status} />
                 </div>
               ))}
             </div>
@@ -397,20 +410,31 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
           {/* ── 3. Events Timeline ── */}
           <section>
             <div className="tdd-section-hd">
-              <span className="tdd-section-bar tdd-bar-green" />
+              <span
+                className={`tdd-section-bar ${d.isBlocked ? "tdd-bar-red" : "tdd-bar-green"}`}
+              />
               Events Timeline
               <span className="tdd-section-hint">
                 — click an event to expand tests
               </span>
+              {d.isBlocked ? (
+                <span className="tdd-section-fail-count">
+                  {totalFails} test{totalFails !== 1 ? "s" : ""} failed across
+                  all events
+                </span>
+              ) : (
+                <span className="tdd-section-pass-count">
+                  All tests passed ✓
+                </span>
+              )}
             </div>
 
             <div className="tdd-events-list">
-              {CLICK_SEQUENCES.map((seq, seqIdx) => {
+              {clickSequences.map((seq, seqIdx) => {
                 const seqFailed = seqHasFail(seq);
-                const globalBase = CLICK_SEQUENCES.slice(0, seqIdx).reduce(
-                  (a, s) => a + s.length,
-                  0,
-                );
+                const globalBase = clickSequences
+                  .slice(0, seqIdx)
+                  .reduce((a, s) => a + s.length, 0);
                 const failCount = seq.reduce(
                   (a, e) =>
                     a + e.tests.filter((t) => t.status === "fail").length,
@@ -422,7 +446,7 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                     key={seqIdx}
                     className={`tdd-click-group${seqFailed ? " has-fail" : ""}`}
                   >
-                    {/* ── Sequence separator header ── */}
+                    {/* ── Sequence header ── */}
                     <div
                       className={`tdd-click-group-hd${seqFailed ? " fail" : ""}`}
                     >
@@ -430,12 +454,16 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                         <span
                           className={`tdd-click-group-pill${seqFailed ? " fail" : ""}`}
                         >
-                          Click {seqIdx + 1}
+                          {seqFailed ? "🚫" : "✅"} Click {seqIdx + 1}
                         </span>
-                        {seqFailed && (
+                        {seqFailed ? (
                           <span className="tdd-click-fail-badge">
                             ⚠ {failCount} test{failCount !== 1 ? "s" : ""}{" "}
                             failed
+                          </span>
+                        ) : (
+                          <span className="tdd-click-pass-badge">
+                            All clear
                           </span>
                         )}
                       </div>
@@ -444,7 +472,7 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                       </span>
                     </div>
 
-                    {/* ── Events in this sequence ── */}
+                    {/* ── Events ── */}
                     {seq.map((evt, evtIdx) => {
                       const globalIdx = globalBase + evtIdx;
                       const isOpen = expandedEvt === globalIdx;
@@ -465,7 +493,6 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                             className={`tdd-event-header${isOpen ? " open" : ""}${hasFail ? " evt-fail-hd" : ""}`}
                           >
                             <div className="tdd-event-left">
-                              {/* Number badge */}
                               <div
                                 className={`tdd-event-icon${hasFail ? " fail" : ""}${isOpen ? " open" : ""}`}
                               >
@@ -478,9 +505,13 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                                   >
                                     {evt.name}
                                   </span>
-                                  {hasFail && (
+                                  {hasFail ? (
                                     <span className="tdd-evt-fail-pill">
                                       {evtFailCount} failed
+                                    </span>
+                                  ) : (
+                                    <span className="tdd-evt-pass-pill">
+                                      ✓ passed
                                     </span>
                                   )}
                                 </div>
@@ -508,9 +539,6 @@ export default function TransactionDetailModal({ row, onClose, onUserIp }) {
                                   className={`tdd-test-item${test.status === "fail" ? " fail" : ""}`}
                                 >
                                   <div className="tdd-test-left">
-                                    {test.status === "fail" && (
-                                      <span className="tdd-test-fail-bar" />
-                                    )}
                                     <span className="tdd-test-label">
                                       {test.name}
                                     </span>

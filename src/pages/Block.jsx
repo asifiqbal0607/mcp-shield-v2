@@ -48,7 +48,7 @@ export default function PageBlocking() {
   const blkVisible = blkRows.slice(0, perPageBlk);
 
   return (
-    <div>
+    <div className="block-page-wrap">
       {/* Summary stats */}
       <div className="g-stats3 mb-section">
         {SUMMARY_STATS.map((s) => (
@@ -138,7 +138,7 @@ export default function PageBlocking() {
           </select>
           <span className="dt-entries-lbl">entries</span>
         </div>
-        <div className="table-wrap"><table
+        <div className="page-table-scroll"><table
           className="dt"
         >
           <thead>

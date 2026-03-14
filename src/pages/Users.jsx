@@ -135,10 +135,8 @@ const PRIMARY_ACTIONS = [
   { key: "loginAs", icon: "🔑", title: "Login As", color: "#7c3aed" },
 ];
 const MORE_ACTIONS = [
-  { key: "ninjaUser", label: "Ninja User", icon: "🥷", color: "#0f172a" },
   { key: "loginAs", label: "Login As", icon: "🔑", color: "#7c3aed" },
-  { key: "updatePlans", label: "Update Plans", icon: "📋", color: "#0891b2" },
-  { key: "makeStatus", label: "Make Status", icon: "🔄", color: "#d97706" },
+  { key: "updateStatus", label: "Update Status", icon: "🔄", color: "#d97706" },
   { key: "clearHistory", label: "Clear History", icon: "🗑", color: "#dc2626" },
   {
     key: "updateHistory",
@@ -273,9 +271,10 @@ function ViewModal({ user, onClose }) {
       </div>
       <div className="g-halves">
         <Field label="Region" value={user.region} />
-        <Field label="Sessions" value={user.sessions} />
         <Field label="Last Login" value={user.lastLogin} />
         <Field label="Status" value={user.status} />
+        {user.plan && <Field label="Plan" value={user.plan} />}
+        <Field label="User ID" value={user.id} mono />
       </div>
       <div className="mt-8-end">
         <CancelBtn onClick={onClose} />
@@ -286,6 +285,14 @@ function ViewModal({ user, onClose }) {
 
 // ─── Edit Modal ───────────────────────────────────────────────────────────────
 function EditModal({ user, onSave, onClose }) {
+  const [form, setForm] = useState({
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    region: user.region,
+    status: user.status,
+  });
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
   return (
     <Modal
       title="Edit User"
@@ -293,26 +300,72 @@ function EditModal({ user, onSave, onClose }) {
       onClose={onClose}
     >
       <div className="usr-grid-2">
-        <FormInput label="Full Name" defaultValue={user.name} />
-        <FormInput label="Email" defaultValue={user.email} type="email" />
-        <FormSelect
-          label="Role"
-          defaultValue={user.role}
-          options={USER_TYPES.filter((t) => t !== "All")}
-        />
-        <FormInput label="Region" defaultValue={user.region} />
-        <FormSelect
-          label="Status"
-          defaultValue={user.status}
-          options={["active", "warning", "blocked"]}
-        />
+        <div className="mb-14">
+          <label className="usr-field-label">Full Name</label>
+          <input
+            value={form.name}
+            onChange={set("name")}
+            className="usr-input"
+            onFocus={(e) => (e.currentTarget.style.borderColor = T)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+          />
+        </div>
+        <div className="mb-14">
+          <label className="usr-field-label">Email</label>
+          <input
+            type="email"
+            value={form.email}
+            onChange={set("email")}
+            className="usr-input"
+            onFocus={(e) => (e.currentTarget.style.borderColor = T)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+          />
+        </div>
+        <div className="mb-14">
+          <label className="usr-field-label">Role</label>
+          <select
+            value={form.role}
+            onChange={set("role")}
+            className="usr-input-white"
+            onFocus={(e) => (e.currentTarget.style.borderColor = T)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+          >
+            {USER_TYPES.filter((t) => t !== "All").map((o) => (
+              <option key={o}>{o}</option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-14">
+          <label className="usr-field-label">Region</label>
+          <input
+            value={form.region}
+            onChange={set("region")}
+            className="usr-input"
+            onFocus={(e) => (e.currentTarget.style.borderColor = T)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+          />
+        </div>
+        <div className="mb-14">
+          <label className="usr-field-label">Status</label>
+          <select
+            value={form.status}
+            onChange={set("status")}
+            className="usr-input-white"
+            onFocus={(e) => (e.currentTarget.style.borderColor = T)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#e2e8f0")}
+          >
+            {["active", "warning", "blocked"].map((o) => (
+              <option key={o}>{o}</option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="usr-action-row-end">
         <CancelBtn onClick={onClose} />
         <ActionBtn
           label="Save Changes"
           onClick={() => {
-            onSave();
+            onSave(form);
             onClose();
           }}
         />
@@ -457,11 +510,29 @@ function LoginAsModal({ user, onClose }) {
               fontSize: 13,
               color: "#64748b",
               lineHeight: 1.6,
-              marginBottom: 20,
+              marginBottom: 12,
             }}
           >
             You are now logged in as <strong>{user.name}</strong>. Session has
             been logged.
+          </div>
+          <div
+            style={{
+              background: "#f0fdf4",
+              border: "1px solid #bbf7d0",
+              borderRadius: 8,
+              padding: "10px 14px",
+              textAlign: "left",
+              marginBottom: 20,
+              fontSize: 12,
+              color: "#166534",
+            }}
+          >
+            <div>
+              ✓ Session ID: session-{Date.now().toString(36).toUpperCase()}
+            </div>
+            <div>✓ Account: {user.email}</div>
+            <div>✓ Logged for audit</div>
           </div>
           <ActionBtn label="Close" onClick={onClose} />
         </div>
@@ -470,54 +541,8 @@ function LoginAsModal({ user, onClose }) {
   );
 }
 
-// ─── Update Plans Modal ───────────────────────────────────────────────────────
-function UpdatePlansModal({ user, onClose }) {
-  const plans = ["Basic", "Standard", "Professional", "Enterprise", "Custom"];
-  const [selected, setSelected] = useState("Standard");
-  return (
-    <Modal
-      title="Update Plans"
-      subtitle={`Change plan for ${user.name}`}
-      onClose={onClose}
-      width={440}
-    >
-      <div className="usr-col-gap8">
-        {plans.map((p) => (
-          <label
-            key={p}
-            className="usr-plan-opt"
-            style={{
-              "--bdr": selected === p ? T : "#e2e8f0",
-              "--bg": selected === p ? "#f0fdfa" : "#f8fafc",
-            }}
-          >
-            <input
-              type="radio"
-              name="plan"
-              checked={selected === p}
-              onChange={() => setSelected(p)}
-              className="perm-check usr-radio-accent"
-              style={{ "--ac": T }}
-            />
-            <span
-              className="usr-plan-lbl"
-              style={{ "--c": selected === p ? T : "#334155" }}
-            >
-              {p}
-            </span>
-          </label>
-        ))}
-      </div>
-      <div className="toolbar-end">
-        <CancelBtn onClick={onClose} />
-        <ActionBtn label="Update Plan" onClick={onClose} />
-      </div>
-    </Modal>
-  );
-}
-
 // ─── Make Status Modal ────────────────────────────────────────────────────────
-function MakeStatusModal({ user, onSave, onClose }) {
+function UpdateStatusModal({ user, onSave, onClose }) {
   const statuses = [
     {
       value: "active",
@@ -531,7 +556,7 @@ function MakeStatusModal({ user, onSave, onClose }) {
       label: "Warning",
       color: "#d97706",
       bg: "#fef3c7",
-      desc: "User is flagged. Limited access may apply.",
+      desc: "User is flagged. Your account is going to Inactive.",
     },
     {
       value: "blocked",
@@ -541,7 +566,7 @@ function MakeStatusModal({ user, onSave, onClose }) {
       desc: "User is inactive and cannot log in.",
     },
   ];
-  const [selected, setSelected] = useState(user.status);
+  const [selected, setSelected] = useState(user.status || "active");
   return (
     <Modal
       title="Change User Status"
@@ -591,7 +616,7 @@ function MakeStatusModal({ user, onSave, onClose }) {
 }
 
 // ─── Clear History Modal ──────────────────────────────────────────────────────
-function ClearHistoryModal({ user, onClose }) {
+function ClearHistoryModal({ user, onClear, onClose }) {
   const [done, setDone] = useState(false);
   return (
     <Modal
@@ -613,7 +638,13 @@ function ClearHistoryModal({ user, onClose }) {
           </div>
           <div className="toolbar-end">
             <CancelBtn onClick={onClose} />
-            <button onClick={() => setDone(true)} className="usr-btn-danger">
+            <button
+              onClick={() => {
+                setDone(true);
+                onClear && onClear();
+              }}
+              className="usr-btn-danger"
+            >
               Yes, Clear History
             </button>
           </div>
@@ -633,53 +664,84 @@ function ClearHistoryModal({ user, onClose }) {
 }
 
 // ─── User Update History Modal ────────────────────────────────────────────────
-function UpdateHistoryModal({ user, onClose }) {
-  const history = [
-    {
-      date: "2024-06-25 14:32",
-      action: "Status changed",
-      detail: "active → warning",
-      by: "admin@mcp.com",
-    },
-    {
-      date: "2024-06-20 09:11",
-      action: "Plan updated",
-      detail: "Basic → Standard",
-      by: "admin@mcp.com",
-    },
-    {
-      date: "2024-06-14 16:45",
-      action: "Password reset",
-      detail: "Via admin panel",
-      by: "superadmin",
-    },
-    {
-      date: "2024-06-01 10:00",
-      action: "Role changed",
-      detail: "Clients → C-Admins",
-      by: "admin@mcp.com",
-    },
-    {
-      date: "2024-05-18 08:22",
-      action: "Account created",
-      detail: "New user added",
-      by: "superadmin",
-    },
-  ];
+function UpdateHistoryModal({ user, log, onClose }) {
+  const entries =
+    log && log.length > 0
+      ? log
+      : [
+          {
+            date: user.lastLogin || "—",
+            action: "Account created",
+            detail: "New user added",
+            by: "superadmin",
+          },
+        ];
+  const ACTION_ICON = {
+    "Status toggled": "🔄",
+    "Status changed": "🟡",
+    "Profile edited": "✏️",
+    "Plan updated": "📋",
+    "User deleted": "🗑",
+    "Account created": "✅",
+    "History cleared": "🧹",
+  };
   return (
     <Modal
       title="User Update History"
       subtitle={`Audit trail for ${user.name}`}
       onClose={onClose}
-      width={580}
+      width={600}
     >
-      <div className="f-col-8">
-        {history.map((h, i) => (
-          <div key={i} className="usr-history-row">
-            <div className="txt-mono">{h.date}</div>
-            <div className="txt-label-md">{h.action}</div>
-            <div className="txt-body-3">{h.detail}</div>
-            <div className="txt-muted-r">{h.by}</div>
+      <div
+        style={{
+          marginBottom: 12,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: "#94a3b8",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          {entries.length} {entries.length === 1 ? "entry" : "entries"}
+        </span>
+      </div>
+      <div className="f-col-8" style={{ maxHeight: 360, overflowY: "auto" }}>
+        {entries.map((h, i) => (
+          <div
+            key={i}
+            className="usr-history-row"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "140px 1fr 1fr auto",
+              alignItems: "center",
+              gap: 10,
+              padding: "10px 12px",
+              borderRadius: 8,
+              background: i === 0 ? "#f0fdf4" : "#f8fafc",
+              border: `1px solid ${i === 0 ? "#bbf7d0" : "#f1f5f9"}`,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                color: "#64748b",
+                fontFamily: "monospace",
+              }}
+            >
+              {h.date}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#1e293b" }}>
+              {ACTION_ICON[h.action] || "•"} {h.action}
+            </div>
+            <div style={{ fontSize: 12, color: "#475569" }}>{h.detail}</div>
+            <div style={{ fontSize: 11, color: "#94a3b8" }}>{h.by}</div>
           </div>
         ))}
       </div>
@@ -724,51 +786,19 @@ function DeleteModal({ user, onDelete, onClose }) {
   );
 }
 
-// ─── Ninja User Modal ─────────────────────────────────────────────────────────
-function NinjaUserModal({ user, onClose }) {
-  const [active, setActive] = useState(false);
-  return (
-    <Modal
-      title="Ninja User Mode"
-      subtitle="Silent admin access without audit trail"
-      onClose={onClose}
-      width={420}
-    >
-      <div className="onb-dark-card">
-        <div className="txt-hero-icon">🥷</div>
-        <div className="txt-hero-title">Ninja Mode for {user.name}</div>
-        <div className="txt-body-2">
-          Access this account invisibly. User will not be notified.
-        </div>
-      </div>
-      <div className="action-row mb-10">
-        <span className="txt-name">Enable Ninja Mode</span>
-        <div
-          onClick={() => setActive((a) => !a)}
-          className="usr-toggle"
-          style={{ "--c": active ? "#0d9488" : "#cbd5e1" }}
-        >
-          <div
-            className="usr-toggle-thumb"
-            style={{ "--left": active ? "23px" : "3px" }}
-          />
-        </div>
-      </div>
-      <div className="toolbar-end">
-        <CancelBtn onClick={onClose} />
-        <ActionBtn
-          label={active ? "Activate Ninja Mode" : "Close"}
-          onClick={onClose}
-        />
-      </div>
-    </Modal>
-  );
-}
-
 // AddUserModal is imported from ./Onboarding_users
 
 // ─── UserActions component ────────────────────────────────────────────────────
-function UserActions({ user, onBlock, onDelete, onStatusChange }) {
+function UserActions({
+  user,
+  onBlock,
+  onDelete,
+  onStatusChange,
+  onEdit,
+  onPlanChange,
+  userAuditLog,
+  onClearHistory,
+}) {
   const [open, setOpen] = useState(false);
   const [modal, setModal] = useState(null);
   const ref = useRef(null);
@@ -795,31 +825,33 @@ function UserActions({ user, onBlock, onDelete, onStatusChange }) {
       {modal === "edit" && (
         <EditModal
           user={user}
-          onSave={() => {}}
+          onSave={(updated) => onEdit(user, updated)}
           onClose={() => setModal(null)}
         />
       )}
       {modal === "loginAs" && (
         <LoginAsModal user={user} onClose={() => setModal(null)} />
       )}
-      {modal === "ninjaUser" && (
-        <NinjaUserModal user={user} onClose={() => setModal(null)} />
-      )}
-      {modal === "updatePlans" && (
-        <UpdatePlansModal user={user} onClose={() => setModal(null)} />
-      )}
-      {modal === "makeStatus" && (
-        <MakeStatusModal
+      {modal === "updateStatus" && (
+        <UpdateStatusModal
           user={user}
           onSave={(s) => onStatusChange(user, s)}
           onClose={() => setModal(null)}
         />
       )}
       {modal === "clearHistory" && (
-        <ClearHistoryModal user={user} onClose={() => setModal(null)} />
+        <ClearHistoryModal
+          user={user}
+          onClear={() => onClearHistory(user)}
+          onClose={() => setModal(null)}
+        />
       )}
       {modal === "updateHistory" && (
-        <UpdateHistoryModal user={user} onClose={() => setModal(null)} />
+        <UpdateHistoryModal
+          user={user}
+          log={userAuditLog}
+          onClose={() => setModal(null)}
+        />
       )}
       {modal === "delete" && (
         <DeleteModal
@@ -969,6 +1001,19 @@ const USR_PIE_PA = 2;
 
 export default function PageUsers({ role = "admin", setPage }) {
   const [users, setUsers] = useState(initialUserRows);
+  const [auditLog, setAuditLog] = useState({}); // { email: [{date,action,detail,by}] }
+  const addAudit = (email, action, detail) => {
+    const now = new Date();
+    const date =
+      now.toISOString().slice(0, 10) + " " + now.toTimeString().slice(0, 5);
+    setAuditLog((prev) => ({
+      ...prev,
+      [email]: [
+        { date, action, detail, by: "admin@shield.io" },
+        ...(prev[email] || []),
+      ],
+    }));
+  };
   const [partnerAccounts, setPartnerAccounts] = useState(
     PARTNER_SUB_ACCOUNTS_INIT,
   );
@@ -979,16 +1024,17 @@ export default function PageUsers({ role = "admin", setPage }) {
 
   // ── User actions ──
   const handleBlock = (user) => {
+    const newStatus = user.status === "blocked" ? "active" : "blocked";
     setUsers((prev) =>
       prev.map((u) =>
-        u.email === user.email
-          ? { ...u, status: u.status === "blocked" ? "active" : "blocked" }
-          : u,
+        u.email === user.email ? { ...u, status: newStatus } : u,
       ),
     );
+    addAudit(user.email, "Status toggled", `${user.status} → ${newStatus}`);
   };
   const handleDelete = (user) => {
     setUsers((prev) => prev.filter((u) => u.email !== user.email));
+    addAudit(user.email, "User deleted", "Account permanently removed");
   };
   const handleStatusChange = (user, newStatus) => {
     setUsers((prev) =>
@@ -996,6 +1042,27 @@ export default function PageUsers({ role = "admin", setPage }) {
         u.email === user.email ? { ...u, status: newStatus } : u,
       ),
     );
+    addAudit(user.email, "Status changed", `${user.status} → ${newStatus}`);
+  };
+  const handleEdit = (user, updated) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.email === user.email ? { ...u, ...updated } : u)),
+    );
+    const changed = Object.keys(updated)
+      .filter((k) => updated[k] !== user[k])
+      .map((k) => `${k}: ${user[k]} → ${updated[k]}`)
+      .join(", ");
+    if (changed) addAudit(user.email, "Profile edited", changed);
+  };
+  const handlePlanChange = (user, plan) => {
+    setUsers((prev) =>
+      prev.map((u) => (u.email === user.email ? { ...u, plan } : u)),
+    );
+    addAudit(user.email, "Plan updated", `${user.plan || "None"} → ${plan}`);
+  };
+  const handleClearHistory = (user) => {
+    setAuditLog((prev) => ({ ...prev, [user.email]: [] }));
+    addAudit(user.email, "History cleared", "Audit log wiped by admin");
   };
   const [addModal, setAddModal] = useState(false);
   const handleAddUser = () => {
@@ -1349,7 +1416,6 @@ export default function PageUsers({ role = "admin", setPage }) {
               <col className="usr-col-email" />
               <col className="usr-col-type" />
               <col className="usr-col-region" />
-              <col className="usr-col-sessions" />
               <col className="usr-col-login" />
               <col className="usr-col-status" />
               <col className="usr-col-actions" />
@@ -1361,7 +1427,6 @@ export default function PageUsers({ role = "admin", setPage }) {
                   "Email",
                   "Type",
                   "Region",
-                  "Sessions",
                   "Last Login",
                   "Status",
                   "Actions",
@@ -1397,7 +1462,6 @@ export default function PageUsers({ role = "admin", setPage }) {
                     <Badge color={TYPE_COLORS[u.role] || BLUE}>{u.role}</Badge>
                   </td>
                   <td className="dt-td">{u.region}</td>
-                  <td className="dt-td-num">{u.sessions}</td>
                   <td className="td-p-10s">{u.lastLogin}</td>
                   <td>
                     <div className="usr-td-status">
@@ -1414,6 +1478,10 @@ export default function PageUsers({ role = "admin", setPage }) {
                       onBlock={handleBlock}
                       onDelete={handleDelete}
                       onStatusChange={handleStatusChange}
+                      onEdit={handleEdit}
+                      onPlanChange={handlePlanChange}
+                      onClearHistory={handleClearHistory}
+                      userAuditLog={auditLog[u.email] || []}
                     />
                   </td>
                 </tr>
